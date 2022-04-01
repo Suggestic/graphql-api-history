@@ -1,0 +1,38 @@
+name: graphql-tracker
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Ensure npx uses a cache
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+          cache-dependency-path: '**/.github/workflows/*.yml'
+      - name: Configure Git for commits
+        run: |
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+      - name: Api
+        run: |
+          npx get-graphql-schema https://production.suggestic.com/graphql > api/schema.graphql
+      - name: Coaching
+        run: |
+          npx get-graphql-schema https://production.suggestic.com/cp/graphql > coaching/schema.graphql
+      - name: Console
+        run: |
+          npx get-graphql-schema https://production.suggestic.com/pcp/graphql > console/schema.graphql
+      - name: Commit and push if it changed
+        run: |
+          git add -A
+          timestamp=$(date -u)
+          git commit -m "graphql: ${timestamp}" || exit 0
+          git push
