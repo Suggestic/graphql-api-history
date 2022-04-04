@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
-          cache-dependency-path: '**/.github/workflows/*.yml'
+          cache-dependency-path: '**/.github/workflows/*.yaml'
       - name: Configure Git for commits
         run: |
           git config user.name "Automated"
