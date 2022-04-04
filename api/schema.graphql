@@ -871,6 +871,8 @@ enum FoodCategory {
 
 input FoodFilter {
   barcode: String
+  externalId: String
+  id: ID
   ingredients: [String!]
   mealTime: MealTime
   must: [FoodFilter!]
@@ -2988,6 +2990,8 @@ type Supplement {
   mainImage: String!
   name: String!
   servingName: String!
+  shopifyParentId: String
+  shopifyVariantId: String
   sizeCount: Int!
   sku: String
   storeId: String

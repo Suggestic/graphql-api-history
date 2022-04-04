@@ -1667,6 +1667,8 @@ type Supplement implements Node {
   externalId: String
   sku: String
   storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
   instructions: String
   ingredients: String
   supplementFacts: String
