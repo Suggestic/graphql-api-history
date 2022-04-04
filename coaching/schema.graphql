@@ -605,7 +605,7 @@ type DeleteSupplementPlanTemplate {
 }
 
 input DirectionsOfUseInput {
-  servings: Int!
+  quantity: Float!
   timeOfDay: TimeOfDay!
 }
 
@@ -1565,7 +1565,6 @@ input SPProtocolInput {
 }
 
 input SPTProtocolInput {
-  order: Int!
   protocolId: ID!
   directionsOfUse: [DirectionsOfUseInput!]
   monday: Boolean
@@ -1689,7 +1688,7 @@ type SupplementDirection {
   updatedAt: DateTime!
   supplementplanprotocolSet: [SupplementPlanProtocol!]!
   timeOfDay: TimeOfDay!
-  servings: Int!
+  quantity: Int!
 }
 
 """A Relay edge containing a `Supplement` and its cursor."""

@@ -2358,7 +2358,7 @@ type Query {
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
-  contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ContentCategoryTypeConnection
+  contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], first: Int, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   countries: [GenericScalar]
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
@@ -3005,10 +3005,10 @@ type SupplementDirection {
 }
 
 type SupplementPlan implements Node {
-  active: Boolean!
   createdAt: DateTime!
   exercise: String
   id: ID!
+  isActive: Boolean!
   name: String!
   nutrition: String
   overview: String
@@ -3030,15 +3030,17 @@ type SupplementPlanEdge {
 }
 
 type SupplementPlanProtocol {
-  active: Boolean!
   createdAt: DateTime!
   directionsOfUse: [SupplementDirection!]!
+  endsAt: DateTime
   friday: Boolean!
   id: ID!
+  isActive: Boolean!
   monday: Boolean!
   order: Int!
   protocol: Protocol!
   saturday: Boolean!
+  startsAt: DateTime
   sunday: Boolean!
   thursday: Boolean!
   tuesday: Boolean!
