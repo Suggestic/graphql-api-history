@@ -1690,7 +1690,7 @@ type SupplementDirection {
   updatedAt: DateTime!
   supplementplanprotocolSet: [SupplementPlanProtocol!]!
   timeOfDay: TimeOfDay!
-  quantity: Int!
+  quantity: Float!
 }
 
 """A Relay edge containing a `Supplement` and its cursor."""
