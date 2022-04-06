@@ -1002,6 +1002,7 @@ type Member implements Node {
   quizAnswers: [QuizAnswer!]!
   customAttributes: JSONString!
   supplementPlans(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanConnection
+  coaches: [Coach!]!
 }
 
 type MemberConnection {
