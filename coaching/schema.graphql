@@ -138,8 +138,8 @@ input AvailabilityWeekdayPeriodInput {
 }
 
 type AvailableProtocols {
-  owned(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
-  shared(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
+  owned(group: ProtocolGroup, id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
+  shared(group: ProtocolGroup, id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
 }
 
 type AvailableSupplementPlanTemplates {
@@ -434,6 +434,7 @@ input CreateProtocolInput {
   isPublic: Boolean
   isActive: Boolean
   supplements: [SupplementProtocolInput!]
+  group: ProtocolGroup
 }
 
 input CreateSPInput {
@@ -446,6 +447,7 @@ input CreateSPInput {
   visibility: Boolean
   isActive: Boolean
   protocols: [SPProtocolInput!]
+  supplements: [SingleSupplementActivableProtocolInput!]
 }
 
 input CreateSPTInput {
@@ -456,6 +458,7 @@ input CreateSPTInput {
   resources: String
   isPublic: Boolean
   protocols: [SPTProtocolInput!]
+  supplements: [SingleSupplementProtocolInput!]
 }
 
 type CreateSupplementPlan {
@@ -1369,6 +1372,7 @@ type Protocol implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   id: ID!
+  group: ProtocolGroup!
   program: Program
   supplementProtocols: [SupplementProtocol!]
   owner: Coach
@@ -1389,6 +1393,11 @@ type ProtocolEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+enum ProtocolGroup {
+  PROTOCOL
+  SINGLE_SUPPLEMENT
 }
 
 """Root GraphQL query type"""
@@ -1418,7 +1427,7 @@ type Query {
   subscriptions(before: String, after: String, first: Int, last: Int): SubscriptionConnection
   protocols: AvailableProtocols
   supplementPlanTemplates: AvailableSupplementPlanTemplates
-  supplements(name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+  supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
 }
 
 type QuizAnswer {
@@ -1550,6 +1559,33 @@ type Settings {
   name: String
   availabilitySettings: AvailabilitySettings!
   unitSystem: UnitSystem!
+}
+
+input SingleSupplementActivableProtocolInput {
+  supplementId: ID!
+  directionsOfUse: [DirectionsOfUseInput!]
+  monday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+  thursday: Boolean
+  friday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+  length: Int!
+  isActive: Boolean
+}
+
+input SingleSupplementProtocolInput {
+  supplementId: ID!
+  directionsOfUse: [DirectionsOfUseInput!]
+  monday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+  thursday: Boolean
+  friday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+  length: Int!
 }
 
 input SPProtocolInput {
@@ -1715,7 +1751,7 @@ type SupplementPlan implements Node {
   isActive: Boolean!
   visibility: Boolean!
   id: ID!
-  protocols: [SupplementPlanProtocol!]!
+  protocols(group: ProtocolGroup): [SupplementPlanProtocol!]!
 }
 
 type SupplementPlanConnection {
@@ -1763,7 +1799,7 @@ type SupplementPlanTemplate implements Node {
   updatedAt: DateTime!
   isPublic: Boolean!
   id: ID!
-  protocols: [SupplementPlanTemplateProtocol!]!
+  protocols(group: ProtocolGroup): [SupplementPlanTemplateProtocol!]!
   owner: Coach
 }
 
@@ -2044,6 +2080,7 @@ input UpdateProtocolInput {
   isPublic: Boolean
   isActive: Boolean
   supplements: [SupplementProtocolInput!]
+  group: ProtocolGroup
 }
 
 input UpdateSettingsInput {
@@ -2072,6 +2109,7 @@ input UpdateSPInput {
   visibility: Boolean
   isActive: Boolean
   setProtocols: [SPProtocolInput!]
+  setSupplements: [SingleSupplementActivableProtocolInput!]
   updateProtocols: [SPProtocolInput!]
 }
 
@@ -2084,6 +2122,7 @@ input UpdateSPTInput {
   resources: String
   isPublic: Boolean
   protocols: [SPTProtocolInput!]
+  supplements: [SingleSupplementProtocolInput!]
 }
 
 type UpdateSubscription {

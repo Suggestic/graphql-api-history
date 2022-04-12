@@ -266,6 +266,16 @@ type ChecklistItem {
   title: String!
 }
 
+type CheckoutCreate {
+  message: String!
+  success: Boolean!
+  webUrl: String
+}
+
+input CheckoutCreateInput {
+  supplementsInCart: [SupplementCartItem!]!
+}
+
 type CheckTodayFoodEntry {
   message: String!
   success: Boolean!
@@ -1581,6 +1591,7 @@ type Mutation {
   checkIntake(category: IntakeCategory!, date: Date!, itemId: ID!): CheckIntake!
   checkTodayFood(date: Date!, itemId: ID!): CheckTodayFoodEntry @deprecated(reason: "No longer supported. Use checkIntake instead")
   checkTodaySupplement(date: Date!, itemId: ID!): CheckTodaySupplementEntry @deprecated(reason: "No longer supported. Use checkIntake instead")
+  checkoutCreate(input: CheckoutCreateInput!): CheckoutCreate
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
@@ -2329,6 +2340,7 @@ enum ProgramOrderByField {
 
 type Protocol implements Node {
   createdAt: DateTime!
+  group: ProtocolGroup!
   id: ID!
   isActive: Boolean!
   isPublic: Boolean!
@@ -2338,6 +2350,11 @@ type Protocol implements Node {
   program: Program
   supplementProtocols: [SupplementProtocol!]
   updatedAt: DateTime!
+}
+
+enum ProtocolGroup {
+  PROTOCOL
+  SINGLE_SUPPLEMENT
 }
 
 type PublishEvent {
@@ -2999,6 +3016,11 @@ type Supplement {
   updatedAt: DateTime!
 }
 
+input SupplementCartItem {
+  id: ID!
+  quantity: Int!
+}
+
 type SupplementDirection {
   createdAt: DateTime!
   id: ID!
@@ -3016,7 +3038,7 @@ type SupplementPlan implements Node {
   name: String!
   nutrition: String
   overview: String
-  protocols: [SupplementPlanProtocol!]!
+  protocols(group: ProtocolGroup): [SupplementPlanProtocol!]!
   resources: String
   startDate: Date!
   updatedAt: DateTime!
@@ -3309,6 +3331,7 @@ type UpdateProtocol {
 }
 
 input UpdateProtocolInput {
+  group: ProtocolGroup
   id: ID!
   isActive: Boolean
 }
