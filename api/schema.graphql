@@ -2477,6 +2477,7 @@ type Query {
   suggestMeal(date: Date!, mealTime: MealTime!): SuggestedMeal
   suggestedMeals(date: Date!): SuggestedMeals
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
+  supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use checkedIntakes instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use checkedIntakes instead")
@@ -2992,7 +2993,7 @@ type Suggestion {
   updatedAt: DateTime
 }
 
-type Supplement {
+type Supplement implements Node {
   brand: String!
   category: String!
   createdAt: DateTime!
@@ -3021,6 +3022,11 @@ input SupplementCartItem {
   quantity: Int!
 }
 
+type SupplementConnection {
+  edges: [SupplementEdge]!
+  pageInfo: PageInfo!
+}
+
 type SupplementDirection {
   createdAt: DateTime!
   id: ID!
@@ -3028,6 +3034,11 @@ type SupplementDirection {
   supplementplanprotocolSet: [SupplementPlanProtocol!]!
   timeOfDay: TimeOfDay!
   updatedAt: DateTime!
+}
+
+type SupplementEdge {
+  cursor: String!
+  node: Supplement
 }
 
 type SupplementPlan implements Node {
