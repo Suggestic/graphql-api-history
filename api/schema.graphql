@@ -1544,6 +1544,11 @@ type MenuItemEdge {
   node: MenuItem
 }
 
+type Money {
+  amount: Float!
+  currencyCode: String!
+}
+
 input MPTCustomOptionsInput {
   calories: Int
   carbsPerc: Int
@@ -2165,6 +2170,18 @@ enum PriceRate {
   RATE_4
 }
 
+type ProductOption {
+  name: String!
+  values: [String!]
+}
+
+type ProductVariant {
+  availableForSale: Boolean!
+  id: ID!
+  price: Money!
+  title: String!
+}
+
 enum ProfileBiologicalSex {
   FEMALE
   MALE
@@ -2476,6 +2493,7 @@ type Query {
   subscriptions(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTypeConnection
   suggestMeal(date: Date!, mealTime: MealTime!): SuggestedMeal
   suggestedMeals(date: Date!): SuggestedMeals
+  supplementParent(supplementId: ID!): SupplementParent
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
@@ -3018,8 +3036,8 @@ type Supplement implements Node {
 }
 
 input SupplementCartItem {
-  id: ID!
   quantity: Int!
+  variantId: ID!
 }
 
 type SupplementConnection {
@@ -3039,6 +3057,14 @@ type SupplementDirection {
 type SupplementEdge {
   cursor: String!
   node: Supplement
+}
+
+type SupplementParent {
+  availableForSale: Boolean!
+  id: ID!
+  options: [ProductOption!]
+  title: String!
+  variants: [ProductVariant!]!
 }
 
 type SupplementPlan implements Node {
