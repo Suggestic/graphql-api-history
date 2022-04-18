@@ -196,6 +196,7 @@ type Coach implements Node {
   autoResponse: String
   isCalendarAuth: Boolean!
   conferencingProfiles: [ConferenceProviderName!]!
+  externalCalendarEvents(start: Date, end: Date, timezone: String): [ExternalCalendarEventsInDate!]!
   appointmentsByDate(fromDate: Date, toDate: Date, timezone: String): [AppointmentsInDate!]!
   stripeCustomerId: String
 }
@@ -683,6 +684,18 @@ enum ExerciseType {
   WORKOUT_ROUTINE
   RECOVERY
   OTHER
+}
+
+type ExternalCalendarEvent {
+  title: String!
+  description: String
+  start: DateTime!
+  end: DateTime!
+}
+
+type ExternalCalendarEventsInDate {
+  date: Date!
+  events: [ExternalCalendarEvent!]!
 }
 
 enum Frequency {
