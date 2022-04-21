@@ -401,6 +401,17 @@ type CreateMealPlanTemplate {
   mealPlan: MealPlanTemplate
 }
 
+type CreateMembersTag {
+  success: Boolean!
+  message: String!
+  tag: MemberTag
+}
+
+input CreateMemberTagInput {
+  tag: String!
+  color: String = ""
+}
+
 input CreateNoteInput {
   memberId: ID!
   title: String!
@@ -569,6 +580,12 @@ type DeleteMealPlanTemplate {
   success: Boolean!
   message: String!
   mealPlan: MealPlanTemplate
+}
+
+type DeleteMembersTag {
+  success: Boolean!
+  message: String!
+  tag: MemberTag
 }
 
 input DeleteNoteInput {
@@ -1059,6 +1076,29 @@ input MemberSearchFilters {
   isClient: Boolean
 }
 
+type MemberTag implements Node {
+  tag: String!
+  color: String
+  id: ID!
+}
+
+type MemberTagConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MemberTagEdge]!
+}
+
+"""A Relay edge containing a `MemberTag` and its cursor."""
+type MemberTagEdge {
+  """The item at the end of the edge"""
+  node: MemberTag
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type MPTConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -1192,6 +1232,9 @@ type Mutation {
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput, memberId: ID!): CreateSupplementPlan
   deleteSupplementPlan(id: ID!): DeleteSupplementPlan
   updateSupplementPlan(input: UpdateSPInput!): UpdateSupplementPlan
+  createMembersTag(input: CreateMemberTagInput!): CreateMembersTag
+  updateMembersTag(input: UpdateMemberTagInput!): UpdateMembersTag
+  deleteMembersTag(id: ID!): DeleteMembersTag
 }
 
 """An object with an ID"""
@@ -1441,6 +1484,7 @@ type Query {
   protocols: AvailableProtocols
   supplementPlanTemplates: AvailableSupplementPlanTemplates
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+  memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
 }
 
 type QuizAnswer {
@@ -2051,6 +2095,18 @@ type UpdateMemberRestrictionsPayload {
   success: Boolean!
   message: String!
   clientMutationId: String
+}
+
+type UpdateMembersTag {
+  success: Boolean!
+  message: String!
+  tag: MemberTag
+}
+
+input UpdateMemberTagInput {
+  id: ID!
+  tag: String
+  color: String
 }
 
 input UpdateNoteInput {
