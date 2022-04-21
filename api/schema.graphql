@@ -782,6 +782,11 @@ enum DietaryTag {
   VEGETARIAN
 }
 
+input DirectionsOfUseInput {
+  quantity: Float!
+  timeOfDay: TimeOfDay!
+}
+
 type DuplicateMealPlanTemplate {
   mealPlan: MealPlanTemplate
   message: String!
@@ -2874,6 +2879,20 @@ input SimpleMPFiltersInput {
   tags: TermValuesByMealTimeInput
 }
 
+input SingleSupplementActivableProtocolInput {
+  directionsOfUse: [DirectionsOfUseInput!]
+  friday: Boolean
+  isActive: Boolean
+  length: Int!
+  monday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+  supplementId: ID!
+  thursday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+}
+
 enum SkillLevel {
   EASY
   EXPERT
@@ -2893,6 +2912,19 @@ type Source {
   displayName: String
   recipeUrl: String!
   siteUrl: String
+}
+
+input SPProtocolInput {
+  directionsOfUse: [DirectionsOfUseInput!]
+  friday: Boolean
+  isActive: Boolean
+  monday: Boolean
+  protocolId: ID!
+  saturday: Boolean
+  sunday: Boolean
+  thursday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
 }
 
 type StartJourneys {
@@ -3065,7 +3097,7 @@ type SupplementConnection {
 type SupplementDirection {
   createdAt: DateTime!
   id: ID!
-  servings: Int!
+  quantity: Float!
   supplementplanprotocolSet: [SupplementPlanProtocol!]!
   timeOfDay: TimeOfDay!
   updatedAt: DateTime!
@@ -3395,8 +3427,19 @@ type UpdateShoppingListRecipeServings {
 }
 
 input UpdateSPInput {
+  coach: ID
+  exercise: String
   id: ID!
   isActive: Boolean
+  name: String
+  nutrition: String
+  overview: String
+  resources: String
+  setProtocols: [SPProtocolInput!]
+  setSupplements: [SingleSupplementActivableProtocolInput!]
+  startDate: Date
+  updateProtocols: [SPProtocolInput!]
+  visibility: Boolean
 }
 
 type UpdateSubscription {
