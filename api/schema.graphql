@@ -177,6 +177,8 @@ enum AttrDataType {
   STRING
 }
 
+union AvailableChecklistItems = ChecklistItem | SupplementOnPlan
+
 enum BiologicalSex {
   FEMALE
   MALE
@@ -1061,7 +1063,19 @@ type IngredientSearchResultEdge {
 
 enum IntakeCategory {
   FOOD
+  PLAN_SUPPLEMENT
   SUPPLEMENT
+}
+
+type IntakesChecklist {
+  days: [IntakesChecklistDay!]!
+  icon: String
+  name: String!
+}
+
+type IntakesChecklistDay {
+  date: Date!
+  items: [AvailableChecklistItems!]!
 }
 
 input IntValueByMealTime {
@@ -1593,13 +1607,21 @@ enum MPVariety {
 type Mutation {
   addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
+
+  """
+  addFoodLog logs that the user ate specific food, like a recipe, a personal recipe, a meal plan's meal, etc
+  """
   addFoodLog(date: Date!, foodId: ID!, grams: Int, mealTime: MealTime!, milligrams: Int, portionModifier: String, servings: Float, time: Time): AddFoodLog!
   addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
   addStepsCount(datetime: DateTime!, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
   cancelAppointment(appointment: ID!): CancelAppointment
   changeMealPlannerDayMeal(day: Int!, mealTime: MealTime!, recipeId: String!): ChangeMealPlannerDayMeal
-  checkIntake(category: IntakeCategory!, date: Date!, itemId: ID!): CheckIntake!
+
+  """
+  checkIntake creates a log checking that the user ate food that they was supposed to eat as part of a plan
+  """
+  checkIntake(category: IntakeCategory!, date: Date!, itemId: ID!, timeOfDay: TimeOfDay): CheckIntake!
   checkTodayFood(date: Date!, itemId: ID!): CheckTodayFoodEntry @deprecated(reason: "No longer supported. Use checkIntake instead")
   checkTodaySupplement(date: Date!, itemId: ID!): CheckTodaySupplementEntry @deprecated(reason: "No longer supported. Use checkIntake instead")
   checkoutCreate(input: CheckoutCreateInput!): CheckoutCreate
@@ -1614,6 +1636,10 @@ type Mutation {
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
   createMyBrandedFoods(input: CreateMyBrandedFoodInput!): CreateMyBrandedFood
   createMyChecklistItem(header: String!, tags: [String!], text: String): CreateMyChecklistItem
+
+  """
+  checkIntake creates a log checking that the user fulfilled the action in one of their personal MyChecklistItem
+  """
   createMyChecklistItemLog(date: Date!, itemId: ID!): CreateMyChecklistItemLog!
   createMyCommonFoods(input: CreateMyCommonFoodInput!): CreateMyCommonFood
   createMyRecipe(input: CreateMyRecipeInput!): CreateMyRecipe
@@ -1627,11 +1653,15 @@ type Mutation {
   createWeightEntry(date: Date!, value: Float!): CreateWeightEntry
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
+
+  """deleteFoodLog deletes a food log by ID"""
   deleteFoodLog(id: ID!): DeleteFoodLog!
   deleteLabTestReport(id: ID!): DeleteLabTestReport
   deleteMealPlanTemplate(coach: ID, id: ID!): DeleteMealPlanTemplate
   deleteMyBrandedFood(id: String!): DeleteMyBrandedFood
   deleteMyChecklistItem(id: ID!): DeleteMyChecklistItem
+
+  """deleteMyChecklistItemLog deletes a MyChecklistItem log by ID"""
   deleteMyChecklistItemLog(date: Date!, itemId: ID!): DeleteMyChecklistItemLog!
   deleteMyCommonFood(id: String!): DeleteMyCommonFood
   deleteMyProfile: HardDeleteMyProfileMutation
@@ -1666,6 +1696,8 @@ type Mutation {
   swapMealPlanRecipe(mealId: String, mealTag: MealTime, recipeId: String!, serving: Int): SwapMealPlanRecipe
   toggleShoppingListItem(isAggregate: Boolean!, itemId: String!): ToggleShoppingListItem
   toggleTaskCompleted(keysHash: String!): ToggleTaskCompleted
+
+  """uncheckIntake is the opposite of checkIntake. It undoes the check"""
   uncheckIntake(category: IntakeCategory!, date: Date!, itemId: ID!): UncheckIntake!
   uncheckTodayFood(date: Date!, itemId: ID!): UncheckTodayFood @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
@@ -2412,7 +2444,7 @@ type Query {
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
-  checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist
+  checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
@@ -2434,6 +2466,7 @@ type Query {
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
   hydration(endDate: Date!, startDate: Date!): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
+  intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
   labTestReports(after: String, before: String, first: Int, id: ID, isVisible: Boolean, last: Int, profile: ID): LabTestReportConnection
   locationAutocomplete(lat: Float!, lon: Float!, query: String!): [LocationAutocomplete]
@@ -3098,7 +3131,6 @@ type SupplementDirection {
   createdAt: DateTime!
   id: ID!
   quantity: Float!
-  supplementplanprotocolSet: [SupplementPlanProtocol!]!
   timeOfDay: TimeOfDay!
   updatedAt: DateTime!
 }
@@ -3106,6 +3138,13 @@ type SupplementDirection {
 type SupplementEdge {
   cursor: String!
   node: Supplement
+}
+
+type SupplementOnPlan {
+  checked: Boolean!
+  planName: String!
+  supplement: Supplement!
+  timeOfDay: TimeOfDay
 }
 
 type SupplementParent {

@@ -882,6 +882,18 @@ type LinkCoachPayload {
   clientMutationId: String
 }
 
+input LinkMemberTagInput {
+  memberId: ID!
+  tagId: ID!
+  clientMutationId: String
+}
+
+type LinkMemberTagPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
+}
+
 input Location {
   description: String
   lat: Float
@@ -1036,6 +1048,7 @@ type Member implements Node {
   customAttributes: JSONString!
   supplementPlans(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanConnection
   coaches: [Coach!]!
+  tags: [MemberTag!]!
 }
 
 type MemberConnection {
@@ -1235,6 +1248,8 @@ type Mutation {
   createMembersTag(input: CreateMemberTagInput!): CreateMembersTag
   updateMembersTag(input: UpdateMemberTagInput!): UpdateMembersTag
   deleteMembersTag(id: ID!): DeleteMembersTag
+  linkMemberTag(input: LinkMemberTagInput!): LinkMemberTagPayload
+  unlinkMemberTag(input: UnlinkMemberTagInput!): UnlinkMemberTagPayload
 }
 
 """An object with an ID"""
@@ -1996,6 +2011,18 @@ input UnlinkCoachInput {
 }
 
 type UnlinkCoachPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
+}
+
+input UnlinkMemberTagInput {
+  memberId: ID!
+  tagId: ID!
+  clientMutationId: String
+}
+
+type UnlinkMemberTagPayload {
   success: Boolean!
   message: String!
   clientMutationId: String
