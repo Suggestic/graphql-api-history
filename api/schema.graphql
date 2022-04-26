@@ -340,7 +340,8 @@ type CommonFoodNode implements Node {
 }
 
 type ContentCategoryType implements Node {
-  contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection!
+  contentLibrary(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection
+  contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection @deprecated(reason: "Not used. Renamed to contentLibrary")
   databaseId: String
   id: ID!
   image: String
