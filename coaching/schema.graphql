@@ -173,15 +173,7 @@ type Coach implements Node {
   name: String
   email: String!
   roles: [String!]!
-  authSession: String
-  secretToken2fa: String
-  enable2fa: Boolean!
-  selfReportedRole: String
-  active: Boolean!
-  invitationExpireAt: DateTime
-  invitationStatus: PortalUserInvitationStatus
   createdAt: DateTime!
-  updatedAt: DateTime!
   members(before: String, after: String, first: Int, last: Int): MemberConnection
   avatarUrl: String
   unitSystem: UnitSystem!
@@ -1386,15 +1378,6 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
-}
-
-"""An enumeration."""
-enum PortalUserInvitationStatus {
-  """SENT"""
-  SENT
-
-  """ACCEPTED"""
-  ACCEPTED
 }
 
 type ProfileJourney {
