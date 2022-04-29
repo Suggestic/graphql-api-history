@@ -1699,7 +1699,7 @@ type Mutation {
   toggleTaskCompleted(keysHash: String!): ToggleTaskCompleted
 
   """uncheckIntake is the opposite of checkIntake. It undoes the check"""
-  uncheckIntake(category: IntakeCategory!, date: Date!, itemId: ID!): UncheckIntake!
+  uncheckIntake(category: IntakeCategory!, date: Date!, itemId: ID!, timeOfDay: TimeOfDay): UncheckIntake!
   uncheckTodayFood(date: Date!, itemId: ID!): UncheckTodayFood @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
