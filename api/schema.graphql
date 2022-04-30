@@ -3143,6 +3143,7 @@ type SupplementEdge {
 
 type SupplementOnPlan {
   checked: Boolean!
+  order: Int!
   planName: String!
   supplement: Supplement!
   timeOfDay: TimeOfDay
