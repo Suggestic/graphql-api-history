@@ -86,6 +86,7 @@ type AppointmentType {
   contactType: [CalendarContactType!]!
   multiCoachType: AppointmentMultiCoachType!
   coachesPool: [Coach!]!
+  initialBuffer: Int!
 }
 
 type AppointmentTypes {
@@ -1208,8 +1209,8 @@ type Mutation {
   cronofyAuthToken(code: String!, redirectUri: String!): CronofyAuthToken
   cronofyElementToken(permissions: [String]!): CronofyElementToken
   cronofyConferencingServiceAuth(providerName: ConferenceProviderName, redirectUri: String!): CronofyConferencingServiceAuth
-  createAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int!, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int!, title: String!): CreateAppointmentType
-  updateAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int, id: ID!, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int, title: String): UpdateAppointmentType
+  createAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int!, title: String!): CreateAppointmentType
+  updateAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int, id: ID!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int, title: String): UpdateAppointmentType
   deleteAppointmentType(id: ID!): DeleteAppointmentType
   createAppointmentEvent(input: CreateAppointmentEventInput!): CreateAppointmentEvent
   deleteAppointmentEvent(id: ID!): DeleteAppointmentEvent
