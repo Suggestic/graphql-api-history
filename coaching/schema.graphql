@@ -39,6 +39,7 @@ type Appointment {
   recurringSetting: AppointmentFrequency
   appointmentType: AppointmentType!
   contactType: CalendarContactType!
+  createdAt: DateTime
 }
 
 type AppointmentCredit {
@@ -192,6 +193,7 @@ type Coach implements Node {
   conferencingProfiles: [ConferenceProviderName!]!
   externalCalendarEvents(start: Date, end: Date, timezone: String): [ExternalCalendarEventsInDate!]!
   appointmentsByDate(fromDate: Date, toDate: Date, timezone: String): [AppointmentsInDate!]!
+  recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
 }
 
