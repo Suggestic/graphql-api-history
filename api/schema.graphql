@@ -253,6 +253,20 @@ type CheckIntake {
   success: Boolean!
 }
 
+type CheckItemDirections {
+  createdAt: DateTime!
+  friday: Boolean!
+  id: ID!
+  mealTime: TimeOfDay!
+  monday: Boolean!
+  saturday: Boolean!
+  sunday: Boolean!
+  thursday: Boolean!
+  tuesday: Boolean!
+  updatedAt: DateTime!
+  wednesday: Boolean!
+}
+
 type Checklist {
   icon: String
   items: [ChecklistItem!]!
@@ -443,6 +457,19 @@ input CreateAppointmentInput {
   timezone: String
 }
 
+input CreateCustomerInput {
+  email: String!
+  firstName: String!
+  lastName: String
+  password: String
+}
+
+type CreateCustomerShopify {
+  customer: Customer
+  message: String!
+  success: Boolean!
+}
+
 type CreateDailyRecapEntry {
   message: String!
   success: Boolean!
@@ -579,6 +606,15 @@ type CreateUser {
 type CreateWeightEntry {
   message: String
   success: Boolean
+}
+
+type Customer {
+  acceptsMarketing: Boolean!
+  displayName: String!
+  email: String
+  firstName: String
+  lastName: String
+  tags: [String!]
 }
 
 type DailyChecklist {
@@ -1084,6 +1120,17 @@ input IntValueByMealTime {
   dinner: Int
   lunch: Int
   snack: Int
+}
+
+input ItemDirectionsOfUseInput {
+  friday: Boolean
+  mealTime: TimeOfDay!
+  monday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+  thursday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
 }
 
 type JourneyDialogType {
@@ -1629,6 +1676,7 @@ type Mutation {
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
+  createCustomerShopify(input: CreateCustomerInput!): CreateCustomerShopify
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(externalId: String, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
@@ -1636,7 +1684,7 @@ type Mutation {
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
   createMyBrandedFoods(input: CreateMyBrandedFoodInput!): CreateMyBrandedFood
-  createMyChecklistItem(header: String!, tags: [String!], text: String): CreateMyChecklistItem
+  createMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String!, tags: [String!], text: String): CreateMyChecklistItem
 
   """
   checkIntake creates a log checking that the user fulfilled the action in one of their personal MyChecklistItem
@@ -1711,7 +1759,7 @@ type Mutation {
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   updateMealPlanTemplate(coach: ID, description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
   updateMyBrandedFood(id: String!, input: UpdateMyBrandedFoodInput!): UpdateMyBrandedFood
-  updateMyChecklistItem(header: String, id: ID!, tags: [String!], text: String): UpdateMyChecklistItem
+  updateMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String, id: ID!, tags: [String!], text: String): UpdateMyChecklistItem
   updateMyCommonFood(id: String!, input: UpdateMyCommonFoodInput!): UpdateMyCommonFood
   updateMyRecipe(id: ID!, input: UpdateMyRecipeInput!): UpdateMyRecipe
   updateNote(coach: ID, noteId: ID!, text: String, title: String): UpdateNote
@@ -1763,6 +1811,7 @@ type MyBrandedFoodEdge {
 
 type MyChecklistItem implements Node {
   createdAt: DateTime!
+  directionsOfUse: [CheckItemDirections!]
   header: String!
   id: ID!
   tags: [String!]!
