@@ -186,6 +186,7 @@ type Coach implements Node {
   permissions: [String!]!
   sendbirdToken: String @deprecated(reason: "Renamed. Use sendbirdAccessToken instead")
   sendbirdId: String
+  sendbirdHasEverLoggedIn: Boolean!
   sendbirdAccessToken: String
   availabilitySettings: AvailabilitySettings!
   autoResponse: String
@@ -1466,7 +1467,7 @@ type Query {
 
   """The ID of the object"""
   coach(id: ID!): Coach
-  coaches(offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
+  coaches(sendbirdHasEverLoggedIn: Boolean, offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
   programs(before: String, after: String, first: Int, last: Int): ProgramConnection
 
   """The ID of the object"""
