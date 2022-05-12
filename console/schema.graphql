@@ -700,6 +700,7 @@ type Profile {
   companyName: String!
   apiToken: String
   selfReportedRole: String
+  freeTrialRemainingDays: Int
   active: Boolean
   invitationExpireAt: Datetime
 }
