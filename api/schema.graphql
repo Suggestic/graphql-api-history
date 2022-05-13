@@ -182,6 +182,9 @@ union AvailableChecklistItems = ChecklistItem | SupplementOnPlan
 enum BiologicalSex {
   FEMALE
   MALE
+  PREFER_NOT_TO_DISCLOSE
+  UNCERTAIN
+  UNKNOWN
 }
 
 type BrandedFoodConnection {
@@ -353,6 +356,11 @@ type CommonFoodNode implements Node {
   tags: [String!]!
 }
 
+type ComponentGoal {
+  component: EntryType!
+  goal: Int!
+}
+
 type ContentCategoryType implements Node {
   contentLibrary(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection!
   contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection! @deprecated(reason: "Not used. Renamed to contentLibrary")
@@ -455,19 +463,6 @@ input CreateAppointmentInput {
   datetime: DateTime!
   note: String
   timezone: String
-}
-
-input CreateCustomerInput {
-  email: String!
-  firstName: String!
-  lastName: String
-  password: String
-}
-
-type CreateCustomerShopify {
-  customer: Customer
-  message: String!
-  success: Boolean!
 }
 
 type CreateDailyRecapEntry {
@@ -608,15 +603,6 @@ type CreateWeightEntry {
   success: Boolean
 }
 
-type Customer {
-  acceptsMarketing: Boolean!
-  displayName: String!
-  email: String
-  firstName: String
-  lastName: String
-  tags: [String!]
-}
-
 type DailyChecklist {
   days: [DayChecklistItems!]!
   icon: String
@@ -641,6 +627,7 @@ type DailyRecap {
 
 type Dashboard {
   components: [EntryType!]!
+  goals: [ComponentGoal!]!
 }
 
 type DashboardPDFType {
@@ -1676,7 +1663,6 @@ type Mutation {
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
-  createCustomerShopify(input: CreateCustomerInput!): CreateCustomerShopify
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(externalId: String, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
