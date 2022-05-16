@@ -2588,8 +2588,8 @@ type Query {
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
-  todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use checkedIntakes instead")
-  todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use checkedIntakes instead")
+  todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
+  todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
