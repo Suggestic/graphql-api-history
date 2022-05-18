@@ -146,6 +146,7 @@ type AppointmentType implements Node {
   id: ID!
   multiCoachType: AppointmentMultiCoachType!
   numberOfMember: Int!
+  refundableBeforeHours: Int!
   title: String!
 }
 
@@ -2271,11 +2272,6 @@ type ProductVariant {
   title: String!
 }
 
-enum ProfileBiologicalSex {
-  FEMALE
-  MALE
-}
-
 type ProfileBiomarkers {
   cholesterolLdl: Float
   cortisol: Float
@@ -2335,7 +2331,7 @@ type ProfileType {
   age: Int
   appVersion: Float!
   basalMetabolicRate: Int
-  biologicalSex: ProfileBiologicalSex
+  biologicalSex: BiologicalSex
   biomarkers: ProfileBiomarkers
   birthdate: Date
   bloodPressureDiastolic: Float

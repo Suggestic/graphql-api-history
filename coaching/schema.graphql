@@ -1216,7 +1216,7 @@ type Mutation {
   cronofyConferencingServiceAuth(providerName: ConferenceProviderName, redirectUri: String!): CronofyConferencingServiceAuth
   createAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int!, title: String!): CreateAppointmentType
   updateAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int, id: ID!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int, title: String): UpdateAppointmentType
-  deleteAppointmentType(id: ID!): DeleteAppointmentType
+  deleteAppointmentType(id: ID!, replaceWith: ID): DeleteAppointmentType
   createAppointmentEvent(input: CreateAppointmentEventInput!): CreateAppointmentEvent
   deleteAppointmentEvent(id: ID!): DeleteAppointmentEvent
   updateAppointmentEvent(input: UpdateAppointmentEventInput!): UpdateAppointmentEvent
