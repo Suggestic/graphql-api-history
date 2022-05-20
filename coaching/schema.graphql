@@ -446,6 +446,7 @@ input CreateProtocolInput {
   isActive: Boolean
   supplements: [SupplementProtocolInput!]
   group: ProtocolGroup
+  bundle: ID
 }
 
 input CreateSPInput {
@@ -1438,6 +1439,7 @@ type Protocol implements Node {
   group: ProtocolGroup!
   program: Program
   supplementProtocols: [SupplementProtocol!]
+  bundle: Supplement
   owner: Coach
 }
 
@@ -1775,6 +1777,7 @@ type Supplement implements Node {
   supplementFacts: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  protocolBundle(offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection!
 }
 
 type SupplementConnection {
@@ -2168,6 +2171,7 @@ input UpdateProtocolInput {
   isPublic: Boolean
   isActive: Boolean
   supplements: [SupplementProtocolInput!]
+  bundle: ID
   group: ProtocolGroup
 }
 

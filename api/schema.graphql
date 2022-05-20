@@ -2361,6 +2361,7 @@ type ProfileType {
   language: String!
   lat: String
   lon: String
+  mealPlan(fromDate: Date): [MealPlanDay!]!
   mpCalories: Int
   mpCarbsPerc: Float
   mpDays: Int
@@ -2441,6 +2442,7 @@ enum ProgramOrderByField {
 }
 
 type Protocol implements Node {
+  bundle: Supplement
   createdAt: DateTime!
   group: ProtocolGroup!
   id: ID!
@@ -2452,6 +2454,16 @@ type Protocol implements Node {
   program: Program
   supplementProtocols: [SupplementProtocol!]
   updatedAt: DateTime!
+}
+
+type ProtocolConnection {
+  edges: [ProtocolEdge]!
+  pageInfo: PageInfo!
+}
+
+type ProtocolEdge {
+  cursor: String!
+  node: Protocol
 }
 
 enum ProtocolGroup {
@@ -3139,6 +3151,7 @@ type Supplement implements Node {
   instructions: String
   mainImage: String!
   name: String!
+  protocolBundle(after: String, before: String, first: Int, last: Int, offset: Int): ProtocolConnection!
   servingName: String!
   shopifyParentId: String
   shopifyVariantId: String
