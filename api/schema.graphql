@@ -37,6 +37,11 @@ type AddRecipesToShoppingList {
   success: Boolean
 }
 
+type AddSleepTime {
+  message: String!
+  success: Boolean!
+}
+
 type AddStepsCount {
   message: String!
   success: Boolean!
@@ -1649,6 +1654,9 @@ type Mutation {
   """
   addFoodLog(date: Date!, foodId: ID!, grams: Int, mealTime: MealTime!, milligrams: Int, portionModifier: String, servings: Float, time: Time): AddFoodLog!
   addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
+
+  """addSleepTime add sleep time log"""
+  addSleepTime(date: Date, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
   cancelAppointment(appointment: ID!): CancelAppointment
