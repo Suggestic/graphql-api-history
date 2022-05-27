@@ -1730,6 +1730,7 @@ type Mutation {
   removeMealPlanRecipe(mealId: ID!): RemoveMealPlanRecipe
   removeOwnMeal(databaseId: String!): RemoveOwnMeal
   requestResetPassword(email: String!): RequestResetPassword
+  resendAppointmentConfirmationEmail(appointment: ID!, profile: ID): ResendAppointmentConfirmationEmail
   resetPassword(code: String!, newPassword: String!): ResetPassword
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
   sendFeedback(message: String!, subject: String!): SendFeedback
@@ -2839,6 +2840,11 @@ type RemoveOwnMeal {
 type RequestResetPassword {
   message: String!
   resetPasswordCode: String
+  success: Boolean!
+}
+
+type ResendAppointmentConfirmationEmail {
+  message: String!
   success: Boolean!
 }
 
