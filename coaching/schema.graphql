@@ -1050,6 +1050,7 @@ type Member implements Node {
   supplementPlans(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanConnection
   coaches: [Coach!]!
   tags: [MemberTag!]!
+  sleepTimes(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
 }
 
 type MemberConnection {
@@ -1652,6 +1653,30 @@ input SingleSupplementProtocolInput {
   saturday: Boolean
   sunday: Boolean
   length: Int!
+}
+
+type SleepTime {
+  id: ID!
+  value: Int!
+  source: String!
+  date: Date!
+}
+
+type SleepTimesConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [SleepTimesEdge]!
+}
+
+"""A Relay edge containing a `SleepTimes` and its cursor."""
+type SleepTimesEdge {
+  """The item at the end of the edge"""
+  node: SleepTime
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 input SPProtocolInput {
