@@ -749,16 +749,16 @@ type HrvLog {
   timestamp: DateTime!
 }
 
-type HrvLogsConnnectionConnection {
+type HrvLogsConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
 
   """Contains the nodes in this connection."""
-  edges: [HrvLogsConnnectionEdge]!
+  edges: [HrvLogsEdge]!
 }
 
-"""A Relay edge containing a `HrvLogsConnnection` and its cursor."""
-type HrvLogsConnnectionEdge {
+"""A Relay edge containing a `HrvLogs` and its cursor."""
+type HrvLogsEdge {
   """The item at the end of the edge"""
   node: HrvLog
 
@@ -1078,7 +1078,8 @@ type Member implements Node {
   coaches: [Coach!]!
   tags: [MemberTag!]!
   sleepTimes(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
-  hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnnectionConnection
+  sleepQualityScores(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
+  hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnection
 }
 
 type MemberConnection {
@@ -1681,6 +1682,30 @@ input SingleSupplementProtocolInput {
   saturday: Boolean
   sunday: Boolean
   length: Int!
+}
+
+type SleepQualityScore {
+  id: ID!
+  value: Int!
+  source: String!
+  date: Date!
+}
+
+type SleepQualityScoresConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [SleepQualityScoresEdge]!
+}
+
+"""A Relay edge containing a `SleepQualityScores` and its cursor."""
+type SleepQualityScoresEdge {
+  """The item at the end of the edge"""
+  node: SleepQualityScore
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type SleepTime {
