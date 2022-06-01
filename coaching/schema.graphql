@@ -154,6 +154,9 @@ type AvailableSupplementPlanTemplates {
 enum BiologicalSex {
   MALE
   FEMALE
+  UNCERTAIN
+  UNKNOWN
+  PREFER_NOT_TO_DISCLOSE
 }
 
 enum CalendarContactType {
@@ -739,6 +742,30 @@ enum HabitAnswerType {
   NEGATIVE
 }
 
+type HrvLog {
+  id: ID!
+  value: Float!
+  source: String!
+  timestamp: DateTime!
+}
+
+type HrvLogsConnnectionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [HrvLogsConnnectionEdge]!
+}
+
+"""A Relay edge containing a `HrvLogsConnnection` and its cursor."""
+type HrvLogsConnnectionEdge {
+  """The item at the end of the edge"""
+  node: HrvLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 enum IntakeCategory {
   FOOD
   SUPPLEMENT
@@ -1051,6 +1078,7 @@ type Member implements Node {
   coaches: [Coach!]!
   tags: [MemberTag!]!
   sleepTimes(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
+  hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnnectionConnection
 }
 
 type MemberConnection {
