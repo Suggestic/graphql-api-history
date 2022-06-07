@@ -32,9 +32,24 @@ type AddFoodLog {
   success: Boolean!
 }
 
+type AddHeartRateLog {
+  message: String!
+  success: Boolean!
+}
+
+type AddHRVLog {
+  message: String!
+  success: Boolean!
+}
+
 type AddRecipesToShoppingList {
   message: String
   success: Boolean
+}
+
+type AddSleepQualityScore {
+  message: String!
+  success: Boolean!
 }
 
 type AddSleepTime {
@@ -1026,6 +1041,23 @@ type HardDeleteMyProfileMutation {
   success: Boolean
 }
 
+type HeartRateLog {
+  id: ID!
+  source: String!
+  timestamp: DateTime!
+  value: Float!
+}
+
+type HeartRateLogs {
+  cursor: String!
+  node: HeartRateLog
+}
+
+type HeartRateLogsConnnection {
+  edges: [HeartRateLogs]!
+  pageInfo: PageInfo!
+}
+
 type Hours {
   friday: Day
   monday: Day
@@ -1034,6 +1066,23 @@ type Hours {
   thursday: Day
   tuesday: Day
   wednesday: Day
+}
+
+type HrvLog {
+  id: ID!
+  source: String!
+  timestamp: DateTime!
+  value: Float!
+}
+
+type HrvLogs {
+  cursor: String!
+  node: HrvLog
+}
+
+type HrvLogsConnnection {
+  edges: [HrvLogs]!
+  pageInfo: PageInfo!
 }
 
 type Hydration {
@@ -1653,7 +1702,16 @@ type Mutation {
   addFoodLog logs that the user ate specific food, like a recipe, a personal recipe, a meal plan's meal, etc
   """
   addFoodLog(date: Date!, foodId: ID!, grams: Int, mealTime: MealTime!, milligrams: Int, portionModifier: String, servings: Float, time: Time): AddFoodLog!
+
+  """addHRVLog add HRV log"""
+  addHRVLog(timestamp: DateTime, value: PositiveFloat!): AddHRVLog!
+
+  """addHeartRateLog add Heart Rate Log log"""
+  addHeartRateLog(timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
   addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
+
+  """addSleepQualityScore add sleep quality score log"""
+  addSleepQualityScore(date: Date, value: Int!): AddSleepQualityScore!
 
   """addSleepTime add sleep time log"""
   addSleepTime(date: Date, value: Int!): AddSleepTime!
@@ -2261,6 +2319,10 @@ input PortionInput {
   unit: String!
 }
 
+scalar PositiveFloat
+
+scalar PositiveInt
+
 enum PriceRate {
   RATE_0
   RATE_1
@@ -2517,6 +2579,8 @@ type Query {
   foodLogsByUser(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!, userId: String!): MealLogConnection
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
+  heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): HeartRateLogsConnnection!
+  hrvLogs(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, startDate: Date!): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
@@ -2595,6 +2659,8 @@ type Query {
   shoppingListAggregate(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection
   shoppingListBadge: Boolean
   similarMacrosRecipes(recipeId: String, serving: Int, size: Int): [Recipe]
+  sleepQualityScores(after: String, end: Date!, first: Int, id: ID, start: Date!): SleepQualityScoresConnnection!
+  sleepTimes(after: String, end: Date!, first: Int, id: ID, start: Date!): SleepTimesConnnection!
   stepsCounter(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): StepsCounterConnection!
   streaks(endDate: Date!, startDate: Date!): [Streak!]!
   streaksStats(endDate: Date!, startDate: Date!): StreaksStats!
@@ -2988,6 +3054,40 @@ enum SkillLevel {
   EASY
   EXPERT
   MEDIUM
+}
+
+type SleepQualityScore {
+  date: Date!
+  id: ID!
+  source: String!
+  value: Int!
+}
+
+type SleepQualityScoreEdge {
+  cursor: String!
+  node: SleepQualityScore
+}
+
+type SleepQualityScoresConnnection {
+  edges: [SleepQualityScoreEdge]!
+  pageInfo: PageInfo!
+}
+
+type SleepTime {
+  date: Date!
+  id: ID!
+  source: String!
+  value: Int!
+}
+
+type SleepTimeEdge {
+  cursor: String!
+  node: SleepTime
+}
+
+type SleepTimesConnnection {
+  edges: [SleepTimeEdge]!
+  pageInfo: PageInfo!
 }
 
 enum SortBy {

@@ -742,6 +742,30 @@ enum HabitAnswerType {
   NEGATIVE
 }
 
+type HeartRateLog {
+  id: ID!
+  value: Float!
+  source: String!
+  timestamp: DateTime!
+}
+
+type HeartRateLogsConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [HeartRateLogsEdge]!
+}
+
+"""A Relay edge containing a `HeartRateLogs` and its cursor."""
+type HeartRateLogsEdge {
+  """The item at the end of the edge"""
+  node: HeartRateLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type HrvLog {
   id: ID!
   value: Float!
@@ -1080,6 +1104,7 @@ type Member implements Node {
   sleepTimes(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
   sleepQualityScores(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
   hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnection
+  heartRateLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
 }
 
 type MemberConnection {
