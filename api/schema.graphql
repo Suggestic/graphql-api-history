@@ -198,7 +198,7 @@ enum AttrDataType {
   STRING
 }
 
-union AvailableChecklistItems = ChecklistItem | SupplementOnPlan
+union AvailableChecklistItems = ChecklistItem | MyChecklistItemOnPlan | SupplementOnPlan
 
 enum BiologicalSex {
   FEMALE
@@ -1142,6 +1142,7 @@ type IngredientSearchResultEdge {
 
 enum IntakeCategory {
   FOOD
+  MY_CHECKLIST_ITEM
   PLAN_SUPPLEMENT
   SUPPLEMENT
 }
@@ -1881,6 +1882,11 @@ type MyChecklistItemConnection {
 type MyChecklistItemEdge {
   cursor: String!
   node: MyChecklistItem
+}
+
+type MyChecklistItemOnPlan {
+  checked: Boolean!
+  myChecklistItem: MyChecklistItem!
 }
 
 type MyChecklistLog {
