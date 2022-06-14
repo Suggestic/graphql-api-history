@@ -340,6 +340,7 @@ type Coach implements Node {
   email: String!
   id: ID!
   name: String!
+  sendbirdId: String
 }
 
 type CoachConnection {
