@@ -3113,6 +3113,19 @@ type Source {
 }
 
 input SPProtocolInput {
+  directionsOfUse: [DirectionsOfUseInput!]!
+  friday: Boolean
+  isActive: Boolean
+  monday: Boolean
+  protocolId: ID!
+  saturday: Boolean
+  sunday: Boolean
+  thursday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+}
+
+input SPUpdateProtocolInput {
   directionsOfUse: [DirectionsOfUseInput!]
   friday: Boolean
   isActive: Boolean
@@ -3645,7 +3658,7 @@ input UpdateSPInput {
   setProtocols: [SPProtocolInput!]
   setSupplements: [SingleSupplementActivableProtocolInput!]
   startDate: Date
-  updateProtocols: [SPProtocolInput!]
+  updateProtocols: [SPUpdateProtocolInput!]
   visibility: Boolean
 }
 

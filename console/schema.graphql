@@ -1127,6 +1127,7 @@ input UpdateThirdPartyAppCustomizationInput {
 type UpdateUser {
   success: Boolean!
   message: String!
+  user: User
 }
 
 input UpdateUserInput {
@@ -1183,8 +1184,10 @@ type User implements Node {
   freeTrialRemainingDays: Int
   selfReportedRole: String
   active: Boolean
+  createdAt: Datetime!
   invitationExpireAt: Datetime
   invitationStatus: InvitationStatus
+  invitationHasExpired: Boolean
 }
 
 type UserConnection {

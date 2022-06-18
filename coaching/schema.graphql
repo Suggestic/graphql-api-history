@@ -1684,7 +1684,6 @@ type Settings {
 
 input SingleSupplementActivableProtocolInput {
   supplementId: ID!
-  directionsOfUse: [DirectionsOfUseInput!]
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
@@ -1692,13 +1691,13 @@ input SingleSupplementActivableProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  directionsOfUse: [DirectionsOfUseInput!]
   length: Int!
   isActive: Boolean
 }
 
 input SingleSupplementProtocolInput {
   supplementId: ID!
-  directionsOfUse: [DirectionsOfUseInput!]
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
@@ -1706,6 +1705,7 @@ input SingleSupplementProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  directionsOfUse: [DirectionsOfUseInput!]
   length: Int!
 }
 
@@ -1760,7 +1760,6 @@ type SleepTimesEdge {
 input SPProtocolInput {
   protocolId: ID!
   isActive: Boolean
-  directionsOfUse: [DirectionsOfUseInput!]
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
@@ -1768,6 +1767,7 @@ input SPProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  directionsOfUse: [DirectionsOfUseInput!]!
 }
 
 input SPTProtocolInput {
@@ -1780,6 +1780,19 @@ input SPTProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+}
+
+input SPUpdateProtocolInput {
+  protocolId: ID!
+  isActive: Boolean
+  monday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+  thursday: Boolean
+  friday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+  directionsOfUse: [DirectionsOfUseInput!]
 }
 
 type StartJourneys {
@@ -2021,7 +2034,6 @@ type SupplementProtocol {
 
 input SupplementProtocolInput {
   supplementId: ID!
-  directionsOfUse: [DirectionsOfUseInput!]
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
@@ -2029,6 +2041,7 @@ input SupplementProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  directionsOfUse: [DirectionsOfUseInput!]
 }
 
 input SwapMealPlanRecipeInput {
@@ -2305,7 +2318,7 @@ input UpdateSPInput {
   isActive: Boolean
   setProtocols: [SPProtocolInput!]
   setSupplements: [SingleSupplementActivableProtocolInput!]
-  updateProtocols: [SPProtocolInput!]
+  updateProtocols: [SPUpdateProtocolInput!]
 }
 
 input UpdateSPTInput {
