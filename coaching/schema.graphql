@@ -203,6 +203,7 @@ type Coach implements Node {
   appointmentsByDate(fromDate: Date, toDate: Date, timezone: String): [AppointmentsInDate!]!
   recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
+  affiliateId: String
 }
 
 input CoachAllowSeeAllInput {
@@ -314,6 +315,7 @@ input CoachUpdateInput {
   allowSeeAll: Boolean
   members: [ID]
   enable2fa: Boolean
+  affiliateId: String
   clientMutationId: String
 }
 
