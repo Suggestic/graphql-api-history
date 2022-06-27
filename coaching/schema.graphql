@@ -1109,6 +1109,7 @@ type Member implements Node {
   sleepQualityScores(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
   hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnection
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
+  timezone: String!
 }
 
 type MemberConnection {
