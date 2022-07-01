@@ -1744,7 +1744,7 @@ type Mutation {
   """
   checkIntake creates a log checking that the user fulfilled the action in one of their personal MyChecklistItem
   """
-  createMyChecklistItemLog(date: Date!, itemId: ID!): CreateMyChecklistItemLog!
+  createMyChecklistItemLog(date: Date!, itemId: ID!, timeOfDay: TimeOfDay!): CreateMyChecklistItemLog!
   createMyCommonFoods(input: CreateMyCommonFoodInput!): CreateMyCommonFood
   createMyRecipe(input: CreateMyRecipeInput!): CreateMyRecipe
   createNote(coach: ID, eventId: ID, text: String!, title: String!): CreateNote
@@ -1766,7 +1766,7 @@ type Mutation {
   deleteMyChecklistItem(id: ID!): DeleteMyChecklistItem
 
   """deleteMyChecklistItemLog deletes a MyChecklistItem log by ID"""
-  deleteMyChecklistItemLog(date: Date!, itemId: ID!): DeleteMyChecklistItemLog!
+  deleteMyChecklistItemLog(date: Date!, itemId: ID!, timeOfDay: TimeOfDay!): DeleteMyChecklistItemLog!
   deleteMyCommonFood(id: String!): DeleteMyCommonFood
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
@@ -1888,12 +1888,14 @@ type MyChecklistItemEdge {
 type MyChecklistItemOnPlan {
   checked: Boolean!
   myChecklistItem: MyChecklistItem!
+  timeOfDay: TimeOfDay
 }
 
 type MyChecklistLog {
   id: ID!
   myChecklistItem: MyChecklistItem!
   myChecklistItemId: ID!
+  timeOfDay: TimeOfDay!
 }
 
 type MyChecklistLogs {
