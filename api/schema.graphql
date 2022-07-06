@@ -1778,6 +1778,7 @@ type Mutation {
   generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, variety: MPVariety): GenerateMealPlan
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   login(userId: String!): LoginUser
+  processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean = true, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
   profileRestrictionsUpdate(replace: Boolean, restrictions: [ID]): ProfileRestrictionsUpdate
@@ -2340,9 +2341,38 @@ enum PriceRate {
   RATE_4
 }
 
+type ProcessAppleReceipt {
+  message: String!
+  success: Boolean!
+}
+
+input ProcessAppleReceiptInput {
+  isInitial: Boolean
+  receiptData: String!
+}
+
 type ProductOption {
   name: String!
   values: [String!]
+}
+
+type ProductType implements Node {
+  createdAt: DateTime
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int): ProgramConnection!
+  updatedAt: DateTime
+}
+
+type ProductTypeConnection {
+  edges: [ProductTypeEdge]!
+  pageInfo: PageInfo!
+}
+
+type ProductTypeEdge {
+  cursor: String!
+  node: ProductType
 }
 
 type ProductVariant {
@@ -2493,10 +2523,12 @@ type Program implements Node {
   isPremium: Boolean!
   name: String!
   order: Int!
+  productSet(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): ProductTypeConnection!
   restrictions(encoded: Boolean): [String!]!
   showDefaultGoals: Boolean!
   slug: String
   tags: [String!]!
+  transactionSet(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTransactionConnection!
   visibility: Boolean!
 }
 
@@ -2640,6 +2672,7 @@ type Query {
   profileRecommendations: [ProfileRecommendationType]
   program(id: ID!): Program
   programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int, orderBy: ProgramOrderBy): ProgramConnection
+  purchases: UserPurchases
   quizAnswers: [QuizAnswer!]!
   quizPrograms: [QuizProgram]
   recentMealLogs: [MealLog]
@@ -3195,6 +3228,45 @@ enum SubscriptionDuration {
   YEAR
 }
 
+type SubscriptionTransaction implements Node {
+  cancellationDate: DateTime
+  cancellationSource: String
+  createdAt: DateTime
+  email: String
+  expirationDate: DateTime
+  expiresStat: String
+  externalTransactionId: String
+  hasRefund: Boolean!
+  id: ID!
+  isActive: Boolean!
+  isCanceled: Boolean!
+  isDowngrade: Boolean!
+  isExpired: Boolean
+  isInitial: Boolean!
+  isProcess: Boolean!
+  isRenewal: Boolean!
+  isTrialPeriod: Boolean!
+  livemode: Boolean!
+  parentId: String
+  parentType: String
+  program: Program
+  programStat: String
+  purchaseDate: DateTime
+  subscription: SubscriptionType
+  transactionProvider: String!
+  updatedAt: DateTime
+}
+
+type SubscriptionTransactionConnection {
+  edges: [SubscriptionTransactionEdge]!
+  pageInfo: PageInfo!
+}
+
+type SubscriptionTransactionEdge {
+  cursor: String!
+  node: SubscriptionTransaction
+}
+
 type SubscriptionType implements Node {
   appleId: String
   billingPeriod: SubscriptionBillingPeriod
@@ -3208,6 +3280,7 @@ type SubscriptionType implements Node {
   name: String!
   periodPrice: Int!
   permissions: [String!]
+  product: ProductType
   totalPrice: Int!
   trialPeriodDays: Int!
   updatedAt: DateTime
@@ -3734,6 +3807,10 @@ type UserFavoriteRecipe {
 type UserFavoriteRestaurant {
   isUserFavorite: Boolean
   success: Boolean
+}
+
+type UserPurchases {
+  activeSubscriptionTransaction: SubscriptionTransaction
 }
 
 type UserRecipe implements Node {
