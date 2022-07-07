@@ -239,6 +239,11 @@ type BrandedFoodNode implements Node {
   tags: [String!]!
 }
 
+type BulkCreateEntries {
+  message: String!
+  success: Boolean!
+}
+
 enum CalendarContactType {
   GOOGLE_MEET
   PHONE_CALL
@@ -909,6 +914,13 @@ type ExerciseEntryEdge {
   node: ExerciseEntry
 }
 
+input ExerciseEntryInput {
+  datetime: DateTime!
+  durationMinutes: PositiveInt!
+  intensity: ExerciseIntensity!
+  type: ExerciseType!
+}
+
 enum ExerciseIntensity {
   LOW
   MODERATE
@@ -1042,6 +1054,18 @@ type HardDeleteMyProfileMutation {
   success: Boolean
 }
 
+type HealthDevice implements Node {
+  deviceId: Int!
+  deviceName: String!
+  id: ID!
+}
+
+input HeartRateEntryInput {
+  datetime: DateTime!
+  source: String!
+  value: PositiveInt!
+}
+
 type HeartRateLog {
   id: ID!
   source: String!
@@ -1069,6 +1093,12 @@ type Hours {
   wednesday: Day
 }
 
+input HRVEntryInput {
+  datetime: DateTime!
+  source: String!
+  value: PositiveFloat!
+}
+
 type HrvLog {
   id: ID!
   source: String!
@@ -1091,6 +1121,11 @@ type Hydration {
   goal: Int
   isToday: Boolean
   quantity: Int
+}
+
+input HydrationEntryInput {
+  date: Date!
+  quantity: PositiveInt!
 }
 
 enum Icon {
@@ -1719,6 +1754,7 @@ type Mutation {
   addSleepTime(date: Date, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
+  bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
   changeMealPlannerDayMeal(day: Int!, mealTime: MealTime!, recipeId: String!): ChangeMealPlannerDayMeal
 
@@ -2715,6 +2751,7 @@ type Query {
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
+  trackingDevices: [HealthDevice!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
@@ -3098,6 +3135,12 @@ enum SkillLevel {
   MEDIUM
 }
 
+input SleepQualityEntryInput {
+  date: Date!
+  source: String!
+  value: PositiveInt!
+}
+
 type SleepQualityScore {
   date: Date!
   id: ID!
@@ -3125,6 +3168,12 @@ type SleepTime {
 type SleepTimeEdge {
   cursor: String!
   node: SleepTime
+}
+
+input SleepTimeEntryInput {
+  date: Date!
+  source: String!
+  value: PositiveInt!
 }
 
 type SleepTimesConnnection {
@@ -3187,6 +3236,11 @@ type StepCount {
   datetime: DateTime!
   id: ID!
   steps: Int!
+}
+
+input StepCountEntryInput {
+  datetime: DateTime!
+  steps: PositiveInt!
 }
 
 type StepsCounterConnection {
@@ -3860,6 +3914,11 @@ enum WeeklyWeightGoal {
   GOAL_4
   MAINTAIN
   MANTAIN
+}
+
+input WeightEntryInput {
+  date: Date!
+  value: PositiveFloat!
 }
 
 type WeightTracker {
