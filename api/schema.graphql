@@ -2530,6 +2530,7 @@ type ProfileType {
   subscription: SubscriptionType
   tags: [String!]
   targetWeight: Float
+  thryvePartnerId: String!
   timezone: String!
   totalDailyEnergyExpenditure: Int
   updatedAt: DateTime
