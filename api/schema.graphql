@@ -3278,6 +3278,7 @@ type StreaksStats {
 enum SubscriptionBillingPeriod {
   MONTH
   ONCE
+  SEMESTER
   TRI_MONTH
   YEAR
 }
