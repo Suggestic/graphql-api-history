@@ -3461,7 +3461,7 @@ type SupplementOnPlan {
   checked: Boolean!
   order: Int!
   planName: String!
-  quantity: Int!
+  quantity: Float!
   supplement: Supplement!
   timeOfDay: TimeOfDay
 }
