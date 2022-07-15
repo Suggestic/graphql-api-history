@@ -2083,6 +2083,9 @@ type UISections {
   menuMembers: Boolean!
   menuMealPlans: Boolean!
   menuSupplements: Boolean!
+  menuAppointments: Boolean!
+  menuChat: Boolean!
+  memberLabs: Boolean!
   memberLabTestReports: Boolean!
   memberProgress: Boolean!
   memberMealPlan: Boolean!
@@ -2090,6 +2093,8 @@ type UISections {
   memberNewMember: Boolean!
   memberCustomData: Boolean!
   memberSupplements: Boolean!
+  memberAppointments: Boolean!
+  memberChat: Boolean!
   progressActivities: Boolean!
   progressCalendar: Boolean!
   progressMeals: Boolean!
@@ -2102,11 +2107,9 @@ type UISections {
   progressDailySupplements: Boolean!
   progressSteps: Boolean!
   progressExercise: Boolean!
-  menuAppointments: Boolean!
-  menuChat: Boolean!
-  memberLabs: Boolean!
-  memberAppointments: Boolean!
-  memberChat: Boolean!
+  progressHeartRate: Boolean!
+  progressHeartRateVariability: Boolean!
+  progressSleep: Boolean!
   profileGoals: Boolean!
   profileFoodPreferences: Boolean!
   profileAppointmentCredits: Boolean!
