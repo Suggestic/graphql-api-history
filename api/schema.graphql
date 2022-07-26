@@ -239,6 +239,10 @@ type BrandedFoodNode implements Node {
   tags: [String!]!
 }
 
+type BrandedFoodNodeProxy {
+  brandedFood: BrandedFoodNode!
+}
+
 type BulkCreateEntries {
   message: String!
   success: Boolean!
@@ -381,6 +385,10 @@ type CommonFoodNode implements Node {
   nutrients: [Nutrient!]!
   portions: [Portion]
   tags: [String!]!
+}
+
+type CommonFoodNodeProxy {
+  commonFood: CommonFoodNode!
 }
 
 type ComponentGoal {
@@ -866,6 +874,7 @@ enum EntryType {
   HYDRATION_TRACKER
   MP_MEAL_TRACKER
   MY_CHECKLIST_TRACKER
+  SLEEP_TIME_TRACKER
   STEPS_TRACKER
   TODAY_FOOD
   TODAY_SUPPLEMENT
@@ -935,6 +944,8 @@ enum ExerciseType {
   WORKOUT_ROUTINE
 }
 
+union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | MealProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy
+
 enum FoodCategory {
   BRANDED
   COMMON
@@ -960,6 +971,7 @@ input FoodFilter {
 
 type FoodLog {
   date: Date!
+  food: Food!
   foodId: ID!
   grams: Float
   id: ID!
@@ -967,7 +979,7 @@ type FoodLog {
   portionModifier: String
   servings: Float
   time: Time
-  type: FoodCategory
+  type: FoodCategory!
 }
 
 type FoodLogConnection {
@@ -1079,7 +1091,10 @@ type HeartRateLogs {
 }
 
 type HeartRateLogsConnnection {
+  average: Float!
   edges: [HeartRateLogs]!
+  maximum: Float!
+  minimum: Float!
   pageInfo: PageInfo!
 }
 
@@ -1603,6 +1618,10 @@ type MealPlanTemplateEdge {
   node: MealPlanTemplate
 }
 
+type MealProxy {
+  meal: Meal!
+}
+
 enum MealTime {
   BREAKFAST
   DINNER
@@ -1903,6 +1922,10 @@ type MyBrandedFoodEdge {
   node: MyBrandedFood
 }
 
+type MyBrandedFoodProxy {
+  myBrandedFood: MyBrandedFood!
+}
+
 type MyChecklistItem implements Node {
   createdAt: DateTime!
   directionsOfUse: [CheckItemDirections!]
@@ -1969,6 +1992,10 @@ type MyCommonFoodConnection {
 type MyCommonFoodEdge {
   cursor: String!
   node: MyCommonFood
+}
+
+type MyCommonFoodProxy {
+  myCommonFoodProxy: MyCommonFood!
 }
 
 interface Node {
@@ -2911,6 +2938,10 @@ enum RecipeMealTime {
   TREAT_DESSERT
 }
 
+type RecipeProxy {
+  recipe: Recipe!
+}
+
 type RecipeSearchResult {
   onPlan: [Recipe]
   otherResults: [Recipe]
@@ -3184,8 +3215,10 @@ input SleepTimeEntryInput {
 }
 
 type SleepTimesConnnection {
+  dailyGoal: Int!
   edges: [SleepTimeEdge]!
   pageInfo: PageInfo!
+  totalTime: Int!
 }
 
 enum SortBy {
@@ -3909,6 +3942,10 @@ type UserRecipeConnection {
 type UserRecipeEdge {
   cursor: String!
   node: UserRecipe
+}
+
+type UserRecipeProxy {
+  userRecipe: UserRecipe!
 }
 
 scalar UUID
