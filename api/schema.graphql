@@ -644,6 +644,11 @@ type DailyChecklist {
   name: String!
 }
 
+type DailyExerciseTime {
+  totalTime: Int!
+  type: String!
+}
+
 type DailyQuestion {
   answers: [Answer]
   done: Boolean
@@ -906,8 +911,11 @@ enum EventType {
 }
 
 type ExerciseEntriesConnection {
+  dailyGoal: Int!
   edges: [ExerciseEntryEdge]!
   pageInfo: PageInfo!
+  totalTime: Int!
+  totalTimePerType: [DailyExerciseTime!]!
 }
 
 type ExerciseEntry {
@@ -1127,6 +1135,7 @@ type HrvLogs {
 }
 
 type HrvLogsConnnection {
+  average: Float!
   edges: [HrvLogs]!
   pageInfo: PageInfo!
 }
@@ -3192,6 +3201,7 @@ type SleepQualityScoreEdge {
 }
 
 type SleepQualityScoresConnnection {
+  average: Int!
   edges: [SleepQualityScoreEdge]!
   pageInfo: PageInfo!
 }
