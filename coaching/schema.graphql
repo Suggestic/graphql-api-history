@@ -2304,6 +2304,7 @@ input UpdateSettingsInput {
   name: String
   password: UpdatePasswordInput
   availabilitySettings: AvailabilitySettingsInput
+  affiliateId: String
   clientMutationId: String
 }
 
