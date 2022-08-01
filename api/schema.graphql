@@ -876,9 +876,12 @@ enum EntryType {
   DAILY_RECAP
   EXERCISE_TRACKER
   FOOD_LOGS
+  HEART_RATE_TRACKER
+  HRV_TRACKER
   HYDRATION_TRACKER
   MP_MEAL_TRACKER
   MY_CHECKLIST_TRACKER
+  SLEEP_QUALITY_SCORE_TRACKER
   SLEEP_TIME_TRACKER
   STEPS_TRACKER
   TODAY_FOOD
@@ -1780,7 +1783,7 @@ type Mutation {
 
   """addSleepTime add sleep time log"""
   addSleepTime(date: Date, value: Int!): AddSleepTime!
-  addStepsCount(datetime: DateTime!, steps: Int!): AddStepsCount!
+  addStepsCount(datetime: DateTime!, source: String, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
@@ -3285,15 +3288,19 @@ type StartOverMealPlan {
 type StepCount {
   datetime: DateTime!
   id: ID!
+  source: String!
   steps: Int!
 }
 
 input StepCountEntryInput {
   datetime: DateTime!
+  source: String!
   steps: PositiveInt!
 }
 
 type StepsCounterConnection {
+  dailyGoal: Int!
+  distance: Float!
   edges: [StepsCounterEdge]!
   pageInfo: PageInfo!
 }
@@ -3640,6 +3647,7 @@ type TimePeriod {
 }
 
 type ToggleShoppingListItem {
+  message: String
   success: Boolean
 }
 
