@@ -1842,7 +1842,7 @@ type Mutation {
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
-  generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, variety: MPVariety): GenerateMealPlan
+  generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   login(userId: String!): LoginUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
