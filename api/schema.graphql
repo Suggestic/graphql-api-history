@@ -28,6 +28,7 @@ type AddFavoriteArticle {
 }
 
 type AddFoodLog {
+  foodLog: FoodLog
   message: String!
   success: Boolean!
 }
@@ -1667,6 +1668,7 @@ enum MealType {
   OWN_RECIPE
   RECIPE
   USDA_MEAL
+  USER_RECIPE
 }
 
 type MenuItem implements Node {
