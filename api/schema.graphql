@@ -221,6 +221,7 @@ type BrandedFoodEdge {
 }
 
 type BrandedFoodNode implements Node {
+  brandName: String
   brandOwner: String!
   brandedFoodCategory: String
   calories: Float
@@ -539,6 +540,7 @@ type CreateMyBrandedFood {
 }
 
 input CreateMyBrandedFoodInput {
+  brandName: String
   brandOwner: String!
   brandedFoodCategory: String
   description: String
@@ -1910,6 +1912,7 @@ type Mutation {
 }
 
 type MyBrandedFood implements Node {
+  brandName: String
   brandOwner: String!
   brandedFoodCategory: String
   calories: Float
@@ -3319,8 +3322,10 @@ type StepsCounterEdge {
 
 type Streak {
   activities: [EntryType]
+  completed: [EntryType]
   date: Date
   dayStatus: DayStatus
+  empties: [EntryType]
   hasPreviousStreak: Boolean
   isToday: Boolean
   longestStreakEver: Int! @deprecated
@@ -3749,6 +3754,7 @@ type UpdateMyBrandedFood {
 }
 
 input UpdateMyBrandedFoodInput {
+  brandName: String
   brandOwner: String
   brandedFoodCategory: String
   description: String
