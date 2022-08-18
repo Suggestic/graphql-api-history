@@ -2482,8 +2482,10 @@ type ProfileBiomarkers {
 }
 
 input ProfileCustomAttribute {
+  category: String
   dataType: AttrDataType!
   name: String!
+  timestamp: Float
   value: GenericScalar!
 }
 
@@ -2541,6 +2543,7 @@ type ProfileType {
   dailyCaloricIntakeGoal: Int
   debugMealPlanVariables: DebugMealPlanVariables!
   email: String!
+  encodedAttributes: String
   extraData: JSONString
   gender: String
   glucoseLevel: Float
