@@ -1873,6 +1873,7 @@ type Mutation {
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
   sendFeedback(message: String!, subject: String!): SendFeedback
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
+  setActiveHealthDevice(device: ID!): SetActiveHealthDevice
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
@@ -2524,6 +2525,7 @@ type ProfileRestrictionsUpdate {
 }
 
 type ProfileType {
+  activeHealthDevice: HealthDevice
   activityLevel: ActivityLevel
   adherenceScore: Float!
   age: Int
@@ -3162,6 +3164,11 @@ type Servings {
   equivalent: Float
   selected: Boolean
   unit: String
+}
+
+type SetActiveHealthDevice {
+  message: String!
+  success: Boolean!
 }
 
 type SetMealPlanToTemplate {
