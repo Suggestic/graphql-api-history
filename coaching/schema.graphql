@@ -924,6 +924,7 @@ enum LabTestReportStatus {
   RETURNED_TO_LAB
   RESULTS_READY
   PROCESS_COMPLETE
+  RESULTS_DELIVERED
 }
 
 input LinkCoachInput {
