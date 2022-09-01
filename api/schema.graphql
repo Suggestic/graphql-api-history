@@ -1329,7 +1329,6 @@ enum LabTestReportStatus {
   FULFILLED
   ORDERED
   PROCESS_COMPLETE
-  RESULTS_DELIVERED
   RESULTS_READY
   RETURNED_TO_LAB
 }
@@ -2808,7 +2807,6 @@ type Query {
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
-  trackingDailyGoals: TrackingDailyGoals!
   trackingDevices: [HealthDevice!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
@@ -3678,15 +3676,6 @@ type ToggleShoppingListItem {
 type ToggleTaskCompleted {
   message: String
   success: Boolean
-}
-
-type TrackingDailyGoal {
-  entryType: EntryType!
-  goal: Int
-}
-
-type TrackingDailyGoals {
-  dailyGoals: [TrackingDailyGoal!]!
 }
 
 type UncheckIntake {
