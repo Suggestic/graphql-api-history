@@ -43,6 +43,7 @@ type Appointment {
   contactType: CalendarContactType!
   createdAt: DateTime
   coach: Coach
+  sendbirdRoomId: String
 }
 
 type AppointmentCredit {

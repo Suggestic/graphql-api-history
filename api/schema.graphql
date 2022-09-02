@@ -140,6 +140,7 @@ type Appointment {
   end: DateTime!
   id: ID!
   meetingUrl: String
+  sendbirdRoomId: String
   start: DateTime!
   status: EventStatus!
   title: String!
@@ -871,6 +872,7 @@ type EdamamFoodResult implements Node {
 
 type Entry {
   date: Date
+  source: String
   value: Float
 }
 
@@ -929,6 +931,7 @@ type ExerciseEntry {
   durationMinutes: Int!
   id: ID!
   intensity: ExerciseIntensity!
+  source: String
   type: ExerciseType!
 }
 
@@ -941,6 +944,7 @@ input ExerciseEntryInput {
   datetime: DateTime!
   durationMinutes: PositiveInt!
   intensity: ExerciseIntensity!
+  source: String
   type: ExerciseType!
 }
 
@@ -1151,11 +1155,13 @@ type Hydration {
   goal: Int
   isToday: Boolean
   quantity: Int
+  source: String
 }
 
 input HydrationEntryInput {
   date: Date!
   quantity: PositiveInt!
+  source: String
 }
 
 enum Icon {
@@ -1773,7 +1779,7 @@ enum MPVariety {
 }
 
 type Mutation {
-  addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, type: ExerciseType!): AddExerciseEntry!
+  addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: String, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
   """
@@ -1782,17 +1788,17 @@ type Mutation {
   addFoodLog(date: Date!, foodId: ID!, grams: Int, mealTime: MealTime!, milligrams: Int, portionModifier: String, servings: Float, time: Time): AddFoodLog!
 
   """addHRVLog add HRV log"""
-  addHRVLog(timestamp: DateTime, value: PositiveFloat!): AddHRVLog!
+  addHRVLog(source: String, timestamp: DateTime, value: PositiveFloat!): AddHRVLog!
 
   """addHeartRateLog add Heart Rate Log log"""
-  addHeartRateLog(timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
+  addHeartRateLog(source: String, timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
   addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
 
   """addSleepQualityScore add sleep quality score log"""
-  addSleepQualityScore(date: Date, value: Int!): AddSleepQualityScore!
+  addSleepQualityScore(date: Date, source: String, value: Int!): AddSleepQualityScore!
 
   """addSleepTime add sleep time log"""
-  addSleepTime(date: Date, value: Int!): AddSleepTime!
+  addSleepTime(date: Date, source: String, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, source: String, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
@@ -1831,7 +1837,7 @@ type Mutation {
   createProfileCustomAttributes(append: Boolean, attributes: [ProfileCustomAttribute!]!): CreateProfileCustomAttributes
   createQuizResult(answers: [String]!, result: String!): CreateQuizResult
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
-  createWeightEntry(date: Date!, value: Float!): CreateWeightEntry
+  createWeightEntry(date: Date!, source: String, value: Float!): CreateWeightEntry
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
 
@@ -1888,7 +1894,7 @@ type Mutation {
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
-  updateHydration(action: ActionType!, date: Date!): UpdateHydration
+  updateHydration(action: ActionType!, date: Date!, source: String): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(externalId: String, id: ID!, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
@@ -2705,7 +2711,7 @@ type Query {
   dailyRecapQuestions(group: String): [DailyQuestion!]!
   dailyRecaps(endDate: Date!, group: String, startDate: Date!): [DailyRecap!]!
   dashboard: Dashboard
-  exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): ExerciseEntriesConnection!
+  exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: String, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
   foodLog(id: ID!): MealLog
@@ -2713,9 +2719,9 @@ type Query {
   foodLogsByUser(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!, userId: String!): MealLogConnection
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
-  heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): HeartRateLogsConnnection!
-  hrvLogs(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): HrvLogsConnnection!
-  hydration(endDate: Date!, startDate: Date!): [Hydration!]!
+  heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, source: String, start: DateTime!): HeartRateLogsConnnection!
+  hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: String, start: DateTime!): HrvLogsConnnection!
+  hydration(endDate: Date!, source: String, startDate: Date!): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
@@ -2794,9 +2800,9 @@ type Query {
   shoppingListAggregate(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection
   shoppingListBadge: Boolean
   similarMacrosRecipes(recipeId: String, serving: Int, size: Int): [Recipe]
-  sleepQualityScores(after: String, end: Date!, first: Int, id: ID, start: Date!): SleepQualityScoresConnnection!
-  sleepTimes(after: String, end: Date!, first: Int, id: ID, start: Date!): SleepTimesConnnection!
-  stepsCounter(after: String, end: DateTime!, first: Int, id: ID, start: DateTime!): StepsCounterConnection!
+  sleepQualityScores(after: String, end: Date!, first: Int, id: ID, source: String, start: Date!): SleepQualityScoresConnnection!
+  sleepTimes(after: String, end: Date!, first: Int, id: ID, source: String, start: Date!): SleepTimesConnnection!
+  stepsCounter(after: String, end: DateTime!, first: Int, id: ID, source: String, start: DateTime!): StepsCounterConnection!
   streaks(endDate: Date!, startDate: Date!): [Streak!]!
   streaksStats(endDate: Date!, startDate: Date!): StreaksStats!
   subscriptions(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTypeConnection
@@ -2813,7 +2819,7 @@ type Query {
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
-  weightTracker(endDate: Date!, startDate: Date!): WeightTracker
+  weightTracker(endDate: Date!, source: String, startDate: Date!): WeightTracker
 }
 
 type QuizAnswer {
@@ -4017,6 +4023,7 @@ enum WeeklyWeightGoal {
 
 input WeightEntryInput {
   date: Date!
+  source: String
   value: PositiveFloat!
 }
 
