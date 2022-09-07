@@ -351,6 +351,8 @@ type Coach implements Node {
   avatarUrl: String
   email: String!
   id: ID!
+  irad: String
+  irmp: String
   name: String!
   sendbirdId: String
 }
