@@ -1237,6 +1237,7 @@ type Mutation {
   resendInviteMemberEmail(input: ResendInviteMemberEmailInput!): ResendInviteMemberEmailPayload
   inviteMember(input: InviteMemberInput!): InviteMemberPayload
   inviteCoach(input: InviteCoachInput!): InviteCoachPayload
+  resendInviteCoach(input: ResendInviteCoachInput!): ResendInviteCoachPayload
   requestMemberResetPassword(input: RequestMemberResetPasswordInput!): RequestMemberResetPasswordPayload
   requestCoachResetPassword(input: RequestCoachResetPasswordInput!): RequestCoachResetPasswordPayload
   memberResetPassword(input: MemberResetPasswordInput!): MemberResetPasswordPayload
@@ -1624,6 +1625,17 @@ input RequestMemberResetPasswordInput {
 }
 
 type RequestMemberResetPasswordPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
+}
+
+input ResendInviteCoachInput {
+  email: String!
+  clientMutationId: String
+}
+
+type ResendInviteCoachPayload {
   success: Boolean!
   message: String!
   clientMutationId: String
