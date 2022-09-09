@@ -1315,6 +1315,7 @@ type Mutation {
   deleteMembersTag(id: ID!): DeleteMembersTag
   linkMemberTag(input: LinkMemberTagInput!): LinkMemberTagPayload
   unlinkMemberTag(input: UnlinkMemberTagInput!): UnlinkMemberTagPayload
+  setUISettings(input: SetUISettingsInput!): SetUISettings
 }
 
 """An object with an ID"""
@@ -1557,6 +1558,7 @@ type Query {
   supplementPlanTemplates: AvailableSupplementPlanTemplates
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
+  uiSettings: UISettings
 }
 
 type QuizAnswer {
@@ -1699,6 +1701,21 @@ type Settings {
   name: String
   availabilitySettings: AvailabilitySettings!
   unitSystem: UnitSystem!
+}
+
+type SetUISettings {
+  success: Boolean!
+  message: String!
+  setting: UISettings
+}
+
+input SetUISettingsInput {
+  icon: String
+  logo: String
+  baseColor1: String
+  baseColor2: String
+  primaryColor: String
+  secondaryColor: String
 }
 
 input SingleSupplementActivableProtocolInput {
@@ -2129,6 +2146,16 @@ type UISections {
   profileAppointmentCredits: Boolean!
   profileCustomMacros: Boolean!
   profilePassword: Boolean!
+}
+
+type UISettings implements Node {
+  icon: String
+  logo: String
+  baseColor1: String
+  baseColor2: String
+  primaryColor: String
+  secondaryColor: String
+  id: ID!
 }
 
 """Available values for the unit_system setting"""
