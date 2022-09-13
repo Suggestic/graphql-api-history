@@ -683,6 +683,32 @@ type DashboardPDFType {
   pdfUrl: String
 }
 
+type DataSource implements Node {
+  id: ID!
+  sourceId: Int!
+  sourceName: DataSourceSourceName!
+}
+
+enum DataSourceSourceName {
+  APPLE
+  FITBIT
+  GARMIN
+  GOOGLEFIT_NATIVE
+  GOOGLEFIT_REST
+  HUAWEIHEALTH
+  IHEALTH
+  MISFIT
+  OMRONCONNECT
+  OMRONWELLNESS
+  OURA
+  POLAR
+  SAMSUNG
+  STRAVA
+  SUGGESTIC
+  SUUNTO
+  WITHINGS
+}
+
 scalar Date
 
 scalar DateTime
@@ -1084,12 +1110,6 @@ enum HabitAnswerType {
 type HardDeleteMyProfileMutation {
   email: String
   success: Boolean
-}
-
-type HealthDevice implements Node {
-  deviceId: Int!
-  deviceName: String!
-  id: ID!
 }
 
 input HeartRateEntryInput {
@@ -1882,7 +1902,7 @@ type Mutation {
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
   sendFeedback(message: String!, subject: String!): SendFeedback
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
-  setActiveHealthDevice(device: ID!): SetActiveHealthDevice
+  setActiveSource(source: SourceType!): SetActiveSource
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
@@ -2534,7 +2554,7 @@ type ProfileRestrictionsUpdate {
 }
 
 type ProfileType {
-  activeHealthDevice: HealthDevice
+  activeDataSource: DataSource
   activityLevel: ActivityLevel
   adherenceScore: Float!
   age: Int
@@ -2817,7 +2837,7 @@ type Query {
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   trackingDailyGoals: TrackingDailyGoals!
-  trackingDevices: [HealthDevice!]!
+  trackingSources: [DataSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
@@ -3176,7 +3196,7 @@ type Servings {
   unit: String
 }
 
-type SetActiveHealthDevice {
+type SetActiveSource {
   message: String!
   success: Boolean!
 }
