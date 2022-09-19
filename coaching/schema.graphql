@@ -333,6 +333,16 @@ enum ConferenceProviderName {
   ZOOM
 }
 
+type ConnectedSource {
+  sourceId: Int!
+  createdAt: DateTime!
+  id: ID!
+  sourceName: SourceType!
+
+  """Indicates if it is the selected active source."""
+  currentActive: Boolean!
+}
+
 type CreateAppointmentEvent {
   success: Boolean!
   message: String!
@@ -1087,12 +1097,12 @@ type Member implements Node {
   sendbirdId: String
   dailyRecaps(startDate: Date!, endDate: Date!): [DailyRecap!]!
   activityStreaks(startDate: Date!, endDate: Date!): [ActivityStreak!]!
-  waterIntake(startDate: Date!, endDate: Date!): [WaterLog!]!
+  waterIntake(startDate: Date!, endDate: Date!, source: SourceType): [WaterLog!]!
   mealLogs(startDate: Date!, endDate: Date!): MealLogs!
   mealPlanLogs(startDate: Date!, endDate: Date!): [MealPlanLogs!]!
-  weightLogs(startDate: Date!, endDate: Date!): WeightLogs!
-  stepsCounter(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): StepsCounterConnection!
-  exerciseTracker(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): ExerciseTrackerConnection!
+  weightLogs(startDate: Date!, endDate: Date!, source: SourceType): WeightLogs!
+  stepsCounter(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): StepsCounterConnection!
+  exerciseTracker(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): ExerciseTrackerConnection!
   currentJourneys(before: String, after: String, first: Int, last: Int): JourneysConnection!
   notes(eventId: ID, before: String, after: String, first: Int, last: Int): NoteConnection
   mealPlan(startDate: Date): [MealPlanDay]
@@ -1107,11 +1117,12 @@ type Member implements Node {
   supplementPlans(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanConnection
   coaches: [Coach!]!
   tags: [MemberTag!]!
-  sleepTimes(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
-  sleepQualityScores(start: Date!, end: Date!, id: ID, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
-  hrvLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HrvLogsConnection
-  heartRateLogs(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
+  sleepTimes(start: Date!, end: Date!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): SleepTimesConnection!
+  sleepQualityScores(start: Date!, end: Date!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
+  hrvLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HrvLogsConnection
+  heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
   timezone: String!
+  connectedSources: [ConnectedSource!]!
 }
 
 type MemberConnection {
@@ -1791,6 +1802,26 @@ type SleepTimesEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+enum SourceType {
+  SUGGESTIC
+  FITBIT
+  GARMIN
+  POLAR
+  MISFIT
+  WITHINGS
+  STRAVA
+  GOOGLEFIT_REST
+  GOOGLEFIT_NATIVE
+  SUUNTO
+  OURA
+  IHEALTH
+  APPLE
+  SAMSUNG
+  OMRONCONNECT
+  OMRONWELLNESS
+  HUAWEIHEALTH
 }
 
 input SPProtocolInput {

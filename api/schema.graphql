@@ -401,6 +401,14 @@ type ComponentGoal {
   goal: Int!
 }
 
+type ConnectedSource {
+  createdAt: DateTime!
+  currentActive: Boolean!
+  id: ID!
+  sourceId: Int!
+  sourceName: SourceType!
+}
+
 type ContentCategoryType implements Node {
   contentLibrary(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection!
   contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection! @deprecated(reason: "Not used. Renamed to contentLibrary")
@@ -681,32 +689,6 @@ type DashboardPDFType {
   id: ID!
   name: String!
   pdfUrl: String
-}
-
-type DataSource implements Node {
-  id: ID!
-  sourceId: Int!
-  sourceName: DataSourceSourceName!
-}
-
-enum DataSourceSourceName {
-  APPLE
-  FITBIT
-  GARMIN
-  GOOGLEFIT_NATIVE
-  GOOGLEFIT_REST
-  HUAWEIHEALTH
-  IHEALTH
-  MISFIT
-  OMRONCONNECT
-  OMRONWELLNESS
-  OURA
-  POLAR
-  SAMSUNG
-  STRAVA
-  SUGGESTIC
-  SUUNTO
-  WITHINGS
 }
 
 scalar Date
@@ -2554,7 +2536,6 @@ type ProfileRestrictionsUpdate {
 }
 
 type ProfileType {
-  activeDataSource: DataSource
   activityLevel: ActivityLevel
   adherenceScore: Float!
   age: Int
@@ -2837,7 +2818,7 @@ type Query {
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   trackingDailyGoals: TrackingDailyGoals!
-  trackingSources: [DataSource!]!
+  trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
