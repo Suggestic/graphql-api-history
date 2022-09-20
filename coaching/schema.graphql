@@ -1569,7 +1569,7 @@ type Query {
   supplementPlanTemplates: AvailableSupplementPlanTemplates
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
-  uiSettings: UISettings
+  uiSettings(slug: String): UISettings
 }
 
 type QuizAnswer {
@@ -1721,8 +1721,8 @@ type SetUISettings {
 }
 
 input SetUISettingsInput {
-  icon: String
-  logo: String
+  icon: Upload
+  logo: Upload
   baseColor1: String
   baseColor2: String
   primaryColor: String
@@ -2180,13 +2180,13 @@ type UISections {
 }
 
 type UISettings implements Node {
-  icon: String
-  logo: String
   baseColor1: String
   baseColor2: String
   primaryColor: String
   secondaryColor: String
   id: ID!
+  logo: String
+  icon: String
 }
 
 """Available values for the unit_system setting"""
