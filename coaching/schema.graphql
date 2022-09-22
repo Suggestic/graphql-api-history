@@ -2452,7 +2452,7 @@ input UserGoals {
 """User's basic information"""
 input UserInfo {
   name: String
-  birthdate: Date!
+  birthdate: Date
 }
 
 """User's meal plan settings"""
