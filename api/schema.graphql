@@ -2760,7 +2760,7 @@ type Query {
   myFavoriteRestaurants(after: String, before: String, first: Int, last: Int): RestaurantConnection
   myProfile: ProfileType
   myRecipes(after: String, before: String, first: Int, id: ID, last: Int): UserRecipeConnection
-  nextIntake(category: IntakeCategory!): AvailableChecklistItems
+  nextIntakes(category: IntakeCategory!): IntakesChecklistDay
   notes(after: String, before: String, eventId: ID, first: Int, id: ID, last: Int, offset: Int): NoteConnection
   onProgramPopularRestaurants(lat: Float!, lon: Float!): [Restaurant]
   outocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection @deprecated(reason: "Deprecating soon.")
