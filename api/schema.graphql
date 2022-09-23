@@ -2822,7 +2822,7 @@ type Query {
   trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
-  users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], userUUIDs: [String!]): UserConnection
+  users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
 
@@ -3958,6 +3958,7 @@ type User implements Node {
   organizationId: ID
   phone: String
   profileId: String
+  subscription: SubscriptionType
   updatedAt: DateTime
   userSource: String
 }

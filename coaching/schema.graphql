@@ -369,6 +369,25 @@ type CreateAppointmentType {
   appointmentType: AppointmentType
 }
 
+type CreateGroupChannel {
+  success: Boolean!
+  message: String!
+  channelUrl: String
+  responseRaw: JSONString
+}
+
+input CreateGroupChannelInput {
+  memberIds: [ID!]!
+  nameChannel: String
+  channelUrl: String
+  isDistinct: Boolean
+  coverUrl: String
+  customType: String
+  data: String
+  isEphemeral: Boolean
+  accessCode: String
+}
+
 type CreateLabTestReport {
   success: Boolean!
   message: String!
@@ -1327,6 +1346,7 @@ type Mutation {
   linkMemberTag(input: LinkMemberTagInput!): LinkMemberTagPayload
   unlinkMemberTag(input: UnlinkMemberTagInput!): UnlinkMemberTagPayload
   setUISettings(input: SetUISettingsInput!): SetUISettings
+  createGroupChannel(input: CreateGroupChannelInput!): CreateGroupChannel
 }
 
 """An object with an ID"""
