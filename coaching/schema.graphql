@@ -205,6 +205,8 @@ type Coach implements Node {
   recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
   affiliateId: String
+  multiAvailablePeriod: Boolean
+  weeklyRules: [WeeklyRules!]
 }
 
 input CoachAllowSeeAllInput {
@@ -1732,6 +1734,8 @@ type Settings {
   name: String
   availabilitySettings: AvailabilitySettings!
   unitSystem: UnitSystem!
+  multiAvailablePeriod: Boolean
+  weeklyRules: [WeeklyRules!]
 }
 
 type SetUISettings {
@@ -2397,6 +2401,8 @@ input UpdateSettingsInput {
   password: UpdatePasswordInput
   availabilitySettings: AvailabilitySettingsInput
   affiliateId: String
+  multiAvailablePeriod: Boolean
+  weeklyRules: [WeeklyPeriodInput!]
   clientMutationId: String
 }
 
@@ -2492,6 +2498,28 @@ type Verify2faCode {
 type WaterLog {
   date: Date!
   value: Float!
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+input WeeklyPeriodInput {
+  weekday: Weekday!
+  period: AvailabilityWeekdayPeriodInput!
+}
+
+type WeeklyRules implements Node {
+  """The ID of the object."""
+  id: ID!
+  weekday: Weekday!
+  period: AvailabilityWeekdayPeriod!
 }
 
 enum WeeklyWeightGoal {
