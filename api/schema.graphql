@@ -953,9 +953,9 @@ type ExerciseEntryEdge {
 input ExerciseEntryInput {
   datetime: DateTime!
   durationMinutes: PositiveInt!
-  intensity: ExerciseIntensity!
+  intensity: ExerciseIntensity
   source: SourceType
-  type: ExerciseType!
+  type: ExerciseType
 }
 
 enum ExerciseIntensity {
