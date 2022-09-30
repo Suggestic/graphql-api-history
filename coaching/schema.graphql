@@ -269,6 +269,10 @@ type CoachEdge {
   cursor: String!
 }
 
+input CoachFiltersInput {
+  name: String
+}
+
 input CoachMakeAdminInput {
   id: ID!
 
@@ -1570,7 +1574,7 @@ type Query {
 
   """The ID of the object"""
   coach(id: ID!): Coach
-  coaches(sendbirdHasEverLoggedIn: Boolean, ids: [ID!], offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
+  coaches(sendbirdHasEverLoggedIn: Boolean, ids: [ID!], filters: CoachFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
   programs(before: String, after: String, first: Int, last: Int): ProgramConnection
 
   """The ID of the object"""
