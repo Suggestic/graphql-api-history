@@ -718,8 +718,8 @@ type ExerciseTracker {
   id: ID!
   datetime: DateTime!
   durationMinutes: Int!
-  type: ExerciseType!
-  intensity: ExerciseIntensity!
+  type: ExerciseType
+  intensity: ExerciseIntensity
 }
 
 type ExerciseTrackerConnection {

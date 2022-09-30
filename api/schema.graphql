@@ -940,9 +940,9 @@ type ExerciseEntry {
   datetime: DateTime!
   durationMinutes: Int!
   id: ID!
-  intensity: ExerciseIntensity!
+  intensity: ExerciseIntensity
   source: SourceType
-  type: ExerciseType!
+  type: ExerciseType
 }
 
 type ExerciseEntryEdge {
