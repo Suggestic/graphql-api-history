@@ -660,7 +660,7 @@ type DailyChecklist {
 
 type DailyExerciseTime {
   totalTime: Int!
-  type: String!
+  type: String
 }
 
 type DailyQuestion {
