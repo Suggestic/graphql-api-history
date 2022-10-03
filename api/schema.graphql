@@ -642,7 +642,7 @@ type CreateQuizResult {
 }
 
 input CreateSPInput {
-  coach: ID!
+  coach: ID
   exercise: String
   isActive: Boolean
   name: String!
