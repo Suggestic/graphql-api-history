@@ -45,6 +45,7 @@ type Appointment {
   createdAt: DateTime
   coach: Coach
   sendbirdRoomId: String
+  availabilityTimezone: String!
 }
 
 type AppointmentCredit {
