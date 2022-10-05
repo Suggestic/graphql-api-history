@@ -415,7 +415,7 @@ type ContentCategoryType implements Node {
   databaseId: String
   id: ID!
   image: String
-  name: String!
+  name: String
   slug: String!
   subcategories: [ContentCategoryType!]
 }
@@ -444,17 +444,18 @@ type ContentLibraryType implements Node {
   categories: [ContentCategoryType]
   databaseId: String
   id: ID!
-  imageUrl: String!
+  imageUrl: String
   interestedProfiles: [ProfileType!]!
   isBlocked: Boolean!
   isFavorite: Boolean!
   isFeatured: Boolean!
+  lang: JSONString
   order: Int!
   programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int): ProgramConnection!
-  sourceUrl: String!
+  sourceUrl: String
   subTitle: String
   tags: [ContentTagType!]
-  title: String!
+  title: String
 }
 
 type ContentLibraryTypeConnection {
