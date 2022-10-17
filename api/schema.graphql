@@ -656,6 +656,33 @@ input CreateSPInput {
   visibility: Boolean
 }
 
+type CreateSupplement {
+  message: String!
+  success: Boolean!
+  supplement: Supplement
+}
+
+input CreateSupplementInput {
+  brand: String!
+  category: String!
+  description: String
+  directionsOfUse: [DirectionsOfUseInput!]
+  directionsOfUseText: String
+  externalId: String
+  images: [String!]
+  ingredients: String
+  instructions: String
+  mainImage: String!
+  name: String!
+  servingName: String!
+  shopifyParentId: String
+  shopifyVariantId: String
+  sizeCount: Int
+  sku: String
+  storeId: String
+  supplementFacts: String
+}
+
 type CreateSupplementPlan {
   message: String!
   success: Boolean!
@@ -1842,7 +1869,7 @@ type Mutation {
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
-  createLabTestReport(externalId: String, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
+  createLabTestReport(externalId: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
   createMealEntry(mealId: ID!, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
@@ -1861,6 +1888,7 @@ type Mutation {
   createProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): CreateProfileBiomarkers
   createProfileCustomAttributes(append: Boolean, attributes: [ProfileCustomAttribute!]!): CreateProfileCustomAttributes
   createQuizResult(answers: [String]!, result: String!): CreateQuizResult
+  createSupplement(input: CreateSupplementInput!): CreateSupplement
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
@@ -1938,6 +1966,7 @@ type Mutation {
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
   updateShoppingListRecipeServings(numberOfServings: Int!, recipeId: String!): UpdateShoppingListRecipeServings
   updateSubscription(profileId: String, subscriptionId: String!, userId: String): UpdateSubscription
+  updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
   updateSupplementPlan(input: UpdateSPInput!): UpdateSupplementPlan
   updateUserProgram(programId: String!): UpdateUserProgram
   userFavoriteMenuitem(menuitemId: String!): UserFavoriteMenuItem
@@ -3941,6 +3970,34 @@ input UpdateSPInput {
 type UpdateSubscription {
   message: String
   success: Boolean
+}
+
+type UpdateSupplement {
+  message: String!
+  success: Boolean!
+  supplement: Supplement
+}
+
+input UpdateSupplementInput {
+  brand: String
+  category: String
+  description: String
+  directionsOfUse: [DirectionsOfUseInput!]
+  directionsOfUseText: String
+  externalId: String
+  id: ID!
+  images: [String!]
+  ingredients: String
+  instructions: String
+  mainImage: String
+  name: String
+  servingName: String
+  shopifyParentId: String
+  shopifyVariantId: String
+  sizeCount: Int
+  sku: String
+  storeId: String
+  supplementFacts: String
 }
 
 type UpdateSupplementPlan {
