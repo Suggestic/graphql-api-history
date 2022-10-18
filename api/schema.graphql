@@ -1100,6 +1100,21 @@ type GenerateSimpleMealPlan {
   success: Boolean
 }
 
+input GenerateVideoZoomTokenInput {
+  clientMutationId: String
+  password: String
+  role: VideoZoomRole
+  sessionKey: String
+  sessionName: String!
+}
+
+type GenerateVideoZoomTokenPayload {
+  clientMutationId: String
+  message: String!
+  success: Boolean!
+  token: String
+}
+
 scalar GenericScalar
 
 input GeoBoundingBox {
@@ -1914,6 +1929,7 @@ type Mutation {
   generateMagicLink(email: String!): GenerateMagicLink
   generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
+  generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   login(userId: String!): LoginUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean = true, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
@@ -4111,6 +4127,11 @@ type UserRecipeProxy {
 }
 
 scalar UUID
+
+enum VideoZoomRole {
+  HOST
+  PARTICIPANT
+}
 
 enum WeeklyWeightGoal {
   GOAL_0_5
