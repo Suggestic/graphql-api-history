@@ -4,6 +4,32 @@ enum ActivityLevel {
   EXERCISE_3_MORE
 }
 
+type ActivityLog implements Node {
+  eventName: String!
+  createdAt: DateTime!
+  id: ID!
+  userEmail: String
+  userName: String
+  payload: GenericScalar
+}
+
+type ActivityLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivityLogEdge]!
+}
+
+"""A Relay edge containing a `ActivityLog` and its cursor."""
+type ActivityLogEdge {
+  """The item at the end of the edge"""
+  node: ActivityLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type ActivityStreak {
   isToday: Boolean!
   dayStatus: DayStatus
@@ -779,6 +805,30 @@ type GenerateMealPlan {
   message: String
 }
 
+input GenerateVideoZoomTokenInput {
+  sessionName: String!
+  sessionKey: String
+  role: VideoZoomRole
+
+  """Max 10 characters"""
+  password: String
+  clientMutationId: String
+}
+
+type GenerateVideoZoomTokenPayload {
+  success: Boolean!
+  message: String!
+  token: String
+  clientMutationId: String
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
 enum HabitAnswerType {
   POSITIVE
   NEUTRAL
@@ -1356,6 +1406,7 @@ type Mutation {
   unlinkMemberTag(input: UnlinkMemberTagInput!): UnlinkMemberTagPayload
   setUISettings(input: SetUISettingsInput!): SetUISettings
   createGroupChannel(input: CreateGroupChannelInput!): CreateGroupChannel
+  generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
 }
 
 """An object with an ID"""
@@ -1599,6 +1650,7 @@ type Query {
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
+  activitiesLogs(offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
 }
 
 type QuizAnswer {
@@ -2299,6 +2351,7 @@ input UpdateMemberFieldsInput {
   userInfo: UserInfo
   mealPlanSettings: UserMealPlanSettings
   phone: String
+  timezone: String
   clientMutationId: String
 }
 
@@ -2499,6 +2552,11 @@ input UserMealPlanSettings {
 type Verify2faCode {
   success: Boolean!
   message: String!
+}
+
+enum VideoZoomRole {
+  PARTICIPANT
+  HOST
 }
 
 """A user's water log from the tracking service"""
