@@ -140,10 +140,12 @@ type Appointment {
   end: DateTime!
   id: ID!
   meetingUrl: String
-  sendbirdRoomId: String
+  sendbirdRoomId: String @deprecated(reason: "Soon it will be removed")
   start: DateTime!
   status: EventStatus!
   title: String!
+  zoomSessionName: String
+  zoomSessionPassword: String
 }
 
 type AppointmentCredit {
@@ -1106,6 +1108,7 @@ input GenerateVideoZoomTokenInput {
   role: VideoZoomRole
   sessionKey: String
   sessionName: String!
+  userIdentity: String
 }
 
 type GenerateVideoZoomTokenPayload {

@@ -70,8 +70,10 @@ type Appointment {
   contactType: CalendarContactType!
   createdAt: DateTime
   coach: Coach
-  sendbirdRoomId: String
+  sendbirdRoomId: String @deprecated(reason: "Soon it will be removed")
   availabilityTimezone: String!
+  zoomSessionName: String
+  zoomSessionPassword: String
 }
 
 type AppointmentCredit {
@@ -810,8 +812,11 @@ input GenerateVideoZoomTokenInput {
   sessionKey: String
   role: VideoZoomRole
 
-  """Max 10 characters"""
+  """Max length 10 characters"""
   password: String
+
+  """Max length 15 characters"""
+  userIdentity: String
   clientMutationId: String
 }
 
