@@ -6,11 +6,11 @@ enum ActivityLevel {
 
 type ActivityLog implements Node {
   eventName: String!
-  createdAt: DateTime!
   id: ID!
   userEmail: String
   userName: String
   payload: GenericScalar
+  createdAt: DateTime
 }
 
 type ActivityLogConnection {
@@ -1656,7 +1656,8 @@ type Query {
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
-  activitiesLogs(offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  coachActivitiesLogs(offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  appUserActivities(start: DateTime, end: DateTime, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
 }
 
 type QuizAnswer {
