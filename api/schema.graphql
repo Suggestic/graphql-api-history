@@ -2822,7 +2822,7 @@ type Query {
   myBrandedFoods(after: String, before: String, first: Int, id: String, last: Int): MyBrandedFoodConnection
   myChecklistItems(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): MyChecklistItemConnection
   myChecklistLogs(end: Date!, start: Date!): MyChecklistLogs!
-  myCoaches(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): CoachConnection
+  myCoaches(after: String, before: String, excludeAppointmentCoaches: Boolean = false, first: Int, id: ID, last: Int, offset: Int): CoachConnection
   myCommonFoods(after: String, before: String, first: Int, id: String, last: Int): MyCommonFoodConnection
   myFavoriteArticles(after: String, before: String, categories: [ID], first: Int, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   myFavoriteMenuitems(after: String, before: String, first: Int, last: Int): MenuItemConnection
