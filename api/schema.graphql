@@ -17,6 +17,26 @@ enum ActivityLevel {
   NOT_ACTIVE
 }
 
+type ActivityLog implements Node {
+  appUser: ProfileType
+  createdAt: DateTime!
+  eventName: String!
+  id: ID!
+  payload: GenericScalar
+  userEmail: String
+  userName: String
+}
+
+type ActivityLogConnection {
+  edges: [ActivityLogEdge]!
+  pageInfo: PageInfo!
+}
+
+type ActivityLogEdge {
+  cursor: String!
+  node: ActivityLog
+}
+
 type AddExerciseEntry {
   message: String!
   success: Boolean!
@@ -946,6 +966,7 @@ enum EntryType {
   HYDRATION_TRACKER
   MP_MEAL_TRACKER
   MY_CHECKLIST_TRACKER
+  PLAN_SUPPLEMENT
   SLEEP_QUALITY_SCORE_TRACKER
   SLEEP_TIME_TRACKER
   STEPS_TRACKER
@@ -2767,6 +2788,7 @@ type PurchaseMealRecipe {
 
 type Query {
   allIngredients: [String]
+  appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
@@ -3433,11 +3455,12 @@ type StepsCounterEdge {
 }
 
 type Streak {
-  activities: [EntryType]
+  activities: [EntryType] @deprecated
   completed: [EntryType]
   date: Date
   dayStatus: DayStatus
   empties: [EntryType]
+  expectedActivities: [EntryType]
   hasPreviousStreak: Boolean
   isToday: Boolean
   longestStreakEver: Int! @deprecated
