@@ -1,0 +1,1235 @@
+type AcceptUserInvite {
+  success: Boolean!
+  message: String!
+}
+
+type appCustomizationFeature {
+  key: String!
+  name: String!
+  description: String!
+}
+
+type Article implements Node {
+  id: ID!
+  title: String!
+  imageUrl: String!
+  sourceUrl: String!
+  order: Int!
+  subTitle: String
+  isBlocked: Boolean
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  categories: [ContentCategory!]!
+  tags: [ContentTag!]!
+}
+
+type ArticleConnection {
+  edges: [ArticleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ArticleEdge {
+  cursor: String!
+  node: Article
+}
+
+enum BiologicalSex {
+  MALE
+  FEMALE
+}
+
+type ChangePassword {
+  success: Boolean!
+  message: String!
+}
+
+type Condition {
+  id: ID!
+  attrName: String!
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+  dataType: DataType
+}
+
+type ConditionConnection {
+  edges: [ConditionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ConditionEdge {
+  cursor: String!
+  node: Condition
+}
+
+type ContentCategory {
+  id: ID!
+  name: String!
+  slug: String!
+}
+
+type ContentTag implements Node {
+  id: ID!
+  name: String!
+}
+
+type CopyProgram {
+  success: Boolean!
+  message: String!
+  newProgram: Program
+}
+
+input CreateAndInviteUserInput {
+  email: String!
+  role: Role!
+  enable2fa: Boolean!
+}
+
+type CreateArticle {
+  success: Boolean!
+  message: String!
+  article: Article
+}
+
+input CreateArticleInput {
+  title: String!
+  image: Upload!
+  sourceUrl: String!
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  categories: [ID!]
+  tags: [ID!]
+}
+
+type CreateContentCategory {
+  success: Boolean!
+  message: String!
+  category: ContentCategory
+}
+
+type CreateContentTag {
+  success: Boolean!
+  message: String!
+  tag: ContentTag
+}
+
+type CreateCustomAttribute {
+  success: Boolean!
+  message: String!
+  customAttribute: CustomAttribute
+}
+
+type CreateIngredient {
+  success: Boolean!
+  message: String!
+}
+
+type CreateIngredientGroup {
+  success: Boolean!
+  message: String!
+  ingredientGroup: IngredientGroup
+}
+
+input CreateIngredientGroupInput {
+  name: String!
+  ingredients: [ID!]!
+}
+
+type CreateProgram {
+  success: Boolean!
+  message: String!
+  program: Program
+}
+
+type CreateProgramGoal {
+  success: Boolean!
+  message: String!
+  goal: Goal
+}
+
+input CreateProgramGoalInput {
+  name: String!
+  biologicalSex: BiologicalSex!
+  programId: ID!
+  nutrients: [NutrientGoalInput!]!
+  monday: Boolean!
+  tuesday: Boolean!
+  wednesday: Boolean!
+  thursday: Boolean!
+  friday: Boolean!
+  saturday: Boolean!
+  sunday: Boolean!
+}
+
+input CreateProgramInput {
+  name: String!
+  author: String!
+  isActive: Boolean
+  descriptionShort: String
+  descriptionLong: String
+  restrictions: [ID!]
+  visibility: Boolean
+  image: Upload
+  cover: Upload
+  backgroundImage: Upload
+  authorAvatar: Upload
+}
+
+type CreateRuleSet {
+  success: Boolean!
+  message: String!
+  ruleSet: RuleSet
+}
+
+input CreateRuleSetInput {
+  order: Int!
+  name: String!
+  actionType: RuleSetActionType!
+  userSegments: [ID!]
+  ingredientGroups: [ID!]
+  program: ID
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  priority: Int
+}
+
+type CreateSegmentCondition {
+  success: Boolean!
+  message: String!
+  condition: Condition
+}
+
+input CreateSegmentConditionInput {
+  dataType: DataType
+  attrName: String!
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+}
+
+type CreateThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+  customization: ThirdPartyAppCustomization
+}
+
+input CreateThirdPartyAppCustomizationInput {
+  logo: Upload
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type CreateUser {
+  success: Boolean!
+  message: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String
+  password: String!
+  thirdPartySlug: String
+  roles: [Role!]!
+  enable2fa: Boolean
+  selfReportedRole: Role
+  active: Boolean
+}
+
+type CreateUserSegment {
+  success: Boolean!
+  message: String!
+  userSegment: UserSegment
+}
+
+input CreateUserSegmentInput {
+  """Name of the user segment"""
+  name: String!
+
+  """Priority over other user segments"""
+  priority: Int
+
+  """List of program ids using the segment to apply custom rules"""
+  programs: [ID!]!
+
+  """
+  List of existing conditions that must match with the user's attrs to join the segment
+  """
+  conditions: [ID!]!
+
+  """
+  Add new conditions that must match with the user's attrs to join the segment
+  """
+  createConditions: [CreateSegmentConditionInput!]!
+
+  """List of rule ids the are applied to the matching users"""
+  rules: [ID!]!
+}
+
+type CustomAttribute {
+  id: ID!
+  label: String!
+  dataType: DataType
+}
+
+type CustomAttributeConnection {
+  edges: [CustomAttributeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CustomAttributeEdge {
+  cursor: String!
+  node: CustomAttribute
+}
+
+enum DataType {
+  RANGE
+  NUMBER
+  TERM
+  BOOL
+}
+
+"""An ISO-8601 encoded UTC date string."""
+scalar Datetime
+
+type DeleteArticle {
+  success: Boolean!
+  message: String!
+  deleted: Article
+}
+
+type DeleteContentCategory {
+  success: Boolean!
+  message: String!
+  deleted: ContentCategory
+}
+
+type DeleteContentTag {
+  success: Boolean!
+  message: String!
+  deleted: ContentTag
+}
+
+type DeleteCustomAttribute {
+  success: Boolean!
+  message: String!
+  deleted: CustomAttribute
+}
+
+type DeleteIngredient {
+  success: Boolean!
+  message: String!
+  deleted: Ingredient
+}
+
+type DeleteIngredientGroup {
+  success: Boolean!
+  message: String!
+  deleted: IngredientGroup
+}
+
+type DeleteProgram {
+  success: Boolean!
+  message: String!
+  deleted: Program
+}
+
+type DeleteProgramGoal {
+  success: Boolean!
+  message: String!
+  deleted: Goal
+}
+
+type DeleteRuleSet {
+  success: Boolean!
+  message: String!
+  deleted: RuleSet
+}
+
+type DeleteSegmentCondition {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteUser {
+  success: Boolean!
+  message: String!
+  deleted: User
+}
+
+type DeleteUserSegment {
+  success: Boolean!
+  message: String
+  deleted: UserSegment
+}
+
+scalar Email
+
+enum FeatureOption {
+  MEAL_PLANNER
+  RECIPE_FINDER
+  RESTAURANTS
+  PROGRESS_TRACKER
+  FOOD_LOGGING
+  WEIGHT_GOALS
+  SUBSCRIPTIONS
+  NOTIFICATIONS
+  APPOINTMENTS
+  GROCERY_LIST
+  CHAT
+  PROGRAMS
+  PREFERENCES
+  VIDEO_CALLS
+  NUTRITION_DASHBOARD
+  LAB_TESTS
+  ONBOARDING
+}
+
+type Generate2faUri {
+  success: Boolean!
+  message: String!
+  uri: String
+}
+
+type Goal implements Node {
+  id: ID!
+  name: String!
+  biologicalSex: BiologicalSex!
+  programId: ID!
+  nutrients: [NutrientGoal!]!
+  slug: String
+  monday: Boolean!
+  tuesday: Boolean!
+  wednesday: Boolean!
+  thursday: Boolean!
+  friday: Boolean!
+  saturday: Boolean!
+  sunday: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type Ingredient implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+  alias: [String!]!
+  isActive: Boolean!
+  createdAt: Datetime!
+  isReadOnly: Boolean!
+}
+
+type IngredientGroup implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+  groupType: IngredientGroupType!
+  isActive: Boolean!
+  createdAt: Datetime!
+  ingredients: [Ingredient!]!
+  isReadOnly: Boolean!
+}
+
+type IngredientGroupConnection {
+  edges: [IngredientGroupEdge!]!
+  pageInfo: PageInfo!
+}
+
+type IngredientGroupEdge {
+  cursor: String!
+  node: IngredientGroup
+}
+
+enum IngredientGroupType {
+  RESTRICTION_GROUP
+  BUILDING_GROUP
+}
+
+enum InvitationStatus {
+  SENT
+  ACCEPTED
+}
+
+type Login {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+}
+
+type Logout {
+  success: Boolean!
+  message: String!
+}
+
+type MakeCoach {
+  success: Boolean!
+  message: String!
+}
+
+input MakeCoachInput {
+  email: String!
+  name: String!
+  isCoachAdmin: Boolean!
+}
+
+type Mutation {
+  """Get and access tokens for the login profile"""
+  login(email: String!, password: String!): Login!
+
+  """Revokes the user authentication session"""
+  logout: Logout!
+
+  """Set a new role to the userID"""
+  setRole(userID: ID!, role: Role!): SetRole!
+
+  """Create a new user with a non-admin role and member of a third party"""
+  createUser(input: CreateUserInput!): CreateUser!
+
+  """Grant access to the coaching portal to a user"""
+  makeCoach(input: MakeCoachInput!): MakeCoach!
+
+  """Change your password"""
+  changePassword(old: String!, new: String!): ChangePassword!
+
+  """Send an email to reset password"""
+  requestPasswordReset(email: String!): RequestPasswordReset!
+
+  """Set a new password for the user"""
+  resetPassword(token: String!, password: String!): ResetPassword!
+
+  """Create a new developer user and third party app"""
+  signUpDeveloper(input: SignUpDeveloperInput!): SignUpDeveloper!
+  verifyDeveloperEmail(token: String!, password: String!): VerifyDeveloperEmail!
+
+  """Create a new `Program` owned by the profile's third party"""
+  createProgram(input: CreateProgramInput!): CreateProgram!
+
+  """Update the `Program` if it's owned by the profile's third party"""
+  updateProgram(input: UpdateProgramInput!): UpdateProgram!
+
+  """Copy a `Program`. The copy will be owned by the profile's third party"""
+  copyProgram(id: ID!, rename: String): CopyProgram!
+
+  """Create a new ingredient group with the ingredients received"""
+  createIngredientGroup(input: CreateIngredientGroupInput!): CreateIngredientGroup!
+
+  """Update the `IngredientGroup` if is owned by the user"""
+  updateIngredientGroup(input: UpdateIngredientGroupInput!): UpdateIngredientGroup!
+
+  """Delete an owned `IngredientGroup`"""
+  deleteIngredientGroup(id: ID!): DeleteIngredientGroup!
+
+  """Create a new ingredient available to add to a group"""
+  createIngredient(name: String!, alias: [String!]): CreateIngredient!
+
+  """Delete an owned ingredient"""
+  deleteIngredient(id: ID!): DeleteIngredient!
+
+  """Update an owned ingredient"""
+  updateIngredient(input: UpdateIngredientInput!): UpdateIngredient!
+
+  """
+  Create a new rule set related to the ingredient groups by the action type
+  """
+  createRuleSet(input: CreateRuleSetInput!): CreateRuleSet!
+
+  """Update an owned rule set by ID"""
+  updateRuleSet(input: UpdateRuleSetInput!): UpdateRuleSet!
+
+  """Remove an owned rule set by ID"""
+  deleteRuleSet(id: ID!): DeleteRuleSet!
+
+  """Create a new program goal"""
+  createProgramGoal(input: CreateProgramGoalInput!): CreateProgramGoal!
+
+  """Update an owned program goal"""
+  updateProgramGoal(input: UpdateProgramGoalInput!): UpdateProgramGoal!
+
+  """Delete an owned program goal"""
+  deleteProgramGoal(goal: ID!): DeleteProgramGoal!
+
+  """Create a new custom attribute label"""
+  createCustomAttribute(label: String!, dataType: DataType): CreateCustomAttribute!
+
+  """Update an owned custom attribute"""
+  updateCustomAttribute(id: ID!, label: String, dataType: DataType): UpdateCustomAttribute!
+
+  """Delete an owned custom attribute"""
+  deleteCustomAttribute(id: ID!): DeleteCustomAttribute!
+
+  """Create a new segment condition"""
+  createSegmentCondition(input: CreateSegmentConditionInput!): CreateSegmentCondition!
+
+  """Update a segment condition"""
+  updateSegmentCondition(input: UpdateSegmentConditionInput!): UpdateSegmentCondition!
+
+  """Delete a segment condition"""
+  deleteSegmentCondition(id: ID!): DeleteSegmentCondition!
+
+  """Create a user segment"""
+  createUserSegment(input: CreateUserSegmentInput!): CreateUserSegment!
+
+  """Update a user segment"""
+  updateUserSegment(input: UpdateUserSegmentInput!): UpdateUserSegment!
+
+  """Delete a user segment by ID"""
+  deleteUserSegment(id: ID!): DeleteUserSegment!
+
+  """Update a user"""
+  updateUser(input: UpdateUserInput!): UpdateUser!
+
+  """Delete a user by ID"""
+  deleteUser(id: ID!): DeleteUser!
+
+  """Generate URI to be encoded in a QR Code"""
+  generate2faUri(email: String!): Generate2faUri!
+
+  """Validate 2FA verification code"""
+  verify2faCode(email: String!, code: String!): Verify2faCode!
+
+  """Create Content Tags"""
+  createContentTag(name: String!): CreateContentTag!
+
+  """Update Content Tags"""
+  updateContentTag(input: UpdateContentTagInput!): UpdateContentTag!
+
+  """Delete Content Tag"""
+  deleteContentTag(id: ID!): DeleteContentTag!
+
+  """Create Content Category"""
+  createContentCategory(name: String!): CreateContentCategory!
+
+  """Update Content Category"""
+  updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory!
+
+  """Delete Content Category"""
+  deleteContentCategory(id: ID!): DeleteContentCategory!
+
+  """Create an Article"""
+  createArticle(input: CreateArticleInput!): CreateArticle!
+
+  """Update and Article"""
+  updateArticle(input: UpdateArticleInput!): UpdateArticle!
+
+  """Delete and Article"""
+  deleteArticle(id: ID!): DeleteArticle!
+
+  """Mutation to add/remove category as subcategory"""
+  setContentSubcategory(mainCategory: ID!, subcategory: ID!, action: SetAction!): SetContentSubcategory!
+
+  """Create a ThirdPartyAppCustomization"""
+  createThirdPartyAppCustomization(input: CreateThirdPartyAppCustomizationInput): CreateThirdPartyAppCustomization!
+
+  """Update a ThirdPartyAppCustomization"""
+  updateThirdPartyAppCustomization(input: UpdateThirdPartyAppCustomizationInput!): UpdateThirdPartyAppCustomization!
+
+  """Delete a ThirdPartyAppCustomization"""
+  deleteThirdPartyAppCustomization(id: ID!): DeleteThirdPartyAppCustomization!
+
+  """Send invitation to user"""
+  sendUserInvite(existingId: ID, create: CreateAndInviteUserInput): SendUserInvite!
+
+  """Accept an invitation"""
+  acceptUserInvite(token: String!, password: String!): AcceptUserInvite!
+}
+
+interface Node {
+  id: ID!
+}
+
+type NutrientGoal implements Node {
+  id: ID!
+  unit: NutrientUnit!
+  nutrient: NutrientType!
+  goalAmount: Float!
+  upperLimit: Float!
+  lowerLimit: Float!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+input NutrientGoalInput {
+  unit: NutrientUnit!
+  nutrient: NutrientType!
+  goalAmount: Float!
+  upperLimit: Float!
+  lowerLimit: Float!
+}
+
+enum NutrientType {
+  NETCARBS
+  CHOCDF
+  PROCNT
+  FAT
+}
+
+enum NutrientUnit {
+  PERCENT
+  GRAM
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Profile {
+  id: ID!
+  name: String!
+  email: String!
+  roles: [Role!]!
+  permissions: [String!]!
+  companyName: String!
+  apiToken: String
+  selfReportedRole: String
+  freeTrialRemainingDays: Int
+  active: Boolean
+  invitationExpireAt: Datetime
+}
+
+"""Diet Program that an app user can be subscribed to"""
+type Program implements Node {
+  id: ID!
+  name: String!
+  createdAt: Datetime!
+  slug: String!
+  author: String!
+  isActive: Boolean!
+  isPremium: Boolean!
+  descriptionShort: String
+  descriptionLong: String
+  image: URI
+  cover: URI
+  backgroundImage: URI
+  authorAvatar: URI
+  emailCampaignId: String
+  mailchimpWorkflowEmailId: String
+  dynamicProgramParent: String
+  ruleSets: [RuleSet!]!
+  isReadOnly: Boolean!
+  restrictions: [Restriction!]!
+  visibility: Boolean!
+}
+
+type ProgramConnection {
+  edges: [ProgramEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProgramEdge {
+  cursor: String!
+  node: Program
+}
+
+input ProgramOrderBy {
+  field: ProgramOrderByField
+  order: SortOrder
+}
+
+enum ProgramOrderByField {
+  NAME
+  AUTHOR
+  CREATED_AT
+  IS_ACTIVE
+}
+
+type Query {
+  """Return the logged-in profile info, like email or roles"""
+  me: Profile
+
+  """List the logged-in profile permissions"""
+  userPermissions: [String!]!
+
+  """Fetch a user details"""
+  user(id: ID!): User
+
+  """List all the users"""
+  users(first: Int, last: Int, after: String, before: String, search: String): UserConnection!
+
+  """Retrieve a list with available program's restrictions"""
+  restrictions(first: Int, last: Int, after: String, before: String): RestrictionConnection!
+
+  """Retrieve a `Program` by ID, or null if it doesn't exist"""
+  program(id: ID!): Program
+
+  """List all `Program` available for the profile"""
+  programs(visibility: Boolean, first: Int, after: String, readOnly: Boolean, isActive: Boolean, orderBy: ProgramOrderBy): ProgramConnection!
+
+  """List all owned and read-only ingredients"""
+  ingredients(readOnly: Boolean): [Ingredient!]!
+
+  """Retrieve an `IngredientGroup` by ID, or null if it doesn't exist"""
+  ingredientGroup(id: ID!): IngredientGroup
+
+  """List all `IngredientGroup` available for the profile"""
+  ingredientGroups(first: Int, last: Int, after: String, before: String, readOnly: Boolean, search: String, onlyRestrictions: Boolean, onlyBuildingGroups: Boolean): IngredientGroupConnection!
+
+  """List all read-only and owned `RuleSet` ordered by name"""
+  ruleSets(first: Int, after: String, program: ID, readOnly: Boolean): RuleSetConnection!
+
+  """Retrieve a `RuleSet` by ID, or null if it doesn't exist"""
+  ruleSet(id: ID!): RuleSet
+
+  """List goals assigned to a program"""
+  programGoals(program: ID!): [Goal!]!
+
+  """List custom attributes"""
+  customAttributes(first: Int, last: Int, after: String, before: String): CustomAttributeConnection!
+
+  """List segment conditions"""
+  segmentConditions(first: Int, last: Int, after: String, before: String): ConditionConnection!
+
+  """Retrieve a condition by ID"""
+  segmentCondition(id: ID!): Condition
+
+  """List user segments"""
+  userSegments(first: Int, last: Int, after: String, before: String): UserSegmentConnection!
+
+  """Retrieve a user segment by ID"""
+  userSegment(id: ID!): UserSegment
+  availableThirdParties: [ThirdParty!]!
+
+  """List Content Tags"""
+  contentTags: [ContentTag!]!
+
+  """List Content Categories"""
+  contentCategories: [ContentCategory!]!
+
+  """List Articles"""
+  articles(first: Int, last: Int, after: String, before: String, category: ID, tag: ID): ArticleConnection!
+
+  """Retrieve Features for AppCustomization"""
+  appCustomizationFeatures: [appCustomizationFeature!]!
+
+  """
+  Retrieve an user ThirdPartyAppCustomization or null if it doesn't exist
+  """
+  thirdPartyAppCustomization: ThirdPartyAppCustomization
+}
+
+type RequestPasswordReset {
+  success: Boolean!
+  message: String!
+}
+
+type ResetPassword {
+  success: Boolean!
+  message: String!
+}
+
+type Restriction implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+}
+
+type RestrictionConnection {
+  edges: [RestrictionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type RestrictionEdge {
+  cursor: String!
+  node: Restriction
+}
+
+enum Role {
+  VIEWER
+  DEVELOPER
+  ADMIN
+  SUPER_ADMIN
+  COACH
+  COACH_ALL_MEMBERS
+  INACTIVE_COACH
+  NON_VERIFIED_COACH
+  COACH_ADMIN
+  FREE_DEVELOPER
+  FULL_ACCESS
+  CREATOR
+}
+
+type RuleSet implements Node {
+  id: ID!
+  order: Int!
+  name: String!
+  actionType: RuleSetActionType!
+  ingredientGroups: [IngredientGroup!]
+  userSegments: [UserSegment!]!
+  program: Program
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  visibility: Boolean!
+  isReadOnly: Boolean!
+  priority: Int!
+}
+
+enum RuleSetActionType {
+  AVOID
+  INCREASE
+  DECREASE
+}
+
+type RuleSetConnection {
+  edges: [RuleSetEdge!]!
+  pageInfo: PageInfo!
+}
+
+type RuleSetEdge {
+  cursor: String!
+  node: RuleSet
+}
+
+type SendUserInvite {
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+enum SetAction {
+  ADD
+  REMOVE
+}
+
+type SetContentSubcategory {
+  success: Boolean!
+  message: String!
+}
+
+type SetRole {
+  success: Boolean!
+  message: String!
+}
+
+type SignUpDeveloper {
+  success: Boolean!
+  message: String!
+}
+
+input SignUpDeveloperInput {
+  email: Email!
+  firstName: String!
+  lastName: String!
+  companyName: String
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+type ThirdParty {
+  name: String!
+  slug: String!
+}
+
+type ThirdPartyAppCustomization {
+  id: ID!
+  thirdPartyId: Int!
+  logo: String
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type UpdateArticle {
+  success: Boolean!
+  message: String!
+  article: Article
+}
+
+input UpdateArticleInput {
+  id: ID!
+  title: String
+  image: Upload
+  sourceUrl: String
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  categories: [ID!]
+  tags: [ID!]
+}
+
+type UpdateContentCategory {
+  success: Boolean!
+  message: String!
+  category: ContentCategory
+}
+
+input UpdateContentCategoryInput {
+  id: ID!
+  name: String!
+}
+
+type UpdateContentTag {
+  success: Boolean!
+  message: String!
+  tag: ContentTag
+}
+
+input UpdateContentTagInput {
+  id: ID!
+  name: String!
+}
+
+type UpdateCustomAttribute {
+  success: Boolean!
+  message: String!
+  customAttribute: CustomAttribute
+}
+
+type UpdateIngredient {
+  success: Boolean!
+  message: String!
+  ingredient: Ingredient
+}
+
+type UpdateIngredientGroup {
+  success: Boolean!
+  message: String!
+  updated: IngredientGroup
+}
+
+input UpdateIngredientGroupInput {
+  id: ID!
+  name: String
+  ingredients: [ID!]
+}
+
+input UpdateIngredientInput {
+  id: ID!
+  name: String
+  alias: [String!]
+}
+
+type UpdateProgram {
+  success: Boolean!
+  message: String!
+  updated: Program
+}
+
+type UpdateProgramGoal {
+  success: Boolean!
+  message: String!
+  goal: Goal
+}
+
+input UpdateProgramGoalInput {
+  id: ID!
+  name: String
+  biologicalSex: BiologicalSex
+  programId: ID
+  nutrients: [NutrientGoalInput!]
+  monday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+  thursday: Boolean
+  friday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+}
+
+input UpdateProgramInput {
+  id: ID!
+  name: String
+  author: String
+  isActive: Boolean
+  descriptionShort: String
+  descriptionLong: String
+  restrictions: [ID!]
+  visibility: Boolean
+  image: Upload
+  cover: Upload
+  backgroundImage: Upload
+  authorAvatar: Upload
+}
+
+type UpdateRuleSet {
+  success: Boolean!
+  message: String!
+  updated: RuleSet
+}
+
+input UpdateRuleSetInput {
+  id: ID!
+  order: Int
+  name: String
+  actionType: RuleSetActionType
+  userSegments: [ID!]
+  ingredientGroups: [ID!]
+  program: ID
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  priority: Int
+}
+
+type UpdateSegmentCondition {
+  success: Boolean!
+  message: String!
+  condition: Condition
+}
+
+input UpdateSegmentConditionInput {
+  id: ID!
+  dataType: DataType
+  attrName: String
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+}
+
+type UpdateThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+  customization: ThirdPartyAppCustomization
+}
+
+input UpdateThirdPartyAppCustomizationInput {
+  id: ID!
+  logo: Upload
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type UpdateUser {
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+input UpdateUserInput {
+  id: String!
+  email: String
+  name: String
+  enable2fa: Boolean
+  selfReportedRole: Role
+  active: Boolean
+}
+
+type UpdateUserSegment {
+  success: Boolean!
+  message: String!
+  userSegment: UserSegment
+}
+
+input UpdateUserSegmentInput {
+  """ID of the user segment to update"""
+  id: ID!
+
+  """Name of the user segment"""
+  name: String
+
+  """Priority over other user segments"""
+  priority: Int
+
+  """List of program ids using the segment to apply custom rules"""
+  programs: [ID!]
+
+  """
+  List of existing conditions that must match with the user's attrs to join the segment
+  """
+  conditions: [ID!]
+
+  """
+  Add new conditions that must match with the user's attrs to join the segment
+  """
+  createConditions: [CreateSegmentConditionInput!]
+
+  """List of rule ids the are applied to the matching users"""
+  rules: [ID!]
+}
+
+scalar Upload
+
+"""An RFC 3986, RFC 3987, and RFC 6570 (level 4) compliant URI string."""
+scalar URI
+
+type User implements Node {
+  id: ID!
+  email: String!
+  roles: [Role!]!
+  freeTrialRemainingDays: Int
+  selfReportedRole: String
+  active: Boolean
+  createdAt: Datetime!
+  invitationExpireAt: Datetime
+  invitationStatus: InvitationStatus
+  invitationHasExpired: Boolean
+}
+
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User
+}
+
+type UserSegment {
+  id: ID!
+  name: String!
+  priority: Int!
+  programs: [Program!]!
+  conditions: [Condition!]!
+  rules: [RuleSet!]!
+  dataType: DataType
+}
+
+type UserSegmentConnection {
+  edges: [UserSegmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserSegmentEdge {
+  cursor: String!
+  node: UserSegment
+}
+
+type Verify2faCode {
+  success: Boolean!
+  message: String!
+}
+
+type VerifyDeveloperEmail {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+  profile: Profile
+}
+
