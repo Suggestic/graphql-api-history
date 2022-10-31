@@ -779,7 +779,7 @@ enum ExerciseType {
 }
 
 type ExternalCalendarEvent {
-  title: String!
+  title: String
   description: String
   start: DateTime!
   end: DateTime!
