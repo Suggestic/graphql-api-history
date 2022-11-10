@@ -2861,8 +2861,8 @@ type Query {
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
+  biomarkerCatalog(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, parentId: ID): BiomarkerCategoryConnection
-  biomarkerTemplates(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
