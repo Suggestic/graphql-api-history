@@ -300,7 +300,7 @@ type CoachEdge {
 
 input CoachFiltersInput {
   name: String
-  isActive: Boolean = true
+  isActive: Boolean
 }
 
 input CoachMakeAdminInput {
