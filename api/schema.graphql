@@ -1174,6 +1174,11 @@ type FoodProduct {
   servings: [Servings]
 }
 
+type FormError {
+  field: String
+  messages: [String!]
+}
+
 type GenerateMagicLink {
   magicLink: String
   message: String!
@@ -2199,7 +2204,7 @@ type Note implements Node {
   createdAt: DateTime!
   createdBy: Coach
   id: ID!
-  text: String!
+  text: String
   title: String!
   updatedAt: DateTime!
   updatedBy: Coach
@@ -4025,6 +4030,7 @@ input UpdateMyRecipeInput {
 }
 
 type UpdateNote {
+  errors: [FormError!]
   message: String!
   note: Note
   success: Boolean!
