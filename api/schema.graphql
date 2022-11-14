@@ -37,6 +37,20 @@ type ActivityLogEdge {
   node: ActivityLog
 }
 
+input AddBiomarkerResultsInput {
+  biomarkers: [BiomarkerResultInput!]!
+  clientMutationId: String
+  labTestReportId: ID!
+  profileId: ID!
+}
+
+type AddBiomarkerResultsPayload {
+  clientMutationId: String
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
 type AddExerciseEntry {
   message: String!
   success: Boolean!
@@ -279,6 +293,11 @@ type BiomarkerEdge {
   node: Biomarker
 }
 
+input BiomarkerResultInput {
+  biomarkerId: ID!
+  result: BiomarkerValueInput!
+}
+
 type BiomarkerUnit implements Node {
   alias: String
   createdAt: DateTime!
@@ -296,6 +315,17 @@ type BiomarkerUnitConnection {
 type BiomarkerUnitEdge {
   cursor: String!
   node: BiomarkerUnit
+}
+
+enum BiomarkerValueDatatype {
+  BOOLEAN
+  NUMBER
+  STRING
+}
+
+input BiomarkerValueInput {
+  type: BiomarkerValueDatatype!
+  value: GenericScalar!
 }
 
 type BrandedFoodConnection {
@@ -1943,6 +1973,7 @@ enum MPVariety {
 }
 
 type Mutation {
+  addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResultsPayload
   addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
