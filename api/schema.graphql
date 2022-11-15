@@ -37,6 +37,27 @@ type ActivityLogEdge {
   node: ActivityLog
 }
 
+input AddBiomarkerInput {
+  aliases: [BiomarkerAliasInput!]
+  category: ID!
+  clientMutationId: String
+  description: String
+  isVisible: Boolean = true
+  method: String
+  name: String!
+  order: Int = 0
+  range: BiomarkerRangeInput
+  units: [ID!]!
+}
+
+type AddBiomarkerPayload {
+  biomarker: Biomarker
+  clientMutationId: String
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
 input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
   clientMutationId: String
@@ -265,6 +286,11 @@ type BiomarkerAlias {
   name: String!
 }
 
+input BiomarkerAliasInput {
+  language: BiomarkerLanguage!
+  name: String!
+}
+
 type BiomarkerCategory implements Node {
   createdAt: DateTime!
   id: ID!
@@ -291,6 +317,45 @@ type BiomarkerConnection {
 type BiomarkerEdge {
   cursor: String!
   node: Biomarker
+}
+
+enum BiomarkerLanguage {
+  AFRIKAANS
+  ALBANIAN
+  ARABIC
+  CATALAN
+  CHINESE
+  CROATIAN
+  CZECH
+  DANISH
+  DUTCH
+  ENGLISH
+  ESTONIAN
+  FRENCH
+  GERMAN
+  HEBREW
+  HINDI
+  INDONESIAN
+  ITALIAN
+  JAPANESE
+  KOREAN
+  POLISH
+  PORTUGUESE
+  ROMANIAN
+  RUSSIAN
+  SERBIAN
+  SPANISH
+  SWEDISH
+  THAI
+  TURKISH
+  UKRAINIAN
+  VIETNAMESE
+  ZULU
+}
+
+input BiomarkerRangeInput {
+  max: Float!
+  min: Float!
 }
 
 input BiomarkerResultInput {
@@ -1973,6 +2038,7 @@ enum MPVariety {
 }
 
 type Mutation {
+  addBiomarker(input: AddBiomarkerInput!): AddBiomarkerPayload
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResultsPayload
   addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
