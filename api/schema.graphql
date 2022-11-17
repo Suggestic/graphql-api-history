@@ -267,7 +267,7 @@ enum BiologicalSex {
   UNKNOWN
 }
 
-type Biomarker implements Node {
+type Biomarker {
   aliases: [BiomarkerAlias!]!
   category: BiomarkerCategory!
   createdAt: DateTime!
@@ -275,10 +275,10 @@ type Biomarker implements Node {
   id: ID!
   method: String
   name: String!
+  range: BiomarkerRange
+  results(after: String, before: String, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   units: [BiomarkerUnit!]!
   updatedAt: DateTime!
-  valueMax: Float
-  valueMin: Float
 }
 
 type BiomarkerAlias {
@@ -353,6 +353,11 @@ enum BiomarkerLanguage {
   ZULU
 }
 
+type BiomarkerRange {
+  max: Float
+  min: Float
+}
+
 input BiomarkerRangeInput {
   max: Float!
   min: Float!
@@ -360,7 +365,15 @@ input BiomarkerRangeInput {
 
 input BiomarkerResultInput {
   biomarkerId: ID!
+  date: DateTime!
   result: BiomarkerValueInput!
+}
+
+input BiomarkerResultsFilterInput {
+  biomarkerId: ID
+  biomarkerName: String
+  categoryId: ID
+  labTestReportId: ID
 }
 
 type BiomarkerUnit implements Node {
@@ -2741,6 +2754,24 @@ type ProductVariant {
   title: String!
 }
 
+type ProfileBiomarker implements Node {
+  createdAt: DateTime!
+  date: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+  value: GenericScalar!
+}
+
+type ProfileBiomarkerConnection {
+  edges: [ProfileBiomarkerEdge]!
+  pageInfo: PageInfo!
+}
+
+type ProfileBiomarkerEdge {
+  cursor: String!
+  node: ProfileBiomarker
+}
+
 type ProfileBiomarkers {
   cholesterolLdl: Float
   cortisol: Float
@@ -2965,6 +2996,7 @@ type Query {
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, parentId: ID): BiomarkerCategoryConnection
+  biomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int): BiomarkerConnection
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
@@ -3064,7 +3096,7 @@ type Query {
   restrictions(after: String, before: String, first: Int, last: Int): RestrictionConnection
   searchProfile(email: String!): ProfileType
   searchRecipeByNameOrIngredient(query: String): RecipeSearchResult
-  searchRecipesByIngredients(after: String, before: String, first: Int, last: Int, mustIngredients: [String]): RecipeConnection
+  searchRecipesByIngredients(after: String, before: String, first: Int, last: Int, mustIngredients: [String]!): RecipeConnection
   serchForAllowedIngredient(ingredient: String!): [CPCIngredient]
   shoppingList(after: String, before: String, first: Int, last: Int, offset: Int, recipe: ID): ListItemConnection
   shoppingListAggregate(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection
