@@ -45,6 +45,7 @@ input AddBiomarkerInput {
   isVisible: Boolean = true
   method: String
   name: String!
+  optimalRange: BiomarkerRangeInput
   order: Int = 0
   range: BiomarkerRangeInput
   units: [ID!]!
@@ -275,6 +276,7 @@ type Biomarker {
   id: ID!
   method: String
   name: String!
+  optimalRange: BiomarkerRange
   range: BiomarkerRange
   results(after: String, before: String, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   units: [BiomarkerUnit!]!
