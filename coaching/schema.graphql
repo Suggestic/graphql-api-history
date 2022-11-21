@@ -239,6 +239,12 @@ type Coach implements Node {
   weeklyRules: [WeeklyRules!]
 }
 
+input CoachActivityLogFiltersInput {
+  start: Date
+  end: Date
+  coachId: ID
+}
+
 input CoachAllowSeeAllInput {
   id: ID!
 
@@ -1656,7 +1662,7 @@ type Query {
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
-  coachActivitiesLogs(offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  coachActivitiesLogs(filters: CoachActivityLogFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
   appUserActivities(start: DateTime, end: DateTime, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
 }
 
