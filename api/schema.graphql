@@ -321,6 +321,13 @@ type BiomarkerEdge {
   node: Biomarker
 }
 
+enum BiomarkerIntervalRange {
+  ALL
+  IN_OPTIMAL_RANGE
+  IN_RANGE
+  OUT_RANGE
+}
+
 enum BiomarkerLanguage {
   AFRIKAANS
   ALBANIAN
@@ -375,6 +382,7 @@ input BiomarkerResultsFilterInput {
   biomarkerId: ID
   biomarkerName: String
   categoryId: ID
+  intervalRange: BiomarkerIntervalRange
   labTestReportId: ID
 }
 
@@ -2757,9 +2765,11 @@ type ProductVariant {
 }
 
 type ProfileBiomarker implements Node {
+  biomarker: Biomarker!
   createdAt: DateTime!
   date: DateTime!
   id: ID!
+  labTestReport: LabTestReport!
   updatedAt: DateTime!
   value: GenericScalar!
 }
@@ -2998,7 +3008,7 @@ type Query {
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, parentId: ID): BiomarkerCategoryConnection
-  biomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int): BiomarkerConnection
+  biomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
@@ -3023,6 +3033,7 @@ type Query {
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
   heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HeartRateLogsConnnection!
+  historicalBiomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, source: SourceType, startDate: Date!, toMl: Boolean): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
