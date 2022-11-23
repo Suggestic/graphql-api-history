@@ -321,6 +321,11 @@ type BiomarkerEdge {
   node: Biomarker
 }
 
+input BiomarkerFilterInput {
+  categoryId: ID
+  name: String
+}
+
 enum BiomarkerIntervalRange {
   ALL
   IN_OPTIMAL_RANGE
@@ -1194,6 +1199,7 @@ type ExerciseEntriesConnection {
 }
 
 type ExerciseEntry {
+  createdAt: DateTime!
   datetime: DateTime!
   durationMinutes: Int!
   id: ID!
@@ -1379,6 +1385,7 @@ input HeartRateEntryInput {
 }
 
 type HeartRateLog {
+  createdAt: DateTime!
   id: ID!
   source: SourceType!
   timestamp: DateTime!
@@ -1415,6 +1422,7 @@ input HRVEntryInput {
 }
 
 type HrvLog {
+  createdAt: DateTime!
   id: ID!
   source: SourceType!
   timestamp: DateTime!
@@ -2784,6 +2792,11 @@ type ProfileBiomarkerEdge {
   node: ProfileBiomarker
 }
 
+type ProfileBiomarkerResult {
+  biomarker: Biomarker!
+  results(after: String, before: String, end: Date, first: Int, last: Int, offset: Int, start: Date): ProfileBiomarkerConnection
+}
+
 type ProfileBiomarkers {
   cholesterolLdl: Float
   cortisol: Float
@@ -3006,11 +3019,11 @@ type Query {
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
-  biomarkerCatalog(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
+  biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, parentId: ID): BiomarkerCategoryConnection
   biomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
-  biomarkers(after: String, before: String, first: Int, id: ID, last: Int): BiomarkerConnection
+  biomarkers(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
@@ -3034,6 +3047,7 @@ type Query {
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
   heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HeartRateLogsConnnection!
   historicalBiomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
+  historicalResultsByBiomarker(id: ID!): ProfileBiomarkerResult
   hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, source: SourceType, startDate: Date!, toMl: Boolean): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
@@ -3649,6 +3663,7 @@ type StartOverMealPlan {
 }
 
 type StepCount {
+  createdAt: DateTime!
   datetime: DateTime!
   id: ID!
   source: SourceType!
