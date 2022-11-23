@@ -1193,6 +1193,7 @@ enum EventType {
 type ExerciseEntriesConnection {
   dailyGoal: Int!
   edges: [ExerciseEntryEdge]!
+  latestEntry: DateTime
   pageInfo: PageInfo!
   totalTime: Int!
   totalTimePerType: [DailyExerciseTime!]!
@@ -1400,6 +1401,7 @@ type HeartRateLogs {
 type HeartRateLogsConnnection {
   average: Float!
   edges: [HeartRateLogs]!
+  latestEntry: DateTime
   maximum: Float!
   minimum: Float!
   pageInfo: PageInfo!
@@ -1437,6 +1439,7 @@ type HrvLogs {
 type HrvLogsConnnection {
   average: Float!
   edges: [HrvLogs]!
+  latestEntry: DateTime
   pageInfo: PageInfo!
 }
 
@@ -3680,6 +3683,7 @@ type StepsCounterConnection {
   dailyGoal: Int!
   distance: Float!
   edges: [StepsCounterEdge]!
+  latestEntry: DateTime
   pageInfo: PageInfo!
 }
 
