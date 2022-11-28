@@ -240,8 +240,8 @@ type Coach implements Node {
 }
 
 input CoachActivityLogFiltersInput {
-  start: Date
-  end: Date
+  start: DateTime
+  end: DateTime
   coachId: ID
 }
 
