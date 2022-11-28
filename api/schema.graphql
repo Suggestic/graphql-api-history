@@ -3570,6 +3570,7 @@ type SleepQualityScoresConnnection {
 }
 
 type SleepTime {
+  createdAt: DateTime!
   date: Date!
   id: ID!
   source: SourceType!
@@ -3590,6 +3591,7 @@ input SleepTimeEntryInput {
 type SleepTimesConnnection {
   dailyGoal: Int!
   edges: [SleepTimeEdge]!
+  latestEntry: DateTime
   pageInfo: PageInfo!
   totalTime: Int!
 }
