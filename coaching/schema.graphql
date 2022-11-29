@@ -796,6 +796,11 @@ type ExternalCalendarEventsInDate {
   events: [ExternalCalendarEvent!]!
 }
 
+type FormError {
+  field: String
+  messages: [String!]
+}
+
 enum Frequency {
   DAILY
   WEEKLY
@@ -2436,6 +2441,7 @@ type UpdateNotePayload {
   success: Boolean!
   message: String!
   note: Note
+  errors: [FormError!]
   clientMutationId: String
 }
 
