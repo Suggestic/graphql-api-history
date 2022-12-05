@@ -1809,7 +1809,7 @@ type SetMealPlanToTemplate {
 """Available account settings for coaches"""
 type Settings {
   name: String
-  availabilitySettings: AvailabilitySettings!
+  availabilitySettings: AvailabilitySettings
   unitSystem: UnitSystem!
   multiAvailablePeriod: Boolean
   weeklyRules: [WeeklyRules!]

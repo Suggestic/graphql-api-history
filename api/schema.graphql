@@ -3024,7 +3024,7 @@ type Query {
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   biomarkerCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, parentId: ID): BiomarkerCategoryConnection
-  biomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
+  biomarkerResults(filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
