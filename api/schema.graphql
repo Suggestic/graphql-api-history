@@ -3109,7 +3109,7 @@ type Query {
   recentMealLogs: [MealLog]
   recipe(id: ID!): Recipe
   recipeMealTags: [String]
-  recipeSearch(after: String, before: String, cuisines: [String], dietaryTag: DietaryTag, filter: FoodFilter, first: Int, hasImage: Boolean, hasInstructions: Boolean, ingredients: [String], isPremium: Boolean, last: Int, macroNutrientsRange: MacroNutrientsRangeInput, maxPrepTime: Int, mealTime: RecipeMealTime, meals: [String], minPrepTime: Int, numberOfIngredients: Int, program: String, query: String, skillLevel: SkillLevel, tags: [String], totalTime: Float): RecipeConnection
+  recipeSearch(after: String, before: String, cuisines: [String], dietaryTag: DietaryTag, filter: FoodFilter, first: Int, hasImage: Boolean, hasInstructions: Boolean, ingredients: [String], isPremium: Boolean, last: Int, macroNutrientsRange: MacroNutrientsRangeInput, maxPrepTime: Int, mealTime: RecipeMealTime, meals: [String], minPrepTime: Int, numberOfIngredients: Int, program: String, query: String, servingQuantity: Int, skillLevel: SkillLevel, tags: [String], totalTime: Float): RecipeConnection
   recipeSwapOptions(recipeId: String, serving: Int): RecipeSwapOptions
   recipeTags: [String]
   recipesByMealTime(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, mealTime: RecipeMealTime): RecipeConnection
