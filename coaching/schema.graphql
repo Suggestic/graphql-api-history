@@ -2558,6 +2558,7 @@ input UserGoals {
 input UserInfo {
   name: String
   birthdate: Date
+  email: String
 }
 
 """User's meal plan settings"""
