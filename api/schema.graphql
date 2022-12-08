@@ -1019,6 +1019,16 @@ type DeleteFoodLog {
   success: Boolean!
 }
 
+type DeleteHeartRateLog {
+  message: String!
+  success: Boolean!
+}
+
+type DeleteHRVLog {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteLabTestReport {
   message: String!
   report: LabTestReport
@@ -1060,6 +1070,16 @@ type DeleteMyRecipe {
 type DeleteNote {
   message: String!
   note: Note
+  success: Boolean!
+}
+
+type DeleteSleepQualityScore {
+  message: String!
+  success: Boolean!
+}
+
+type DeleteSleepTime {
+  message: String!
   success: Boolean!
 }
 
@@ -2140,6 +2160,12 @@ type Mutation {
 
   """deleteFoodLog deletes a food log by ID"""
   deleteFoodLog(id: ID!): DeleteFoodLog!
+
+  """deleteHRVLog delete hrv log entry"""
+  deleteHRVLog(id: ID!): DeleteHRVLog!
+
+  """deleteHeartRateLog delete Heart Rate Log"""
+  deleteHeartRateLog(id: ID!): DeleteHeartRateLog!
   deleteLabTestReport(id: ID!): DeleteLabTestReport
   deleteMealPlanTemplate(coach: ID, id: ID!): DeleteMealPlanTemplate
   deleteMyBrandedFood(id: String!): DeleteMyBrandedFood
@@ -2151,6 +2177,12 @@ type Mutation {
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
   deleteNote(noteId: ID!): DeleteNote
+
+  """deleteSleepQualityScore delete sleep quality score entry"""
+  deleteSleepQualityScore(id: ID!): DeleteSleepQualityScore!
+
+  """deleteSleepTime delete sleep time entry"""
+  deleteSleepTime(id: ID!): DeleteSleepTime!
   deleteStepsCount(id: ID!): DeleteStepsCount!
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
