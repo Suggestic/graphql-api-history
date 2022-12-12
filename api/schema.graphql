@@ -37,10 +37,16 @@ type ActivityLogEdge {
   node: ActivityLog
 }
 
+type AddBiomarker {
+  biomarker: Biomarker
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
 input AddBiomarkerInput {
   aliases: [BiomarkerAliasInput!]
   category: ID!
-  clientMutationId: String
   description: String
   isVisible: Boolean = true
   method: String
@@ -51,9 +57,7 @@ input AddBiomarkerInput {
   units: [ID!]!
 }
 
-type AddBiomarkerPayload {
-  biomarker: Biomarker
-  clientMutationId: String
+type AddBiomarkerResults {
   errors: [FormError!]
   message: String!
   success: Boolean!
@@ -61,16 +65,8 @@ type AddBiomarkerPayload {
 
 input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
-  clientMutationId: String
   labTestReportId: ID!
   profileId: ID!
-}
-
-type AddBiomarkerResultsPayload {
-  clientMutationId: String
-  errors: [FormError!]
-  message: String!
-  success: Boolean!
 }
 
 type AddExerciseEntry {
@@ -269,7 +265,7 @@ enum BiologicalSex {
 }
 
 type Biomarker {
-  aliases: [BiomarkerAlias!]!
+  aliases: [BiomarkerAlias!]
   category: BiomarkerCategory!
   createdAt: DateTime!
   description: String
@@ -2092,8 +2088,8 @@ enum MPVariety {
 }
 
 type Mutation {
-  addBiomarker(input: AddBiomarkerInput!): AddBiomarkerPayload
-  addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResultsPayload
+  addBiomarker(input: AddBiomarkerInput!): AddBiomarker
+  addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
   addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
