@@ -154,14 +154,7 @@ input AvailabilitySettingsInput {
   bufferMinutes: Int
   startInterval: Int
   timezone: String!
-  allWeek: AvailabilityWeekdayPeriodInput
-  monday: AvailabilityWeekdayPeriodInput
-  tuesday: AvailabilityWeekdayPeriodInput
-  wednesday: AvailabilityWeekdayPeriodInput
-  thursday: AvailabilityWeekdayPeriodInput
-  friday: AvailabilityWeekdayPeriodInput
-  saturday: AvailabilityWeekdayPeriodInput
-  sunday: AvailabilityWeekdayPeriodInput
+  weeklyRules: [WeeklyPeriodInput!]!
 }
 
 type AvailabilityWeekdayPeriod {
@@ -2481,7 +2474,6 @@ input UpdateSettingsInput {
   availabilitySettings: AvailabilitySettingsInput
   affiliateId: String
   multiAvailablePeriod: Boolean
-  weeklyRules: [WeeklyPeriodInput!]
   clientMutationId: String
 }
 
