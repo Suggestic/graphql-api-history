@@ -48,6 +48,15 @@ enum ActivityType {
   EXERCISE_TRACKER
   TODAY_SUPPLEMENT
   HYDRATION_TRACKER
+  PLAN_SUPPLEMENT
+  MY_CHECKLIST_TRACKER
+  SLEEP_TIME_TRACKER
+  SLEEP_QUALITY_SCORE_TRACKER
+  HRV_TRACKER
+  HEART_RATE_TRACKER
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  FOOD_LOG_MEAL_TRACKER
+  DAILY_MOOD
 }
 
 type AddAppointmentCredits {
@@ -230,6 +239,7 @@ type Coach implements Node {
   affiliateId: String
   multiAvailablePeriod: Boolean
   weeklyRules: [WeeklyRules!]
+  isPrimary: Boolean
 }
 
 input CoachActivityLogFiltersInput {
@@ -996,6 +1006,8 @@ type LabTestReport {
   requisitionId: String
   productId: String
   status: LabTestReportStatus
+  description: String
+  image: String
 }
 
 type LabTestReportConnection {
@@ -1372,8 +1384,8 @@ type Mutation {
   generate2faUri(email: String!): Generate2faUri
   verify2faCode(code: String!, email: String!): Verify2faCode
   deleteLabTestReport(id: ID!, memberId: ID!): DeleteLabTestReport
-  createLabTestReport(externalId: String, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
-  updateLabTestReport(externalId: String, id: ID!, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
+  createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
+  updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
   cronofyAuthRevoke: CronofyAuthRevoke
   cronofyAuthToken(code: String!, redirectUri: String!): CronofyAuthToken
   cronofyElementToken(permissions: [String]!): CronofyElementToken
@@ -1417,6 +1429,7 @@ type Mutation {
   setUISettings(input: SetUISettingsInput!): SetUISettings
   createGroupChannel(input: CreateGroupChannelInput!): CreateGroupChannel
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
+  setPrimaryCoach(input: SetPrimaryCoachInput!): SetPrimaryCoachPayload
 }
 
 """An object with an ID"""
@@ -1797,6 +1810,18 @@ type SetCoachAutoResponse {
 type SetMealPlanToTemplate {
   success: Boolean!
   message: String!
+}
+
+input SetPrimaryCoachInput {
+  memberId: ID!
+  coachId: ID!
+  clientMutationId: String
+}
+
+type SetPrimaryCoachPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
 }
 
 """Available account settings for coaches"""

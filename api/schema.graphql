@@ -560,6 +560,7 @@ type Coach implements Node {
   id: ID!
   irad: String
   irmp: String
+  isPrimary: Boolean
   name: String!
   sendbirdId: String
 }
@@ -1611,8 +1612,10 @@ scalar JSONString
 
 type LabTestReport {
   createdAt: DateTime!
+  description: String
   externalId: String
   id: ID!
+  image: String
   isVisible: Boolean!
   labName: String!
   orderId: String
@@ -2128,7 +2131,7 @@ type Mutation {
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
-  createLabTestReport(externalId: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
+  createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
   createMealEntry(mealId: ID!, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
@@ -2222,7 +2225,7 @@ type Mutation {
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
-  updateLabTestReport(externalId: String, id: ID!, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
+  updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   updateMealPlanTemplate(coach: ID, description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
