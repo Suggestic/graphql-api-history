@@ -247,6 +247,7 @@ input CoachActivityLogFiltersInput {
   end: DateTime
   coachId: ID
   memberId: ID
+  eventName: String
 }
 
 input CoachAllowSeeAllInput {
