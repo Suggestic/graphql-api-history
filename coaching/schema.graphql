@@ -246,6 +246,7 @@ input CoachActivityLogFiltersInput {
   start: DateTime
   end: DateTime
   coachId: ID
+  memberId: ID
 }
 
 input CoachAllowSeeAllInput {
