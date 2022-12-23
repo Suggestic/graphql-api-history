@@ -241,6 +241,11 @@ type AppRestriction {
   limitations: [Limitation!]!
 }
 
+input AppUserActivityLogFiltersInput {
+  eventName: String
+  profileId: ID
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -3048,7 +3053,7 @@ type PurchaseMealRecipe {
 
 type Query {
   allIngredients: [String]
-  appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
+  appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection

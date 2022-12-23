@@ -138,6 +138,11 @@ type AppointmentTypes {
   types: [AppointmentType]!
 }
 
+input AppUserActivityLogFiltersInput {
+  memberId: ID
+  eventName: String
+}
+
 type Attendee {
   email: String!
   status: EventParticipationStatus!
@@ -149,14 +154,6 @@ type AvailabilitySettings {
   bufferMinutes: Int
   startInterval: Int
   timezone: String
-  allWeek: AvailabilityWeekdayPeriod
-  monday: AvailabilityWeekdayPeriod
-  tuesday: AvailabilityWeekdayPeriod
-  wednesday: AvailabilityWeekdayPeriod
-  thursday: AvailabilityWeekdayPeriod
-  friday: AvailabilityWeekdayPeriod
-  saturday: AvailabilityWeekdayPeriod
-  sunday: AvailabilityWeekdayPeriod
 }
 
 input AvailabilitySettingsInput {
@@ -237,7 +234,6 @@ type Coach implements Node {
   recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
   affiliateId: String
-  multiAvailablePeriod: Boolean
   weeklyRules: [WeeklyRules!]
   isPrimary: Boolean
 }
@@ -1676,7 +1672,7 @@ type Query {
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
   coachActivitiesLogs(filters: CoachActivityLogFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
-  appUserActivities(start: DateTime, end: DateTime, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  appUserActivities(start: DateTime, end: DateTime, filters: AppUserActivityLogFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
 }
 
 type QuizAnswer {
@@ -1831,7 +1827,6 @@ type Settings {
   name: String
   availabilitySettings: AvailabilitySettings
   unitSystem: UnitSystem!
-  multiAvailablePeriod: Boolean
   weeklyRules: [WeeklyRules!]
 }
 
@@ -2500,7 +2495,6 @@ input UpdateSettingsInput {
   password: UpdatePasswordInput
   availabilitySettings: AvailabilitySettingsInput
   affiliateId: String
-  multiAvailablePeriod: Boolean
   clientMutationId: String
 }
 
