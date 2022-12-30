@@ -3171,8 +3171,8 @@ type Query {
   sleepQualityScores(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepQualityScoresConnnection!
   sleepTimes(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepTimesConnnection!
   stepsCounter(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): StepsCounterConnection!
-  streaks(endDate: Date!, source: SourceType, startDate: Date!): [Streak!]!
-  streaksStats(endDate: Date!, source: SourceType, startDate: Date!): StreaksStats!
+  streaks(endDate: Date!, startDate: Date!): [Streak!]!
+  streaksStats(endDate: Date!, startDate: Date!): StreaksStats!
   subscriptions(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTypeConnection
   suggestMeal(date: Date!, mealTime: MealTime!): SuggestedMeal
   suggestedMeals(date: Date!): SuggestedMeals
