@@ -3052,7 +3052,6 @@ type PurchaseMealRecipe {
 }
 
 type Query {
-  allIngredients: [String]
   appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection

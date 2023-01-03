@@ -65,6 +65,38 @@ type AddAppointmentCredits {
   credits: AppointmentCredit
 }
 
+type AddBiomarker {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarker: Biomarker
+}
+
+input AddBiomarkerInput {
+  name: String!
+  category: ID!
+  method: String
+  description: String
+  order: Int = 0
+  isVisible: Boolean = true
+  range: BiomarkerRangeInput
+  optimalRange: BiomarkerRangeInput
+  units: [ID!]!
+  aliases: [BiomarkerAliasInput!]
+}
+
+type AddBiomarkerResults {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+}
+
+input AddBiomarkerResultsInput {
+  profileId: ID!
+  labTestReportId: ID!
+  biomarkers: [BiomarkerResultInput!]!
+}
+
 type Appointment {
   id: ID!
   title: String!
@@ -211,6 +243,11 @@ type BiomarkerAlias {
   language: String!
 }
 
+input BiomarkerAliasInput {
+  name: String!
+  language: BiomarkerLanguage!
+}
+
 type BiomarkerCategory implements Node {
   name: String!
   parent: BiomarkerCategory
@@ -267,9 +304,54 @@ enum BiomarkerIntervalRange {
   IN_OPTIMAL_RANGE
 }
 
+enum BiomarkerLanguage {
+  AFRIKAANS
+  ALBANIAN
+  ARABIC
+  CATALAN
+  CHINESE
+  CROATIAN
+  CZECH
+  DANISH
+  DUTCH
+  ENGLISH
+  ESTONIAN
+  FRENCH
+  GERMAN
+  HEBREW
+  HINDI
+  INDONESIAN
+  ITALIAN
+  JAPANESE
+  KOREAN
+  POLISH
+  PORTUGUESE
+  ROMANIAN
+  RUSSIAN
+  SERBIAN
+  SPANISH
+  SWEDISH
+  THAI
+  TURKISH
+  UKRAINIAN
+  VIETNAMESE
+  ZULU
+}
+
 type BiomarkerRange {
   max: Float
   min: Float
+}
+
+input BiomarkerRangeInput {
+  max: Float!
+  min: Float!
+}
+
+input BiomarkerResultInput {
+  biomarkerId: ID!
+  result: BiomarkerValueInput!
+  date: String!
 }
 
 input BiomarkerResultsFilterInput {
@@ -306,6 +388,17 @@ type BiomarkerUnitEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+enum BiomarkerValueDatatype {
+  BOOLEAN
+  STRING
+  NUMBER
+}
+
+input BiomarkerValueInput {
+  type: BiomarkerValueDatatype!
+  value: GenericScalar!
 }
 
 enum CalendarContactType {
@@ -1545,6 +1638,8 @@ type Mutation {
   createGroupChannel(input: CreateGroupChannelInput!): CreateGroupChannel
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   setPrimaryCoach(input: SetPrimaryCoachInput!): SetPrimaryCoachPayload
+  addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
+  addBiomarker(input: AddBiomarkerInput!): AddBiomarker
 }
 
 """An object with an ID"""
