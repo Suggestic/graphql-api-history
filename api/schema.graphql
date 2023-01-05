@@ -3185,7 +3185,7 @@ type Query {
   trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
-  users(after: String, before: String, first: Int, last: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
+  users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
 
@@ -4345,18 +4345,18 @@ type User implements Node {
   appleUserSource: String
   appleUserSourceJson: JSONString
   avatar: String
-  createdAt: DateTime
+  createdAt: DateTime!
   databaseId: String
   email: String
   id: ID!
-  isActive: Boolean
-  isArUser: Boolean
+  isActive: Boolean!
+  isArUser: Boolean!
   name: String
-  organizationId: ID
-  phone: String
+  organizationId: UUID
+  phone: String!
   profileId: String
   subscription: SubscriptionType
-  updatedAt: DateTime
+  updatedAt: DateTime!
   userSource: String
 }
 
