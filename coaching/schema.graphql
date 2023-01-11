@@ -81,6 +81,7 @@ input AddBiomarkerInput {
   isVisible: Boolean = true
   range: BiomarkerRangeInput
   optimalRange: BiomarkerRangeInput
+  borderlineRange: BiomarkerRangeInput
   units: [ID!]!
   aliases: [BiomarkerAliasInput!]
 }
@@ -234,6 +235,7 @@ type Biomarker {
   description: String
   range: BiomarkerRange
   optimalRange: BiomarkerRange
+  borderlineRange: BiomarkerRange
   createdAt: DateTime!
   updatedAt: DateTime!
 }
