@@ -448,6 +448,7 @@ type Coach implements Node {
   affiliateId: String
   weeklyRules: [WeeklyRules!]
   isPrimary: Boolean
+  showAllMembers: Boolean!
 }
 
 input CoachActivityLogFiltersInput {
@@ -2088,6 +2089,7 @@ type Settings {
   availabilitySettings: AvailabilitySettings
   unitSystem: UnitSystem!
   weeklyRules: [WeeklyRules!]
+  showAllMembers: Boolean!
 }
 
 type SetUISettings {
@@ -2755,6 +2757,7 @@ input UpdateSettingsInput {
   password: UpdatePasswordInput
   availabilitySettings: AvailabilitySettingsInput
   affiliateId: String
+  showAllMembers: Boolean = false
   clientMutationId: String
 }
 
