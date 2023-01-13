@@ -2114,7 +2114,7 @@ type Mutation {
 
   """addHeartRateLog add Heart Rate Log log"""
   addHeartRateLog(source: SourceType, timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
-  addRecipesToShoppingList(recipeIds: [String!]!): AddRecipesToShoppingList
+  addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
 
   """addSleepQualityScore add sleep quality score log"""
   addSleepQualityScore(date: Date, source: SourceType, value: Int!): AddSleepQualityScore!
