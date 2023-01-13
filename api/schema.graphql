@@ -46,6 +46,7 @@ type AddBiomarker {
 
 input AddBiomarkerInput {
   aliases: [BiomarkerAliasInput!]
+  borderlineRange: BiomarkerRangeInput
   category: ID!
   description: String
   isVisible: Boolean = true
@@ -271,6 +272,7 @@ enum BiologicalSex {
 
 type Biomarker {
   aliases: [BiomarkerAlias!]
+  borderlineRange: BiomarkerRange
   category: BiomarkerCategory!
   createdAt: DateTime!
   description: String
@@ -568,6 +570,7 @@ type Coach implements Node {
   isPrimary: Boolean
   name: String!
   sendbirdId: String
+  showAllMembers: Boolean!
 }
 
 type CoachConnection {
@@ -2111,7 +2114,7 @@ type Mutation {
 
   """addHeartRateLog add Heart Rate Log log"""
   addHeartRateLog(source: SourceType, timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
-  addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
+  addRecipesToShoppingList(recipeIds: [String!]!): AddRecipesToShoppingList
 
   """addSleepQualityScore add sleep quality score log"""
   addSleepQualityScore(date: Date, source: SourceType, value: Int!): AddSleepQualityScore!
