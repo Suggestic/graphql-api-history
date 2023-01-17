@@ -93,7 +93,6 @@ type AddBiomarkerResults {
 }
 
 input AddBiomarkerResultsInput {
-  profileId: ID!
   labTestReportId: ID!
   biomarkers: [BiomarkerResultInput!]!
 }
@@ -996,6 +995,16 @@ enum ExerciseType {
   WORKOUT_ROUTINE
   RECOVERY
   OTHER
+  WALK
+  CYCLE
+  JOG_OR_RUN
+  SWIM
+  BREATHWORK
+  STRETCH
+  YOGA
+  PILATES
+  HIKE
+  DANCE
 }
 
 type ExternalCalendarEvent {
