@@ -67,7 +67,6 @@ type AddBiomarkerResults {
 input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
   labTestReportId: ID!
-  profileId: ID!
 }
 
 type AddExerciseEntry {
@@ -1254,11 +1253,21 @@ enum ExerciseIntensity {
 }
 
 enum ExerciseType {
+  BREATHWORK
   CARDIO
+  CYCLE
+  DANCE
+  HIKE
+  JOG_OR_RUN
   OTHER
+  PILATES
   RECOVERY
   STRENGTH
+  STRETCH
+  SWIM
+  WALK
   WORKOUT_ROUTINE
+  YOGA
 }
 
 union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | MealProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy
