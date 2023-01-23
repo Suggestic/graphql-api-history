@@ -246,6 +246,25 @@ input AppUserActivityLogFiltersInput {
   profileId: ID
 }
 
+type ArticleRecommended implements Node {
+  article: ContentLibraryType!
+  createdAt: DateTime!
+  id: ID!
+  updatedAt: DateTime!
+  valueMax: Float!
+  valueMin: Float!
+}
+
+type ArticleRecommendedConnection {
+  edges: [ArticleRecommendedEdge]!
+  pageInfo: PageInfo!
+}
+
+type ArticleRecommendedEdge {
+  cursor: String!
+  node: ArticleRecommended
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -280,7 +299,6 @@ type Biomarker {
   name: String!
   optimalRange: BiomarkerRange
   range: BiomarkerRange
-  results(after: String, before: String, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   units: [BiomarkerUnit!]!
   updatedAt: DateTime!
 }
@@ -381,6 +399,7 @@ input BiomarkerRangeInput {
 
 input BiomarkerResultInput {
   biomarkerId: ID!
+  biomarkerUnitId: ID!
   date: DateTime!
   result: BiomarkerValueInput!
 }
@@ -656,6 +675,7 @@ enum ContentLibraryOrderByField {
 }
 
 type ContentLibraryType implements Node {
+  articlerecommendationSet(after: String, before: String, first: Int, last: Int, offset: Int): ArticleRecommendedConnection!
   categories: [ContentCategoryType]
   databaseId: String
   id: ID!
@@ -686,6 +706,16 @@ type ContentLibraryTypeEdge {
 type ContentTagType implements Node {
   id: ID!
   name: String!
+}
+
+type ContentTagTypeConnection {
+  edges: [ContentTagTypeEdge]!
+  pageInfo: PageInfo!
+}
+
+type ContentTagTypeEdge {
+  cursor: String!
+  node: ContentTagType
 }
 
 type Contribution {
@@ -727,6 +757,20 @@ input CreateAppointmentInput {
   datetime: DateTime!
   note: String
   timezone: String
+}
+
+type CreateArticleRecommended {
+  articleRecommended: ArticleRecommended
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateArticleRecommendedInput {
+  articleId: ID!
+  biomarkerId: ID!
+  valueMax: Float!
+  valueMin: Float!
 }
 
 type CreateDailyRecapEntry {
@@ -2146,6 +2190,7 @@ type Mutation {
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
+  createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
@@ -2240,6 +2285,7 @@ type Mutation {
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
+  updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
@@ -2825,6 +2871,7 @@ type ProductVariant {
 
 type ProfileBiomarker implements Node {
   biomarker: Biomarker!
+  biomarkerUnit: BiomarkerUnit
   createdAt: DateTime!
   date: DateTime!
   id: ID!
@@ -2844,6 +2891,7 @@ type ProfileBiomarkerEdge {
 }
 
 type ProfileBiomarkerResult {
+  articles(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection
   biomarker: Biomarker!
   results(after: String, before: String, end: Date, first: Int, last: Int, offset: Int, start: Date): ProfileBiomarkerConnection
 }
@@ -3080,6 +3128,7 @@ type Query {
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], first: Int, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
+  contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
   countries: [GenericScalar]
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
   customMealPlan(breakfastDistribution: Float, calories: Int!, carbs: Float, days: Int, dinnerDistribution: Float, error: Float, fat: Float, format: [MealTime]!, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxTimeMinutes: IntValueByMealTime, omega3: Float, program: ID, protein: Float, skipRecipes: [ID!], snackDistribution: Float): [MealPlanDay]
@@ -4137,6 +4186,21 @@ input UpdateAppointmentInput {
   contactType: CalendarContactType
   datetime: DateTime
   timezone: String
+}
+
+type UpdateArticleRecommended {
+  articleRecommended: ArticleRecommended
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateArticleRecommendedInput {
+  articleId: ID
+  biomarkerId: ID
+  id: ID!
+  valueMax: Float
+  valueMin: Float
 }
 
 type UpdateHydration {
