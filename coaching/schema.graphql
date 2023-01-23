@@ -224,7 +224,6 @@ enum BiologicalSex {
 }
 
 type Biomarker {
-  results(offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
   id: ID!
   name: String!
   method: String
@@ -351,6 +350,7 @@ input BiomarkerRangeInput {
 
 input BiomarkerResultInput {
   biomarkerId: ID!
+  biomarkerUnitId: ID!
   result: BiomarkerValueInput!
   date: String!
 }
@@ -1800,6 +1800,7 @@ type ProfileBiomarker implements Node {
   value: GenericScalar!
   biomarker: Biomarker!
   labTestReport: LabTestReport!
+  biomarkerUnit: BiomarkerUnit
 }
 
 type ProfileBiomarkerConnection {
