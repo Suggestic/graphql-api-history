@@ -773,6 +773,13 @@ input CreateArticleRecommendedInput {
   valueMin: Float!
 }
 
+type CreateContentTag {
+  contentTag: ContentTagType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
 type CreateDailyRecapEntry {
   message: String!
   success: Boolean!
@@ -1050,6 +1057,11 @@ type DebugMPMealTimeValues {
   dinner: Int
   lunch: Int
   snack: Int
+}
+
+type DeleteContentTag {
+  message: String!
+  success: Boolean!
 }
 
 type DeleteDailyRecapEntry {
@@ -2191,6 +2203,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createContentTag(name: String!): CreateContentTag
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
@@ -2216,6 +2229,7 @@ type Mutation {
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
+  deleteContentTag(id: ID!): DeleteContentTag
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
 
@@ -2286,6 +2300,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateContentTag(id: ID!, name: String!): UpdateContentTag
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
@@ -4201,6 +4216,13 @@ input UpdateArticleRecommendedInput {
   id: ID!
   valueMax: Float
   valueMin: Float
+}
+
+type UpdateContentTag {
+  contentTag: ContentTagType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
 }
 
 type UpdateHydration {
