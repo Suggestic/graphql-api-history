@@ -779,6 +779,22 @@ input CreateArticleRecommendedInput {
   valueMin: Float!
 }
 
+type CreateContentCategory {
+  contentCategory: ContentCategoryType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateContentCategoryInput {
+  image: Upload
+  lang: GenericScalar
+  name: String!
+  order: Int!
+  subcategories: [ID]
+  tags: [ID]
+}
+
 type CreateContentTag {
   contentTag: ContentTagType
   errors: [FormError!]
@@ -984,7 +1000,7 @@ type DailyExerciseTime {
 }
 
 type DailyMoodSummary {
-  answers: [AnswerCounter!]!
+  answersStats: [AnswerCounter!]!
   question: DailyQuestion
 }
 
@@ -1068,6 +1084,11 @@ type DebugMPMealTimeValues {
   dinner: Int
   lunch: Int
   snack: Int
+}
+
+type DeleteContentCategory {
+  message: String!
+  success: Boolean!
 }
 
 type DeleteContentTag {
@@ -2218,6 +2239,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
   createContentTag(name: String!): CreateContentTag
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
@@ -2244,6 +2266,7 @@ type Mutation {
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
+  deleteContentCategory(id: ID!): DeleteContentCategory
   deleteContentTag(id: ID!): DeleteContentTag
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
@@ -2315,6 +2338,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
   updateContentTag(id: ID!, name: String!): UpdateContentTag
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
@@ -4232,6 +4256,23 @@ input UpdateArticleRecommendedInput {
   id: ID!
   valueMax: Float
   valueMin: Float
+}
+
+type UpdateContentCategory {
+  contentCategory: ContentCategoryType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateContentCategoryInput {
+  id: ID!
+  image: Upload
+  lang: GenericScalar
+  name: String
+  order: Int
+  subcategories: [ID]
+  tags: [ID]
 }
 
 type UpdateContentTag {

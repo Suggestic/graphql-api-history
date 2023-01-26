@@ -97,6 +97,11 @@ input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
 }
 
+type AnswerCounter {
+  total: Int!
+  answer: DailyRecapAnswer!
+}
+
 type Appointment {
   id: ID!
   title: String!
@@ -808,6 +813,11 @@ type DailyChecklist {
   days: [DayChecklistItems]!
 }
 
+type DailyMoodSummary {
+  question: DailyRecapQuestion
+  answersStats: [AnswerCounter!]!
+}
+
 type DailyRecap {
   date: Date!
   questions: [DailyRecapQuestion!]!
@@ -816,7 +826,8 @@ type DailyRecap {
 type DailyRecapAnswer {
   type: HabitAnswerType!
   answer: String!
-  selected: Boolean!
+  selected: Boolean
+  imageUrl: String
 }
 
 type DailyRecapQuestion {
@@ -1068,6 +1079,10 @@ GraphQL scalar value that could be:
 String, Boolean, Int, Float, List or Object.
 """
 scalar GenericScalar
+
+enum GroupQuestion {
+  MOOD
+}
 
 enum HabitAnswerType {
   POSITIVE
@@ -1415,7 +1430,8 @@ type Member implements Node {
   restrictions: [Restriction!]!
   sendbirdToken: String @deprecated(reason: "Renamed. Use sendbirdId instead")
   sendbirdId: String
-  dailyRecaps(startDate: Date!, endDate: Date!): [DailyRecap!]!
+  dailyRecaps(startDate: Date!, endDate: Date!, group: GroupQuestion): [DailyRecap!]!
+  dailyMoodSummary(startDate: Date!, endDate: Date!): DailyMoodSummary!
   activityStreaks(startDate: Date!, endDate: Date!): [ActivityStreak!]!
   waterIntake(startDate: Date!, endDate: Date!, source: SourceType): [WaterLog!]!
   mealLogs(startDate: Date!, endDate: Date!): MealLogs!
