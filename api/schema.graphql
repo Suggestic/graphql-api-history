@@ -180,8 +180,14 @@ type AggregateMeta {
 type Answer {
   answer: String
   id: ID
+  imageUrl: String
   selected: Boolean
   type: HabitAnswerType!
+}
+
+type AnswerCounter {
+  answer: Answer!
+  total: Int!
 }
 
 type Appointment {
@@ -977,6 +983,11 @@ type DailyExerciseTime {
   type: String
 }
 
+type DailyMoodSummary {
+  answers: [AnswerCounter!]!
+  question: DailyQuestion
+}
+
 type DailyQuestion {
   answers: [Answer]
   done: Boolean
@@ -1456,6 +1467,10 @@ type GooglePlayTransactionTypeConnection {
 type GooglePlayTransactionTypeEdge {
   cursor: String!
   node: GooglePlayTransactionType
+}
+
+enum GroupQuestion {
+  MOOD
 }
 
 enum HabitAnswerType {
@@ -3147,9 +3162,10 @@ type Query {
   countries: [GenericScalar]
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
   customMealPlan(breakfastDistribution: Float, calories: Int!, carbs: Float, days: Int, dinnerDistribution: Float, error: Float, fat: Float, format: [MealTime]!, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxTimeMinutes: IntValueByMealTime, omega3: Float, program: ID, protein: Float, skipRecipes: [ID!], snackDistribution: Float): [MealPlanDay]
-  dailyRecap(date: Date!, group: String): [DailyQuestion!]!
-  dailyRecapQuestions(group: String): [DailyQuestion!]!
-  dailyRecaps(endDate: Date!, group: String, startDate: Date!): [DailyRecap!]!
+  dailyMoodSummary(endDate: Date!, startDate: Date!): DailyMoodSummary!
+  dailyRecap(date: Date!, group: GroupQuestion): [DailyQuestion!]!
+  dailyRecapQuestions(group: GroupQuestion): [DailyQuestion!]!
+  dailyRecaps(endDate: Date!, group: GroupQuestion, startDate: Date!): [DailyRecap!]!
   dashboard: Dashboard
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
