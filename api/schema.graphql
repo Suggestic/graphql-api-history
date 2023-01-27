@@ -795,6 +795,26 @@ input CreateContentCategoryInput {
   tags: [ID]
 }
 
+type CreateContentLibrary {
+  contentLibrary: ContentLibraryType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateContentLibraryInput {
+  categories: [ID]
+  imageUrl: String!
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: GenericScalar
+  order: Int
+  sourceUrl: String
+  subTitle: String
+  tags: [ID]
+  title: String!
+}
+
 type CreateContentTag {
   contentTag: ContentTagType
   errors: [FormError!]
@@ -1087,6 +1107,11 @@ type DebugMPMealTimeValues {
 }
 
 type DeleteContentCategory {
+  message: String!
+  success: Boolean!
+}
+
+type DeleteContentLibrary {
   message: String!
   success: Boolean!
 }
@@ -2240,6 +2265,7 @@ type Mutation {
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
+  createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary
   createContentTag(name: String!): CreateContentTag
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
@@ -2267,6 +2293,7 @@ type Mutation {
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteContentCategory(id: ID!): DeleteContentCategory
+  deleteContentLibrary(id: ID!): DeleteContentLibrary
   deleteContentTag(id: ID!): DeleteContentTag
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
@@ -2339,6 +2366,7 @@ type Mutation {
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
+  updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary
   updateContentTag(id: ID!, name: String!): UpdateContentTag
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
@@ -2930,6 +2958,7 @@ type ProfileBiomarker implements Node {
   date: DateTime!
   id: ID!
   labTestReport: LabTestReport!
+  stringValue: JSONString! @deprecated(reason: "Use value instead")
   updatedAt: DateTime!
   value: GenericScalar!
 }
@@ -4273,6 +4302,27 @@ input UpdateContentCategoryInput {
   order: Int
   subcategories: [ID]
   tags: [ID]
+}
+
+type UpdateContentLibrary {
+  contentLibrary: ContentLibraryType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateContentLibraryInput {
+  categories: [ID]
+  id: ID!
+  imageUrl: String
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: GenericScalar
+  order: Int
+  sourceUrl: String
+  subTitle: String
+  tags: [ID]
+  title: String
 }
 
 type UpdateContentTag {
