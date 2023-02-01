@@ -84,6 +84,7 @@ input AddBiomarkerInput {
   borderlineRange: BiomarkerRangeInput
   units: [ID!]!
   aliases: [BiomarkerAliasInput!]
+  normalValues: [GenericScalar!]
 }
 
 type AddBiomarkerResults {
@@ -239,6 +240,7 @@ type Biomarker {
   range: BiomarkerRange
   optimalRange: BiomarkerRange
   borderlineRange: BiomarkerRange
+  normalValues: [GenericScalar!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

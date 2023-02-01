@@ -52,6 +52,7 @@ input AddBiomarkerInput {
   isVisible: Boolean = true
   method: String
   name: String!
+  normalValues: [GenericScalar!]
   optimalRange: BiomarkerRangeInput
   order: Int = 0
   range: BiomarkerRangeInput
@@ -303,6 +304,7 @@ type Biomarker {
   id: ID!
   method: String
   name: String!
+  normalValues: [GenericScalar!]
   optimalRange: BiomarkerRange
   range: BiomarkerRange
   units: [BiomarkerUnit!]!
@@ -1117,6 +1119,7 @@ type DeleteContentLibrary {
 }
 
 type DeleteContentTag {
+  contentTag: ContentTagType
   message: String!
   success: Boolean!
 }
