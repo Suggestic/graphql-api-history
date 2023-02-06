@@ -9,30 +9,6 @@ type appCustomizationFeature {
   description: String!
 }
 
-type Article implements Node {
-  id: ID!
-  title: String!
-  imageUrl: String!
-  sourceUrl: String!
-  order: Int!
-  subTitle: String
-  isBlocked: Boolean
-  createdAt: Datetime!
-  updatedAt: Datetime!
-  categories: [ContentCategory!]!
-  tags: [ContentTag!]!
-}
-
-type ArticleConnection {
-  edges: [ArticleEdge!]!
-  pageInfo: PageInfo!
-}
-
-type ArticleEdge {
-  cursor: String!
-  node: Article
-}
-
 enum BiologicalSex {
   MALE
   FEMALE
@@ -67,11 +43,75 @@ type ContentCategory {
   id: ID!
   name: String!
   slug: String!
+  order: Int!
+  tags: [ContentTag]
+  subcategories: [ContentCategory]
+  image: String
+  lang: Generic
+}
+
+type ContentCategoryConnection {
+  edges: [ContentCategoryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentCategoryEdge {
+  cursor: String!
+  node: ContentCategory
+}
+
+type ContentLibrary implements Node {
+  id: ID!
+  title: String!
+  imageUrl: String!
+  sourceUrl: String
+  order: Int!
+  subTitle: String
+  databaseId: String
+  isBlocked: Boolean
+  isFavorite: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  categories: [ContentCategory!]!
+  tags: [ContentTag!]!
+  programs: [Program!]!
+}
+
+type ContentLibraryConnection {
+  edges: [ContentLibraryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentLibraryEdge {
+  cursor: String!
+  node: ContentLibrary
+}
+
+input ContentLibraryOrderBy {
+  field: ContentLibraryOrderByFields
+  order: SortOrder
+}
+
+enum ContentLibraryOrderByFields {
+  created_at
+  popularity
 }
 
 type ContentTag implements Node {
   id: ID!
   name: String!
+}
+
+type ContentTagConnection {
+  edges: [ContentTagEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentTagEdge {
+  cursor: String!
+  node: ContentTag
 }
 
 type CopyProgram {
@@ -86,33 +126,48 @@ input CreateAndInviteUserInput {
   enable2fa: Boolean!
 }
 
-type CreateArticle {
-  success: Boolean!
-  message: String!
-  article: Article
-}
-
-input CreateArticleInput {
-  title: String!
-  image: Upload!
-  sourceUrl: String!
-  order: Int
-  subTitle: String
-  isBlocked: Boolean
-  categories: [ID!]
-  tags: [ID!]
-}
-
 type CreateContentCategory {
   success: Boolean!
   message: String!
-  category: ContentCategory
+  errors: [FormError!]
+  contentCategory: ContentCategory
+}
+
+input CreateContentCategoryInput {
+  name: String!
+  order: Int!
+  subcategories: [ID!]
+  image: Upload
+  tags: [ID!]
+  lang: Generic
+}
+
+type CreateContentLibrary {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentLibrary: ContentLibrary
+}
+
+input CreateContentLibraryInput {
+  title: String!
+  imageUrl: String!
+  sourceUrl: String
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  categories: [ID!]
+  tags: [ID!]
+  programs: [ID!]
 }
 
 type CreateContentTag {
   success: Boolean!
   message: String!
-  tag: ContentTag
+  errors: [FormError!]
+  contentTag: ContentTag
 }
 
 type CreateCustomAttribute {
@@ -302,22 +357,22 @@ enum DataType {
 """An ISO-8601 encoded UTC date string."""
 scalar Datetime
 
-type DeleteArticle {
-  success: Boolean!
-  message: String!
-  deleted: Article
-}
-
 type DeleteContentCategory {
   success: Boolean!
   message: String!
-  deleted: ContentCategory
+  contentCategory: ContentCategory
+}
+
+type DeleteContentLibrary {
+  success: Boolean!
+  message: String!
+  contentLibrary: ContentLibrary
 }
 
 type DeleteContentTag {
   success: Boolean!
   message: String!
-  deleted: ContentTag
+  contentTag: ContentTag
 }
 
 type DeleteCustomAttribute {
@@ -400,11 +455,18 @@ enum FeatureOption {
   ONBOARDING
 }
 
+type FormError {
+  field: String
+  messages: [String!]
+}
+
 type Generate2faUri {
   success: Boolean!
   message: String!
   uri: String
 }
+
+scalar Generic
 
 type Goal implements Node {
   id: ID!
@@ -613,7 +675,7 @@ type Mutation {
   deleteContentTag(id: ID!): DeleteContentTag!
 
   """Create Content Category"""
-  createContentCategory(name: String!): CreateContentCategory!
+  createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory!
 
   """Update Content Category"""
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory!
@@ -621,14 +683,14 @@ type Mutation {
   """Delete Content Category"""
   deleteContentCategory(id: ID!): DeleteContentCategory!
 
-  """Create an Article"""
-  createArticle(input: CreateArticleInput!): CreateArticle!
+  """Create contentLibrary"""
+  createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary!
 
-  """Update and Article"""
-  updateArticle(input: UpdateArticleInput!): UpdateArticle!
+  """Update contentLibrary"""
+  updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary!
 
-  """Delete and Article"""
-  deleteArticle(id: ID!): DeleteArticle!
+  """Delete contentLibrary"""
+  deleteContentLibrary(id: ID!): DeleteContentLibrary!
 
   """Mutation to add/remove category as subcategory"""
   setContentSubcategory(mainCategory: ID!, subcategory: ID!, action: SetAction!): SetContentSubcategory!
@@ -711,7 +773,7 @@ type Program implements Node {
   name: String!
   createdAt: Datetime!
   slug: String!
-  author: String!
+  author: String
   isActive: Boolean!
   isPremium: Boolean!
   descriptionShort: String
@@ -808,13 +870,13 @@ type Query {
   availableThirdParties: [ThirdParty!]!
 
   """List Content Tags"""
-  contentTags: [ContentTag!]!
+  contentTags(first: Int, last: Int, after: String, before: String, name: String): ContentTagConnection!
 
   """List Content Categories"""
-  contentCategories: [ContentCategory!]!
+  contentCategories(first: Int, last: Int, after: String, before: String, id: ID, tags: [String!]): ContentCategoryConnection!
 
-  """List Articles"""
-  articles(first: Int, last: Int, after: String, before: String, category: ID, tag: ID): ArticleConnection!
+  """List Content Libraries"""
+  contentLibrary(first: Int, last: Int, after: String, before: String, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
 
   """Retrieve Features for AppCustomization"""
   appCustomizationFeatures: [appCustomizationFeature!]!
@@ -956,39 +1018,50 @@ type ThirdPartyAppCustomization {
   selectedFeatures: [FeatureOption!]
 }
 
-type UpdateArticle {
-  success: Boolean!
-  message: String!
-  article: Article
-}
-
-input UpdateArticleInput {
-  id: ID!
-  title: String
-  image: Upload
-  sourceUrl: String
-  order: Int
-  subTitle: String
-  isBlocked: Boolean
-  categories: [ID!]
-  tags: [ID!]
-}
-
 type UpdateContentCategory {
   success: Boolean!
   message: String!
-  category: ContentCategory
+  errors: [FormError!]
+  contentCategory: ContentCategory
 }
 
 input UpdateContentCategoryInput {
   id: ID!
-  name: String!
+  name: String
+  order: Int
+  subcategories: [ID!]
+  image: Upload
+  tags: [ID!]
+  lang: Generic
+}
+
+type UpdateContentLibrary {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentLibrary: ContentLibrary
+}
+
+input UpdateContentLibraryInput {
+  id: ID!
+  title: String
+  imageUrl: String
+  sourceUrl: String
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  categories: [ID!]
+  tags: [ID!]
+  programs: [ID!]
 }
 
 type UpdateContentTag {
   success: Boolean!
   message: String!
-  tag: ContentTag
+  errors: [FormError!]
+  contentTag: ContentTag
 }
 
 input UpdateContentTagInput {

@@ -257,9 +257,10 @@ type ArticleRecommended implements Node {
   article: ContentLibraryType!
   createdAt: DateTime!
   id: ID!
+  normalValues: [GenericScalar!]
   updatedAt: DateTime!
-  valueMax: Float!
-  valueMin: Float!
+  valueMax: Float
+  valueMin: Float
 }
 
 type ArticleRecommendedConnection {
@@ -657,9 +658,12 @@ type ContentCategoryType implements Node {
   databaseId: String
   id: ID!
   image: String
+  lang: JSONString
   name: String
+  order: Int!
   slug: String!
   subcategories: [ContentCategoryType!]
+  tags: [ContentTagType!]
 }
 
 type ContentCategoryTypeConnection {
@@ -683,22 +687,22 @@ enum ContentLibraryOrderByField {
 }
 
 type ContentLibraryType implements Node {
-  articlerecommendationSet(after: String, before: String, first: Int, last: Int, offset: Int): ArticleRecommendedConnection!
   categories: [ContentCategoryType]
+  createdAt: DateTime
   databaseId: String
   id: ID!
   imageUrl: String
-  interestedProfiles: [ProfileType!]!
   isBlocked: Boolean!
   isFavorite: Boolean!
   isFeatured: Boolean!
   lang: JSONString
   order: Int!
-  programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int): ProgramConnection!
+  programs: [Program!]
   sourceUrl: String
   subTitle: String
   tags: [ContentTagType!]
   title: String
+  updatedAt: DateTime
 }
 
 type ContentLibraryTypeConnection {
@@ -777,8 +781,8 @@ type CreateArticleRecommended {
 input CreateArticleRecommendedInput {
   articleId: ID!
   biomarkerId: ID!
-  valueMax: Float!
-  valueMin: Float!
+  normalValues: [GenericScalar!]
+  range: BiomarkerRangeInput
 }
 
 type CreateContentCategory {
@@ -811,6 +815,7 @@ input CreateContentLibraryInput {
   isFeatured: Boolean
   lang: GenericScalar
   order: Int
+  programs: [ID]
   sourceUrl: String
   subTitle: String
   tags: [ID]
@@ -999,6 +1004,20 @@ type CreateSupplementPlan {
   supplementPlan: SupplementPlan
 }
 
+type CreateSupplementRecommended {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+  supplementRecommended: SupplementRecommended
+}
+
+input CreateSupplementRecommendedInput {
+  biomarkerId: ID!
+  normalValues: [GenericScalar!]
+  range: BiomarkerRangeInput
+  supplementId: ID!
+}
+
 type CreateUser {
   message: String!
   success: Boolean!
@@ -1109,11 +1128,13 @@ type DebugMPMealTimeValues {
 }
 
 type DeleteContentCategory {
+  contentCategory: ContentCategoryType
   message: String!
   success: Boolean!
 }
 
 type DeleteContentLibrary {
+  contentLibrary: ContentLibraryType
   message: String!
   success: Boolean!
 }
@@ -2293,6 +2314,7 @@ type Mutation {
   createQuizResult(answers: [String]!, result: String!): CreateQuizResult
   createSupplement(input: CreateSupplementInput!): CreateSupplement
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
+  createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteContentCategory(id: ID!): DeleteContentCategory
@@ -2335,7 +2357,7 @@ type Mutation {
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   login(userId: String!): LoginUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
-  profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean = true, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
+  profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
   profileRestrictionsUpdate(replace: Boolean, restrictions: [ID]): ProfileRestrictionsUpdate
   publishEvent(appVersion: String!, client: String!, eventType: EventType!, location: GenericScalar, timezone: String!): PublishEvent
@@ -2391,6 +2413,7 @@ type Mutation {
   updateSubscription(profileId: String, subscriptionId: String!, userId: String): UpdateSubscription
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
   updateSupplementPlan(input: UpdateSPInput!): UpdateSupplementPlan
+  updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended
   updateUserProgram(programId: String!): UpdateUserProgram
   userFavoriteMenuitem(menuitemId: String!): UserFavoriteMenuItem
   userFavoriteRecipe(recipeId: String!): UserFavoriteRecipe
@@ -2980,6 +3003,7 @@ type ProfileBiomarkerResult {
   articles(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection
   biomarker: Biomarker!
   results(after: String, before: String, end: Date, first: Int, last: Int, offset: Int, start: Date): ProfileBiomarkerConnection
+  supplements(after: String, before: String, first: Int, last: Int, offset: Int): SupplementConnection
 }
 
 type ProfileBiomarkers {
@@ -3201,6 +3225,7 @@ type Query {
   appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
+  articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
@@ -3326,6 +3351,7 @@ type Query {
   supplementParent(supplementId: ID!): SupplementParent
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
+  supplementsRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementRecommendedConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
@@ -4051,6 +4077,7 @@ type Supplement implements Node {
   sku: String
   storeId: String
   supplementFacts: String
+  supplementrecommendationSet(after: String, before: String, first: Int, last: Int, offset: Int): SupplementRecommendedConnection!
   updatedAt: DateTime!
 }
 
@@ -4150,6 +4177,26 @@ type SupplementProtocol {
   thursday: Boolean!
   tuesday: Boolean!
   wednesday: Boolean!
+}
+
+type SupplementRecommended implements Node {
+  createdAt: DateTime!
+  id: ID!
+  normalValues: [GenericScalar!]
+  supplement: Supplement!
+  updatedAt: DateTime!
+  valueMax: Float
+  valueMin: Float
+}
+
+type SupplementRecommendedConnection {
+  edges: [SupplementRecommendedEdge]!
+  pageInfo: PageInfo!
+}
+
+type SupplementRecommendedEdge {
+  cursor: String!
+  node: SupplementRecommended
 }
 
 type SwapMealPlanRecipe {
@@ -4286,8 +4333,8 @@ input UpdateArticleRecommendedInput {
   articleId: ID
   biomarkerId: ID
   id: ID!
-  valueMax: Float
-  valueMin: Float
+  normalValues: [GenericScalar!]
+  range: BiomarkerRangeInput
 }
 
 type UpdateContentCategory {
@@ -4530,6 +4577,21 @@ type UpdateSupplementPlan {
   message: String!
   success: Boolean!
   supplementPlan: SupplementPlan
+}
+
+type UpdateSupplementRecommended {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+  supplementRecommended: SupplementRecommended
+}
+
+input UpdateSupplementRecommendedInput {
+  biomarkerId: ID
+  id: ID!
+  normalValues: [GenericScalar!]
+  range: BiomarkerRangeInput
+  supplementId: ID
 }
 
 type UpdateUserProgram {
