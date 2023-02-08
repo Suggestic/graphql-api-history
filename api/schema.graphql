@@ -255,6 +255,7 @@ input AppUserActivityLogFiltersInput {
 
 type ArticleRecommended implements Node {
   article: ContentLibraryType!
+  biomarker: Biomarker!
   createdAt: DateTime!
   id: ID!
   normalValues: [GenericScalar!]
@@ -1127,6 +1128,12 @@ type DebugMPMealTimeValues {
   snack: Int
 }
 
+type DeleteArticleRecommended {
+  articleRecommended: ArticleRecommended
+  message: String!
+  success: Boolean!
+}
+
 type DeleteContentCategory {
   contentCategory: ContentCategoryType
   message: String!
@@ -1227,6 +1234,12 @@ type DeleteSleepTime {
 type DeleteStepsCount {
   message: String!
   success: Boolean!
+}
+
+type DeleteSupplementRecommended {
+  message: String!
+  success: Boolean!
+  supplementRecommended: SupplementRecommended
 }
 
 type DeleteWeightEntry {
@@ -2317,6 +2330,7 @@ type Mutation {
   createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
+  deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteContentCategory(id: ID!): DeleteContentCategory
   deleteContentLibrary(id: ID!): DeleteContentLibrary
   deleteContentTag(id: ID!): DeleteContentTag
@@ -2349,6 +2363,7 @@ type Mutation {
   """deleteSleepTime delete sleep time entry"""
   deleteSleepTime(id: ID!): DeleteSleepTime!
   deleteStepsCount(id: ID!): DeleteStepsCount!
+  deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
@@ -4180,6 +4195,7 @@ type SupplementProtocol {
 }
 
 type SupplementRecommended implements Node {
+  biomarker: Biomarker!
   createdAt: DateTime!
   id: ID!
   normalValues: [GenericScalar!]

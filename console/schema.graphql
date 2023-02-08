@@ -14,6 +14,54 @@ enum BiologicalSex {
   FEMALE
 }
 
+type Biomarker {
+  id: ID!
+  name: String!
+  method: String
+  category: BiomarkerCategory!
+  units: [BiomarkerUnit!]!
+  aliases: [BiomarkerAlias!]
+  description: String
+  range: BiomarkerRange
+  optimalRange: BiomarkerRange
+  borderlineRange: BiomarkerRange
+  normalValues: [Generic!]
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type BiomarkerAlias {
+  name: String!
+  language: String!
+}
+
+type BiomarkerCategory {
+  name: String!
+  parent: BiomarkerCategory
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+}
+
+type BiomarkerRange {
+  max: Float
+  min: Float
+}
+
+input BiomarkerRangeInput {
+  max: Float!
+  min: Float!
+}
+
+type BiomarkerUnit {
+  id: ID!
+  name: String!
+  factor: Float!
+  alias: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
 type ChangePassword {
   success: Boolean!
   message: String!
@@ -270,6 +318,20 @@ input CreateSegmentConditionInput {
   gte: Float
 }
 
+type CreateSupplementRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  supplementRecommended: SupplementRecommended
+}
+
+input CreateSupplementRecommendedInput {
+  biomarkerId: ID!
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  supplementId: ID!
+}
+
 type CreateThirdPartyAppCustomization {
   success: Boolean!
   message: String!
@@ -414,6 +476,12 @@ type DeleteRuleSet {
 type DeleteSegmentCondition {
   success: Boolean!
   message: String!
+}
+
+type DeleteSupplementRecommended {
+  success: Boolean!
+  message: String!
+  supplementRecommended: SupplementRecommended
 }
 
 type DeleteThirdPartyAppCustomization {
@@ -691,6 +759,15 @@ type Mutation {
 
   """Delete contentLibrary"""
   deleteContentLibrary(id: ID!): DeleteContentLibrary!
+
+  """Create Supplement recommended"""
+  createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended!
+
+  """Update Supplement recommended"""
+  updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended!
+
+  """Delete Supplement recommended"""
+  deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended!
 
   """Mutation to add/remove category as subcategory"""
   setContentSubcategory(mainCategory: ID!, subcategory: ID!, action: SetAction!): SetContentSubcategory!
@@ -1002,6 +1079,59 @@ enum SortOrder {
   DESC
 }
 
+type Supplement {
+  id: ID!
+  name: String!
+  description: String
+  category: String!
+  mainImage: String!
+  images: [String!]
+  brand: String!
+  directionsOfUse: [SupplementDirection!]!
+  directionsOfUseText: String
+  servingName: String!
+  sizeCount: Int!
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type SupplementDirection {
+  quantity: Float!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  timeOfDay: TimeOfDay!
+}
+
+type SupplementRecommended implements Node {
+  valueMax: Float
+  valueMin: Float
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  supplement: Supplement!
+  biomarker: Biomarker!
+  normalValues: [Generic!]
+}
+
+type SupplementRecommendedConnection {
+  pageInfo: PageInfo!
+  edges: [SupplementRecommendedEdge]!
+}
+
+type SupplementRecommendedEdge {
+  node: SupplementRecommended
+  cursor: String!
+}
+
 type ThirdParty {
   name: String!
   slug: String!
@@ -1016,6 +1146,14 @@ type ThirdPartyAppCustomization {
   primaryColor: String
   secondaryColor: String
   selectedFeatures: [FeatureOption!]
+}
+
+enum TimeOfDay {
+  AT_WAKING
+  WITH_BREAKFAST
+  WITH_LUNCH
+  WITH_DINNER
+  AT_BEDTIME
 }
 
 type UpdateContentCategory {
@@ -1179,6 +1317,21 @@ input UpdateSegmentConditionInput {
   bool: Boolean
   lte: Float
   gte: Float
+}
+
+type UpdateSupplementRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  supplementRecommended: SupplementRecommended
+}
+
+input UpdateSupplementRecommendedInput {
+  id: ID!
+  biomarkerId: ID
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  supplementId: ID
 }
 
 type UpdateThirdPartyAppCustomization {
