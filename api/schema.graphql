@@ -1062,6 +1062,23 @@ type DailyRecap {
   questions: [DailyQuestion!]!
 }
 
+type DailyRecapAnswer implements Node {
+  answer: String!
+  answers(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
+  id: ID!
+  type: String!
+}
+
+type DailyRecapAnswerConnection {
+  edges: [DailyRecapAnswerEdge]!
+  pageInfo: PageInfo!
+}
+
+type DailyRecapAnswerEdge {
+  cursor: String!
+  node: DailyRecapAnswer
+}
+
 type Dashboard {
   components: [EntryType!]!
   goals: [ComponentGoal!]!
@@ -3171,6 +3188,7 @@ type Program implements Node {
   showDefaultGoals: Boolean!
   slug: String
   tags: [String!]!
+  thirdpartydailyrecapquestionSet(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
   transactionSet(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTransactionConnection!
   visibility: Boolean!
 }
@@ -4261,6 +4279,24 @@ type ThirdPartyAppCustomization implements Node {
   primaryColor: String
   secondaryColor: String
   selectedFeatures: [String!]!
+}
+
+type ThirdPartyDailyRecapQuestion implements Node {
+  answers(after: String, before: String, first: Int, last: Int, offset: Int): DailyRecapAnswerConnection!
+  id: ID!
+  imageUrl: String!
+  program: Program
+  question: String!
+}
+
+type ThirdPartyDailyRecapQuestionConnection {
+  edges: [ThirdPartyDailyRecapQuestionEdge]!
+  pageInfo: PageInfo!
+}
+
+type ThirdPartyDailyRecapQuestionEdge {
+  cursor: String!
+  node: ThirdPartyDailyRecapQuestion
 }
 
 scalar Time
