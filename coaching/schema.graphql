@@ -1082,6 +1082,38 @@ String, Boolean, Int, Float, List or Object.
 """
 scalar GenericScalar
 
+type GroupChannel implements Node {
+  channelUrl: String!
+  name: String!
+  members: [String!]!
+  isDistinct: Boolean!
+  isActive: Boolean!
+  createdBy: String
+  dateCreated: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  """The ID of the object."""
+  id: ID!
+}
+
+type GroupChannelConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [GroupChannelEdge]!
+}
+
+"""A Relay edge containing a `GroupChannel` and its cursor."""
+type GroupChannelEdge {
+  """The item at the end of the edge"""
+  node: GroupChannel
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 enum GroupQuestion {
   MOOD
 }
@@ -1963,6 +1995,7 @@ type Query {
     """Biomarker ID"""
     id: ID!
   ): ProfileBiomarkerResult
+  groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
 }
 
 type QuizAnswer {
