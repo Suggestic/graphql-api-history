@@ -419,7 +419,6 @@ input BiomarkerResultsFilterInput {
   biomarkerName: String
   categoryId: ID
   intervalRange: BiomarkerIntervalRange
-  labTestReportId: ID
 }
 
 type BiomarkerUnit implements Node {
@@ -830,9 +829,35 @@ type CreateContentTag {
   success: Boolean!
 }
 
+type CreateDailyRecapAnswer {
+  dailyRecapAnswer: DailyRecapAnswer
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateDailyRecapAnswerInput {
+  answer: String!
+  type: String!
+}
+
 type CreateDailyRecapEntry {
   message: String!
   success: Boolean!
+}
+
+type CreateDailyRecapQuestion {
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateDailyRecapQuestionInput {
+  answers: [ID]!
+  imageUrl: String
+  program: ID
+  question: String!
 }
 
 type CreateGooglePlayTransaction {
@@ -1069,16 +1094,6 @@ type DailyRecapAnswer implements Node {
   type: String!
 }
 
-type DailyRecapAnswerConnection {
-  edges: [DailyRecapAnswerEdge]!
-  pageInfo: PageInfo!
-}
-
-type DailyRecapAnswerEdge {
-  cursor: String!
-  node: DailyRecapAnswer
-}
-
 type Dashboard {
   components: [EntryType!]!
   goals: [ComponentGoal!]!
@@ -1169,7 +1184,19 @@ type DeleteContentTag {
   success: Boolean!
 }
 
+type DeleteDailyRecapAnswer {
+  dailyRecapAnswer: DailyRecapAnswer
+  message: String!
+  success: Boolean!
+}
+
 type DeleteDailyRecapEntry {
+  message: String!
+  success: Boolean!
+}
+
+type DeleteDailyRecapQuestion {
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
   message: String!
   success: Boolean!
 }
@@ -1610,6 +1637,14 @@ type HeartRateLogsConnnection {
   maximum: Float!
   minimum: Float!
   pageInfo: PageInfo!
+}
+
+input HistoricalBiomarkerResultsFilterInput {
+  biomarkerId: ID
+  biomarkerName: String
+  categoryId: ID
+  intervalRange: BiomarkerIntervalRange
+  labTestReportId: ID
 }
 
 type Hours {
@@ -2238,6 +2273,17 @@ type MenuItemEdge {
   node: MenuItem
 }
 
+type MergeUser {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input MergeUserInput {
+  userOrigin: ID!
+  userTarget: ID!
+}
+
 type Money {
   amount: Float!
   currencyCode: String!
@@ -2321,7 +2367,9 @@ type Mutation {
   createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
   createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary
   createContentTag(name: String!): CreateContentTag
+  createDailyRecapAnswer(input: CreateDailyRecapAnswerInput!): CreateDailyRecapAnswer
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
+  createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
   createMealEntry(mealId: ID!, value: MealTrackStatus): CreateMealEntry
@@ -2351,7 +2399,9 @@ type Mutation {
   deleteContentCategory(id: ID!): DeleteContentCategory
   deleteContentLibrary(id: ID!): DeleteContentLibrary
   deleteContentTag(id: ID!): DeleteContentTag
+  deleteDailyRecapAnswer(id: ID!): DeleteDailyRecapAnswer
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
+  deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
 
   """deleteFoodLog deletes a food log by ID"""
@@ -2388,6 +2438,7 @@ type Mutation {
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   login(userId: String!): LoginUser
+  mergeUser(input: MergeUserInput!): MergeUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
@@ -2425,6 +2476,8 @@ type Mutation {
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
   updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary
   updateContentTag(id: ID!, name: String!): UpdateContentTag
+  updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
+  updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
@@ -3290,7 +3343,7 @@ type Query {
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
   heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HeartRateLogsConnnection!
-  historicalBiomarkerResults(after: String, before: String, filters: BiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
+  historicalBiomarkerResults(after: String, before: String, filters: HistoricalBiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   historicalResultsByBiomarker(id: ID!): ProfileBiomarkerResult
   hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, source: SourceType, startDate: Date!, toMl: Boolean): [Hydration!]!
@@ -3386,6 +3439,8 @@ type Query {
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   supplementsRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementRecommendedConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
+  thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
+  thirdPartyDailyRecapQuestions(after: String, answers: [ID!], before: String, first: Int, last: Int, offset: Int, question: String): ThirdPartyDailyRecapQuestionConnection
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   trackingDailyGoals: TrackingDailyGoals!
@@ -4282,7 +4337,7 @@ type ThirdPartyAppCustomization implements Node {
 }
 
 type ThirdPartyDailyRecapQuestion implements Node {
-  answers(after: String, before: String, first: Int, last: Int, offset: Int): DailyRecapAnswerConnection!
+  answers: [DailyRecapAnswer!]
   id: ID!
   imageUrl: String!
   program: Program
@@ -4432,6 +4487,34 @@ type UpdateContentTag {
   errors: [FormError!]
   message: String!
   success: Boolean!
+}
+
+type UpdateDailyRecapAnswer {
+  dailyRecapAnswer: DailyRecapAnswer
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateDailyRecapAnswerInput {
+  answer: String
+  id: ID!
+  type: String
+}
+
+type UpdateDailyRecapQuestion {
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateDailyRecapQuestionInput {
+  answers: [ID]
+  id: ID!
+  imageUrl: String
+  program: ID
+  question: String
 }
 
 type UpdateHydration {
