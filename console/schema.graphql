@@ -224,6 +224,18 @@ type CreateCustomAttribute {
   customAttribute: CustomAttribute
 }
 
+type CreateDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapAnswer: DailyRecapAnswer
+}
+
+input CreateDailyRecapAnswerInput {
+  answer: String!
+  type: String!
+}
+
 type CreateIngredient {
   success: Boolean!
   message: String!
@@ -409,6 +421,32 @@ type CustomAttributeEdge {
   node: CustomAttribute
 }
 
+type DailyRecapAnswer {
+  id: ID!
+  thirdPartyId: Int
+  answer: String!
+  type: String!
+}
+
+type DailyRecapQuestion implements Node {
+  id: ID!
+  question: String!
+  image_url: String
+  program: Int
+  third_party: Int
+  answers: [DailyRecapAnswer!]!
+}
+
+type DailyRecapQuestionConnection {
+  edges: [DailyRecapQuestionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DailyRecapQuestionEdge {
+  cursor: String!
+  node: DailyRecapQuestion
+}
+
 enum DataType {
   RANGE
   NUMBER
@@ -441,6 +479,12 @@ type DeleteCustomAttribute {
   success: Boolean!
   message: String!
   deleted: CustomAttribute
+}
+
+type DeleteDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  dailyRecapAnswer: DailyRecapAnswer
 }
 
 type DeleteIngredient {
@@ -786,6 +830,15 @@ type Mutation {
 
   """Accept an invitation"""
   acceptUserInvite(token: String!, password: String!): AcceptUserInvite!
+
+  """Create DailyRecapAnswer"""
+  createDailyRecapAnswer(input: CreateDailyRecapAnswerInput!): CreateDailyRecapAnswer!
+
+  """Update DailyRecapAnswer"""
+  updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer!
+
+  """Delete DailyRecapAnswer"""
+  deleteDailyRecapAnswer(id: ID!): DeleteDailyRecapAnswer!
 }
 
 interface Node {
@@ -965,6 +1018,9 @@ type Query {
   Retrieve an user ThirdPartyAppCustomization or null if it doesn't exist
   """
   thirdPartyAppCustomization: ThirdPartyAppCustomization
+
+  """Daily Recap Answers & Questions"""
+  thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
 }
 
 type RequestPasswordReset {
@@ -1214,6 +1270,19 @@ type UpdateCustomAttribute {
   success: Boolean!
   message: String!
   customAttribute: CustomAttribute
+}
+
+type UpdateDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapAnswer: DailyRecapAnswer
+}
+
+input UpdateDailyRecapAnswerInput {
+  id: ID!
+  answer: String
+  type: String
 }
 
 type UpdateIngredient {

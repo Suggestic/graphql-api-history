@@ -363,7 +363,6 @@ input BiomarkerResultInput {
 }
 
 input BiomarkerResultsFilterInput {
-  labTestReportId: ID
   categoryId: ID
   biomarkerId: ID
   biomarkerName: String
@@ -604,6 +603,56 @@ type ConnectedSource {
 
   """Indicates if it is the selected active source."""
   currentActive: Boolean!
+}
+
+type ContentCategory {
+  id: ID!
+  image: String
+  name: String
+  order: Int!
+  slug: String!
+  lang: JSONString
+  subcategories: [ContentCategory!]
+  tags: [ContentTag!]
+}
+
+type ContentLibrary {
+  id: ID!
+  isFavorite: Boolean!
+  isFeatured: Boolean!
+  categories: [ContentCategory]
+  tags: [ContentTag!]
+  title: String
+  subTitle: String
+  imageUrl: String
+  sourceUrl: String
+  order: Int!
+  isBlocked: Boolean!
+  lang: JSONString
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ContentLibraryConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentLibraryEdge]!
+}
+
+"""A Relay edge containing a `ContentLibrary` and its cursor."""
+type ContentLibraryEdge {
+  """The item at the end of the edge"""
+  node: ContentLibrary
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentTag {
+  id: ID!
+  name: String!
 }
 
 type CreateAppointmentEvent {
@@ -1146,6 +1195,14 @@ type HeartRateLogsEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+input HistoricalBiomarkerResultsFilterInput {
+  categoryId: ID
+  biomarkerId: ID
+  biomarkerName: String
+  intervalRange: BiomarkerIntervalRange
+  labTestReportId: ID
 }
 
 type HrvLog {
@@ -1874,6 +1931,8 @@ type ProfileBiomarkerEdge {
 type ProfileBiomarkerResult {
   biomarker: Biomarker!
   results(start: Date, end: Date, offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
+  articles(before: String, after: String, first: Int, last: Int): ContentLibraryConnection
+  supplements(offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
 }
 
 type ProfileJourney {
@@ -1987,10 +2046,10 @@ type Query {
   biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
   biomarkerCategories(id: ID, parentId: ID, offset: Int, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
   biomarkerUnits(offset: Int, before: String, after: String, first: Int, last: Int, id: Float): BiomarkerUnitConnection
-  biomarkerResults(memberId: ID, filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
-  historicalBiomarkerResults(memberId: ID, filters: BiomarkerResultsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
+  biomarkerResults(memberId: ID!, filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
+  historicalBiomarkerResults(memberId: ID!, filters: HistoricalBiomarkerResultsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
   historicalResultsByBiomarker(
-    memberId: ID
+    memberId: ID!
 
     """Biomarker ID"""
     id: ID!
