@@ -9,6 +9,27 @@ type appCustomizationFeature {
   description: String!
 }
 
+type ArticleRecommended implements Node {
+  valueMax: Float
+  valueMin: Float
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  article: ContentLibrary!
+  biomarker: Biomarker!
+  normalValues: [Generic!]
+}
+
+type ArticleRecommendedConnection {
+  pageInfo: PageInfo!
+  edges: [ArticleRecommendedEdge]!
+}
+
+type ArticleRecommendedEdge {
+  node: ArticleRecommended
+  cursor: String!
+}
+
 enum BiologicalSex {
   MALE
   FEMALE
@@ -124,7 +145,6 @@ type ContentLibrary implements Node {
   updatedAt: Datetime!
   categories: [ContentCategory!]!
   tags: [ContentTag!]!
-  programs: [Program!]!
 }
 
 type ContentLibraryConnection {
@@ -172,6 +192,20 @@ input CreateAndInviteUserInput {
   email: String!
   role: Role!
   enable2fa: Boolean!
+}
+
+type CreateArticleRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  articleRecommended: ArticleRecommended
+}
+
+input CreateArticleRecommendedInput {
+  biomarkerId: ID!
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  articleId: ID!
 }
 
 type CreateContentCategory {
@@ -234,6 +268,20 @@ type CreateDailyRecapAnswer {
 input CreateDailyRecapAnswerInput {
   answer: String!
   type: String!
+}
+
+type CreateDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+input CreateDailyRecapQuestionInput {
+  question: String!
+  imageUrl: String
+  program: ID
+  answers: [ID!]!
 }
 
 type CreateIngredient {
@@ -428,25 +476,6 @@ type DailyRecapAnswer {
   type: String!
 }
 
-type DailyRecapQuestion implements Node {
-  id: ID!
-  question: String!
-  image_url: String
-  program: Int
-  third_party: Int
-  answers: [DailyRecapAnswer!]!
-}
-
-type DailyRecapQuestionConnection {
-  edges: [DailyRecapQuestionEdge!]!
-  pageInfo: PageInfo!
-}
-
-type DailyRecapQuestionEdge {
-  cursor: String!
-  node: DailyRecapQuestion
-}
-
 enum DataType {
   RANGE
   NUMBER
@@ -456,6 +485,12 @@ enum DataType {
 
 """An ISO-8601 encoded UTC date string."""
 scalar Datetime
+
+type DeleteArticleRecommended {
+  success: Boolean!
+  message: String!
+  articleRecommended: ArticleRecommended
+}
 
 type DeleteContentCategory {
   success: Boolean!
@@ -485,6 +520,12 @@ type DeleteDailyRecapAnswer {
   success: Boolean!
   message: String!
   dailyRecapAnswer: DailyRecapAnswer
+}
+
+type DeleteDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
 }
 
 type DeleteIngredient {
@@ -804,14 +845,23 @@ type Mutation {
   """Delete contentLibrary"""
   deleteContentLibrary(id: ID!): DeleteContentLibrary!
 
-  """Create Supplement recommended"""
+  """Create a supplement recommended"""
   createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended!
 
-  """Update Supplement recommended"""
+  """Update a supplement recommended"""
   updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended!
 
-  """Delete Supplement recommended"""
+  """Delete a supplement recommended"""
   deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended!
+
+  """Create an article recommended"""
+  createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended!
+
+  """Update an article recommended"""
+  updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended!
+
+  """Delete an article recommended"""
+  deleteArticleRecommended(id: ID!): DeleteArticleRecommended!
 
   """Mutation to add/remove category as subcategory"""
   setContentSubcategory(mainCategory: ID!, subcategory: ID!, action: SetAction!): SetContentSubcategory!
@@ -839,6 +889,15 @@ type Mutation {
 
   """Delete DailyRecapAnswer"""
   deleteDailyRecapAnswer(id: ID!): DeleteDailyRecapAnswer!
+
+  """Create DailyRecapQuestion"""
+  createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion!
+
+  """Update DailyRecapQuestion"""
+  updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion!
+
+  """Delete DailyRecapQuestion"""
+  deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion!
 }
 
 interface Node {
@@ -1006,10 +1065,13 @@ type Query {
   contentCategories(first: Int, last: Int, after: String, before: String, id: ID, tags: [String!]): ContentCategoryConnection!
 
   """List Content Libraries"""
-  contentLibrary(first: Int, last: Int, after: String, before: String, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
+  contentLibraries(first: Int, last: Int, after: String, before: String, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
 
   """List Supplement Recommended"""
   supplementsRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementRecommendedConnection
+
+  """List Article Recommended"""
+  articlesRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ArticleRecommendedConnection
 
   """Retrieve Features for AppCustomization"""
   appCustomizationFeatures: [appCustomizationFeature!]!
@@ -1021,6 +1083,7 @@ type Query {
 
   """Daily Recap Answers & Questions"""
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
+  thirdPartyDailyRecapQuestions(question: String, answers: [ID!], before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
 }
 
 type RequestPasswordReset {
@@ -1207,12 +1270,46 @@ type ThirdPartyAppCustomization {
   selectedFeatures: [FeatureOption!]
 }
 
+type ThirdPartyDailyRecapQuestion implements Node {
+  id: ID!
+  question: String!
+  imageUrl: String
+  programId: String
+  thirdParty: Int
+  answers: [DailyRecapAnswer!]!
+}
+
+type ThirdPartyDailyRecapQuestionConnection {
+  edges: [ThirdPartyDailyRecapQuestionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ThirdPartyDailyRecapQuestionEdge {
+  cursor: String!
+  node: ThirdPartyDailyRecapQuestion
+}
+
 enum TimeOfDay {
   AT_WAKING
   WITH_BREAKFAST
   WITH_LUNCH
   WITH_DINNER
   AT_BEDTIME
+}
+
+type UpdateArticleRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  articleRecommended: ArticleRecommended
+}
+
+input UpdateArticleRecommendedInput {
+  id: ID!
+  biomarkerId: ID
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  articleId: ID
 }
 
 type UpdateContentCategory {
@@ -1283,6 +1380,21 @@ input UpdateDailyRecapAnswerInput {
   id: ID!
   answer: String
   type: String
+}
+
+type UpdateDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+input UpdateDailyRecapQuestionInput {
+  id: ID!
+  question: String
+  imageUrl: String
+  program: ID
+  answers: [ID!]
 }
 
 type UpdateIngredient {
