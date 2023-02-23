@@ -555,6 +555,31 @@ type CoachResetPasswordPayload {
   clientMutationId: String
 }
 
+type CoachType {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CoachTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CoachTypeEdge]!
+}
+
+"""A Relay edge containing a `CoachType` and its cursor."""
+type CoachTypeEdge {
+  """The item at the end of the edge"""
+  node: CoachType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 input CoachUpdateAvatarInput {
   id: ID!
   avatar: Upload!
@@ -680,6 +705,20 @@ type CreateAppointmentType {
   success: Boolean!
   message: String!
   appointmentType: AppointmentType
+}
+
+input CreateCoachTypeInput {
+  name: String!
+  description: String
+  clientMutationId: String
+}
+
+type CreateCoachTypePayload {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  coachType: CoachType
+  clientMutationId: String
 }
 
 type CreateGroupChannel {
@@ -924,6 +963,12 @@ type DeleteAppointmentType {
   success: Boolean!
   message: String!
   appointmentType: AppointmentType
+}
+
+type DeleteCoachType {
+  success: Boolean!
+  message: String!
+  coachType: CoachType
 }
 
 type DeleteLabTestReport {
@@ -1760,6 +1805,9 @@ type Mutation {
   setPrimaryCoach(input: SetPrimaryCoachInput!): SetPrimaryCoachPayload
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker
+  createCoachType(input: CreateCoachTypeInput!): CreateCoachTypePayload
+  updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachTypePayload
+  deleteCoachType(id: ID!): DeleteCoachType
 }
 
 """An object with an ID"""
@@ -2055,6 +2103,7 @@ type Query {
     id: ID!
   ): ProfileBiomarkerResult
   groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
+  coachTypes(id: ID, name: String, before: String, after: String, first: Int, last: Int): CoachTypeConnection
 }
 
 type QuizAnswer {
@@ -2742,6 +2791,21 @@ type UpdateAppointmentType {
   success: Boolean!
   message: String!
   appointmentType: AppointmentType
+}
+
+input UpdateCoachTypeInput {
+  id: ID!
+  name: String
+  description: String
+  clientMutationId: String
+}
+
+type UpdateCoachTypePayload {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  coachType: CoachType
+  clientMutationId: String
 }
 
 type UpdateJourneyStatus {
