@@ -610,6 +610,25 @@ type CoachEdge {
   node: Coach
 }
 
+type CoachType implements Node {
+  coaches(after: String, before: String, first: Int, last: Int, offset: Int): CoachConnection
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type CoachTypeConnection {
+  edges: [CoachTypeEdge]!
+  pageInfo: PageInfo!
+}
+
+type CoachTypeEdge {
+  cursor: String!
+  node: CoachType
+}
+
 type CommonFoodConnection {
   count: Int
   edges: [CommonFoodEdge]!
@@ -783,6 +802,18 @@ input CreateArticleRecommendedInput {
   biomarkerId: ID!
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
+}
+
+type CreateCoachType {
+  coachType: CoachType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateCoachTypeInput {
+  description: String
+  name: String!
 }
 
 type CreateContentCategory {
@@ -1162,6 +1193,12 @@ type DebugMPMealTimeValues {
 
 type DeleteArticleRecommended {
   articleRecommended: ArticleRecommended
+  message: String!
+  success: Boolean!
+}
+
+type DeleteCoachType {
+  coachType: CoachType
   message: String!
   success: Boolean!
 }
@@ -2364,6 +2401,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createCoachType(input: CreateCoachTypeInput!): CreateCoachType
   createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
   createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary
   createContentTag(name: String!): CreateContentTag
@@ -2396,6 +2434,7 @@ type Mutation {
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
+  deleteCoachType(id: ID!): DeleteCoachType
   deleteContentCategory(id: ID!): DeleteContentCategory
   deleteContentLibrary(id: ID!): DeleteContentLibrary
   deleteContentTag(id: ID!): DeleteContentTag
@@ -2473,6 +2512,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachType
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
   updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary
   updateContentTag(id: ID!, name: String!): UpdateContentTag
@@ -3322,9 +3362,10 @@ type Query {
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
+  coachTypes(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
-  contentLibrary(after: String, before: String, categories: [ID], first: Int, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
+  contentLibrary(after: String, before: String, categories: [ID], first: Int, id: ID, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
   countries: [GenericScalar]
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
@@ -4442,6 +4483,19 @@ input UpdateArticleRecommendedInput {
   id: ID!
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
+}
+
+type UpdateCoachType {
+  coachType: CoachType
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateCoachTypeInput {
+  description: String
+  id: ID!
+  name: String
 }
 
 type UpdateContentCategory {
