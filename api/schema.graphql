@@ -306,6 +306,7 @@ type Biomarker {
   id: ID!
   method: String
   name: String!
+  normalStringValues: JSONString
   normalValues: [GenericScalar!]
   optimalRange: BiomarkerRange
   range: BiomarkerRange
@@ -610,8 +611,32 @@ type CoachEdge {
   node: Coach
 }
 
+type CoachTeam implements Node {
+  coaches: [Coach!]
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type CoachTeamConnection {
+  edges: [CoachTeamEdge]!
+  pageInfo: PageInfo!
+}
+
+type CoachTeamEdge {
+  cursor: String!
+  node: CoachTeam
+}
+
+input CoachTeamsFilterInput {
+  id: ID
+  name: String
+}
+
 type CoachType implements Node {
-  coaches(after: String, before: String, first: Int, last: Int, offset: Int): CoachConnection
+  coaches: [Coach!]
   createdAt: DateTime!
   description: String
   id: ID!
@@ -627,6 +652,11 @@ type CoachTypeConnection {
 type CoachTypeEdge {
   cursor: String!
   node: CoachType
+}
+
+input CoachTypesFilterInput {
+  id: ID
+  name: String
 }
 
 type CommonFoodConnection {
@@ -804,6 +834,19 @@ input CreateArticleRecommendedInput {
   range: BiomarkerRangeInput
 }
 
+type CreateCoachTeam {
+  coachTeam: CoachTeam
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateCoachTeamInput {
+  coaches: [ID!]
+  description: String
+  name: String!
+}
+
 type CreateCoachType {
   coachType: CoachType
   errors: [FormError!]
@@ -812,6 +855,7 @@ type CreateCoachType {
 }
 
 input CreateCoachTypeInput {
+  coaches: [ID!]
   description: String
   name: String!
 }
@@ -1193,6 +1237,12 @@ type DebugMPMealTimeValues {
 
 type DeleteArticleRecommended {
   articleRecommended: ArticleRecommended
+  message: String!
+  success: Boolean!
+}
+
+type DeleteCoachTeam {
+  coachTeam: CoachTeam
   message: String!
   success: Boolean!
 }
@@ -2401,6 +2451,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
   createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
   createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary
@@ -2434,6 +2485,7 @@ type Mutation {
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
+  deleteCoachTeam(id: ID!): DeleteCoachTeam
   deleteCoachType(id: ID!): DeleteCoachType
   deleteContentCategory(id: ID!): DeleteContentCategory
   deleteContentLibrary(id: ID!): DeleteContentLibrary
@@ -2512,6 +2564,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachType
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
   updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary
@@ -3362,7 +3415,8 @@ type Query {
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
-  coachTypes(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): CoachTypeConnection
+  coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, last: Int, offset: Int): CoachTeamConnection
+  coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, last: Int, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], first: Int, id: ID, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
@@ -4485,6 +4539,20 @@ input UpdateArticleRecommendedInput {
   range: BiomarkerRangeInput
 }
 
+type UpdateCoachTeam {
+  coachTeam: CoachTeam
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateCoachTeamInput {
+  coaches: [ID!]
+  description: String
+  id: ID!
+  name: String
+}
+
 type UpdateCoachType {
   coachType: CoachType
   errors: [FormError!]
@@ -4493,6 +4561,7 @@ type UpdateCoachType {
 }
 
 input UpdateCoachTypeInput {
+  coaches: [ID!]
   description: String
   id: ID!
   name: String

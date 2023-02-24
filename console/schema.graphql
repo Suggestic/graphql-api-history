@@ -1065,7 +1065,7 @@ type Query {
   contentCategories(first: Int, last: Int, after: String, before: String, id: ID, tags: [String!]): ContentCategoryConnection!
 
   """List Content Libraries"""
-  contentLibraries(first: Int, last: Int, after: String, before: String, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
+  contentLibraries(first: Int, last: Int, after: String, before: String, id: ID, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
 
   """List Supplement Recommended"""
   supplementsRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementRecommendedConnection
