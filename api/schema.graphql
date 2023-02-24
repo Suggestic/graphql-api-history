@@ -714,7 +714,7 @@ type ContentLibraryType implements Node {
   isBlocked: Boolean!
   isFavorite: Boolean!
   isFeatured: Boolean!
-  lang: JSONString
+  lang: JSONString!
   order: Int!
   programs: [Program!]
   sourceUrl: String
@@ -844,7 +844,7 @@ input CreateContentLibraryInput {
   imageUrl: String!
   isBlocked: Boolean
   isFeatured: Boolean
-  lang: GenericScalar
+  lang: GenericScalar = "{}"
   order: Int
   programs: [ID]
   sourceUrl: String
