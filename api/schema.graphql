@@ -631,7 +631,6 @@ type CoachTeamEdge {
 }
 
 input CoachTeamsFilterInput {
-  id: ID
   name: String
 }
 
@@ -655,7 +654,6 @@ type CoachTypeEdge {
 }
 
 input CoachTypesFilterInput {
-  id: ID
   name: String
 }
 
@@ -2067,6 +2065,7 @@ type LogRecipeIngredient {
 }
 
 type MacroGoals {
+  bmi: Int
   bmr: Int
   carbs: MacroNutrientGoal
   cd: Int
@@ -3206,6 +3205,7 @@ input ProfileCustomAttribute {
 }
 
 type ProfileMacroGoalsSettings {
+  bmi: Int
   bmr: Int
   cd: Int
   dcig: Int
@@ -3415,8 +3415,8 @@ type Query {
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
-  coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, last: Int, offset: Int): CoachTeamConnection
-  coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, last: Int, offset: Int): CoachTypeConnection
+  coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
+  coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], first: Int, id: ID, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
