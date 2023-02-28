@@ -4597,8 +4597,9 @@ input UpdateContentLibraryInput {
   imageUrl: String
   isBlocked: Boolean
   isFeatured: Boolean
-  lang: GenericScalar
+  lang: GenericScalar = "{}"
   order: Int
+  programs: [ID!]
   sourceUrl: String
   subTitle: String
   tags: [ID]

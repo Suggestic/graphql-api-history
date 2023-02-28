@@ -555,12 +555,43 @@ type CoachResetPasswordPayload {
   clientMutationId: String
 }
 
+type CoachTeam {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  coaches: [Coach!]
+}
+
+type CoachTeamConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CoachTeamEdge]!
+}
+
+"""A Relay edge containing a `CoachTeam` and its cursor."""
+type CoachTeamEdge {
+  """The item at the end of the edge"""
+  node: CoachTeam
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input CoachTeamsFilterInput {
+  name: String
+}
+
 type CoachType {
   id: ID!
   name: String!
   description: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  coaches: [Coach!]
 }
 
 type CoachTypeConnection {
@@ -578,6 +609,10 @@ type CoachTypeEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+input CoachTypesFilterInput {
+  name: String
 }
 
 input CoachUpdateAvatarInput {
@@ -707,9 +742,25 @@ type CreateAppointmentType {
   appointmentType: AppointmentType
 }
 
+input CreateCoachTeamInput {
+  name: String!
+  description: String
+  coaches: [ID!]
+  clientMutationId: String
+}
+
+type CreateCoachTeamPayload {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  coachTeam: CoachTeam
+  clientMutationId: String
+}
+
 input CreateCoachTypeInput {
   name: String!
   description: String
+  coaches: [ID!]
   clientMutationId: String
 }
 
@@ -963,6 +1014,12 @@ type DeleteAppointmentType {
   success: Boolean!
   message: String!
   appointmentType: AppointmentType
+}
+
+type DeleteCoachTeam {
+  success: Boolean!
+  message: String!
+  coachTeam: CoachTeam
 }
 
 type DeleteCoachType {
@@ -1808,6 +1865,9 @@ type Mutation {
   createCoachType(input: CreateCoachTypeInput!): CreateCoachTypePayload
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachTypePayload
   deleteCoachType(id: ID!): DeleteCoachType
+  createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeamPayload
+  updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeamPayload
+  deleteCoachTeam(id: ID!): DeleteCoachTeam
 }
 
 """An object with an ID"""
@@ -2103,7 +2163,8 @@ type Query {
     id: ID!
   ): ProfileBiomarkerResult
   groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
-  coachTypes(id: ID, name: String, before: String, after: String, first: Int, last: Int): CoachTypeConnection
+  coachTypes(id: ID, filters: CoachTypesFilterInput, before: String, after: String, first: Int, last: Int): CoachTypeConnection
+  coachTeams(id: ID, filters: CoachTeamsFilterInput, before: String, after: String, first: Int, last: Int): CoachTeamConnection
 }
 
 type QuizAnswer {
@@ -2793,10 +2854,27 @@ type UpdateAppointmentType {
   appointmentType: AppointmentType
 }
 
+input UpdateCoachTeamInput {
+  id: ID!
+  name: String
+  description: String
+  coaches: [ID!]
+  clientMutationId: String
+}
+
+type UpdateCoachTeamPayload {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  coachTeam: CoachTeam
+  clientMutationId: String
+}
+
 input UpdateCoachTypeInput {
   id: ID!
   name: String
   description: String
+  coaches: [ID!]
   clientMutationId: String
 }
 

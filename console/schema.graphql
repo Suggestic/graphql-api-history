@@ -145,6 +145,7 @@ type ContentLibrary implements Node {
   updatedAt: Datetime!
   categories: [ContentCategory!]!
   tags: [ContentTag!]!
+  programs: [Program!]
 }
 
 type ContentLibraryConnection {
@@ -967,6 +968,9 @@ type Program implements Node {
   isPremium: Boolean!
   descriptionShort: String
   descriptionLong: String
+  comment: String
+  order: Int!
+  tags: [String!]!
   image: URI
   cover: URI
   backgroundImage: URI
