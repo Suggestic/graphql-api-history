@@ -3323,6 +3323,7 @@ type Program implements Node {
   defaultVideoThumnail: String
   descriptionLong: String
   descriptionShort: String
+  energyNutrientEquation: ProgramEnergyNutrientEquation!
   id: ID!
   image: String
   isActive: Boolean!
@@ -3347,6 +3348,11 @@ type ProgramConnection {
 type ProgramEdge {
   cursor: String!
   node: Program
+}
+
+enum ProgramEnergyNutrientEquation {
+  HARRIS_BENEDICT
+  ONCOLOGY
 }
 
 input ProgramOrderBy {
