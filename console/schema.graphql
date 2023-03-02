@@ -351,6 +351,8 @@ input CreateRuleSetInput {
   order: Int!
   name: String!
   actionType: RuleSetActionType!
+  ruleType: RuleType
+  recipeTags: [String!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
@@ -1088,6 +1090,9 @@ type Query {
   """Daily Recap Answers & Questions"""
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
   thirdPartyDailyRecapQuestions(question: String, answers: [ID!], before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
+
+  """Retrieve Recipe tags"""
+  recipeTags(recipeId: ID): [String!]
 }
 
 type RequestPasswordReset {
@@ -1137,6 +1142,8 @@ type RuleSet implements Node {
   name: String!
   actionType: RuleSetActionType!
   ingredientGroups: [IngredientGroup!]
+  ruleType: String!
+  recipeTags: [String!]
   userSegments: [UserSegment!]!
   program: Program
   comment: String
@@ -1165,6 +1172,11 @@ type RuleSetConnection {
 type RuleSetEdge {
   cursor: String!
   node: RuleSet
+}
+
+enum RuleType {
+  INGREDIENT_GROUPS
+  RECIPE_TAGS
 }
 
 type SendUserInvite {
@@ -1478,6 +1490,8 @@ input UpdateRuleSetInput {
   order: Int
   name: String
   actionType: RuleSetActionType
+  ruleType: RuleType
+  recipeTags: [String!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
