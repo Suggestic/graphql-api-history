@@ -654,6 +654,7 @@ type CoachTypeEdge {
 }
 
 input CoachTypesFilterInput {
+  mealPlanTemplateId: ID
   name: String
 }
 
@@ -2243,6 +2244,7 @@ enum MealPlannerQueryType {
 
 type MealPlanTemplate implements Node {
   coachId: ID
+  coachTypes(after: String, before: String, first: Int, last: Int, offset: Int): CoachTypeConnection
   createdAt: DateTime!
   days: [MealPlanDay!]!
   description: String!
@@ -2575,7 +2577,7 @@ type Mutation {
   updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
-  updateMealPlanTemplate(coach: ID, description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
+  updateMealPlanTemplate(coach: ID, coachTypes: [ID!], description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
   updateMyBrandedFood(id: String!, input: UpdateMyBrandedFoodInput!): UpdateMyBrandedFood
   updateMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String, id: ID!, tags: [String!], text: String): UpdateMyChecklistItem
   updateMyCommonFood(id: String!, input: UpdateMyCommonFoodInput!): UpdateMyCommonFood
