@@ -591,6 +591,8 @@ type ClearShoppingListCheckedItems {
 type Coach implements Node {
   appointments(end: DateTime, start: DateTime, timezone: String): [Appointment!]!
   avatarUrl: String
+  coachTeams(after: String, before: String, first: Int, last: Int, offset: Int): CoachTeamConnection
+  coachTypes(after: String, before: String, first: Int, last: Int, offset: Int): CoachTypeConnection
   email: String!
   id: ID!
   irad: String
@@ -3462,7 +3464,7 @@ type Query {
   mealLogMacroAggs(fromDate: Date!, toDate: Date!): MealLogMacroAggs
   mealPlan(fromDate: Date): [MealPlanDay]
   mealPlanTemplate(id: ID!): MealPlanTemplate
-  mealPlanTemplates(after: String, before: String, byCoach: ID, excludeCoach: ID, first: Int, isPublic: Boolean, last: Int, newerFirst: Boolean, offset: Int, search: String): MealPlanTemplateConnection
+  mealPlanTemplates(after: String, before: String, byCoach: ID, coachTypes: [ID!], excludeCoach: ID, first: Int, isPublic: Boolean, last: Int, newerFirst: Boolean, offset: Int, search: String): MealPlanTemplateConnection
   mealPlannerByCustomFormat(format: [MealTime]!): MealCustomPlannerDays
   mealPlannerByDay(mealPlannerQueryType: MealPlannerQueryType!): MealPlannerDays
   mealTracker(endDate: Date!, startDate: Date!): [MealTrack]!
