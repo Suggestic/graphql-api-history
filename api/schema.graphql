@@ -1506,6 +1506,7 @@ type ExerciseEntriesConnection {
 }
 
 type ExerciseEntry {
+  calories: Int
   createdAt: DateTime!
   datetime: DateTime!
   durationMinutes: Int!
@@ -2417,7 +2418,7 @@ enum MPVariety {
 type Mutation {
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
-  addExerciseEntry(datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
+  addExerciseEntry(calories: Int, datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
   """
