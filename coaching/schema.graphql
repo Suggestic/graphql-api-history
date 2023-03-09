@@ -643,6 +643,8 @@ input CoachUpdateInput {
   members: [ID]
   enable2fa: Boolean
   affiliateId: String
+  coachTypes: [ID!]
+  coachTeams: [ID!]
   clientMutationId: String
 }
 
@@ -1356,6 +1358,8 @@ input InviteCoachInput {
   allowSeeAll: Boolean
   members: [ID]
   enable2fa: Boolean
+  coachTypes: [ID!]
+  coachTeams: [ID!]
   clientMutationId: String
 }
 
@@ -3019,6 +3023,7 @@ input UpdateProtocolInput {
   supplements: [SupplementProtocolInput!]
   bundle: ID
   group: ProtocolGroup
+  coachTypes: [ID!]
 }
 
 input UpdateSettingsInput {
