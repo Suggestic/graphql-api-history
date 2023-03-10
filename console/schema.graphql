@@ -364,6 +364,7 @@ input CreateRuleSetInput {
   simpleName: String
   simpleExamples: String
   priority: Int
+  visibility: Boolean
 }
 
 type CreateSegmentCondition {
@@ -1503,6 +1504,7 @@ input UpdateRuleSetInput {
   simpleName: String
   simpleExamples: String
   priority: Int
+  visibility: Boolean
 }
 
 type UpdateSegmentCondition {
