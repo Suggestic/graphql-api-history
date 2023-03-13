@@ -4324,7 +4324,7 @@ type SupplementPlan implements Node {
   name: String!
   nutrition: String
   overview: String
-  protocols(group: ProtocolGroup): [SupplementPlanProtocol!]!
+  protocols(coachTypes: [ID!], group: ProtocolGroup): [SupplementPlanProtocol!]!
   resources: String
   startDate: Date!
   updatedAt: DateTime!

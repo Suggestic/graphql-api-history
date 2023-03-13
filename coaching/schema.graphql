@@ -212,13 +212,13 @@ input AvailabilityWeekdayPeriodInput {
 }
 
 type AvailableProtocols {
-  owned(group: ProtocolGroup, id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
-  shared(group: ProtocolGroup, id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
+  owned(group: ProtocolGroup, id: ID, coachTypes: [ID!], offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
+  shared(group: ProtocolGroup, id: ID, coachTypes: [ID!], offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection
 }
 
 type AvailableSupplementPlanTemplates {
-  owned(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanTemplateConnection
-  shared(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanTemplateConnection
+  owned(id: ID, coachTypes: [ID!], offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanTemplateConnection
+  shared(id: ID, coachTypes: [ID!], offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanTemplateConnection
 }
 
 enum BiologicalSex {
