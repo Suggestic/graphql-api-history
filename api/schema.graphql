@@ -399,8 +399,8 @@ enum BiomarkerLanguage {
 }
 
 type BiomarkerRange {
-  max: Float
-  min: Float
+  max: Float!
+  min: Float!
 }
 
 input BiomarkerRangeInput {
