@@ -352,7 +352,7 @@ input CreateRuleSetInput {
   name: String!
   actionType: RuleSetActionType!
   ruleType: RuleType
-  recipeTags: [String!]
+  recipeTags: [ID!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
@@ -1096,6 +1096,12 @@ type Query {
   recipeTags(recipeId: ID): [String!]
 }
 
+type RecipeTag implements Node {
+  id: ID!
+  displayName: String!
+  termName: String!
+}
+
 type RequestPasswordReset {
   success: Boolean!
   message: String!
@@ -1144,7 +1150,7 @@ type RuleSet implements Node {
   actionType: RuleSetActionType!
   ingredientGroups: [IngredientGroup!]
   ruleType: String!
-  recipeTags: [String!]
+  recipeTags: [RecipeTag!]
   userSegments: [UserSegment!]!
   program: Program
   comment: String
@@ -1492,7 +1498,7 @@ input UpdateRuleSetInput {
   name: String
   actionType: RuleSetActionType
   ruleType: RuleType
-  recipeTags: [String!]
+  recipeTags: [ID!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
