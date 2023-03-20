@@ -2596,6 +2596,7 @@ type Mutation {
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
   updateSupplementPlan(input: UpdateSPInput!): UpdateSupplementPlan
   updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended
+  updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent
   updateUserProgram(programId: String!): UpdateUserProgram
   userFavoriteMenuitem(menuitemId: String!): UserFavoriteMenuItem
   userFavoriteRecipe(recipeId: String!): UserFavoriteRecipe
@@ -3040,6 +3041,12 @@ type NutritionEstimates {
   carbs: Float
   fat: Float
   protein: Float
+}
+
+enum Operation {
+  ADD
+  REMOVE
+  REPLACE
 }
 
 type OutoCompleteConnection {
@@ -3511,7 +3518,7 @@ type Query {
   recipeMealTags: [String]
   recipeSearch(after: String, before: String, cuisines: [String], dietaryTag: DietaryTag, filter: FoodFilter, first: Int, hasImage: Boolean, hasInstructions: Boolean, ingredients: [String], isPremium: Boolean, last: Int, macroNutrientsRange: MacroNutrientsRangeInput, maxPrepTime: Int, mealTime: RecipeMealTime, meals: [String], minPrepTime: Int, numberOfIngredients: Int, program: String, query: String, servingQuantity: Int, skillLevel: SkillLevel, tags: [String], totalTime: Float): RecipeConnection
   recipeSwapOptions(recipeId: String, serving: Int): RecipeSwapOptions
-  recipeTags: [String]
+  recipeTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): RecipeTagConnection
   recipesByMealTime(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, mealTime: RecipeMealTime): RecipeConnection
   recipesByTag(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, tag: String): RecipeConnection
   recommendedMenuitems(lat: Float!, lon: Float!): [MenuItem]
@@ -3720,6 +3727,24 @@ type RecipeSearchResult {
 type RecipeSwapOptions {
   onPlan(size: Int): [Recipe]
   similar(size: Int): [Recipe]
+}
+
+type RecipeTag implements Node {
+  createdAt: DateTime!
+  displayName: String!
+  id: ID!
+  termName: String!
+  updatedAt: DateTime!
+}
+
+type RecipeTagConnection {
+  edges: [RecipeTagEdge]!
+  pageInfo: PageInfo!
+}
+
+type RecipeTagEdge {
+  cursor: String!
+  node: RecipeTag
 }
 
 type RecommendationCatalogType {
@@ -4486,6 +4511,27 @@ type ToggleTaskCompleted {
   success: Boolean
 }
 
+enum TrackerComponent {
+  DAILY_MOOD
+  DAILY_RECAP
+  EXERCISE_TRACKER
+  FOOD_LOGS
+  FOOD_LOG_MEAL_TRACKER
+  HEART_RATE_TRACKER
+  HRV_TRACKER
+  HYDRATION_TRACKER
+  MP_MEAL_TRACKER
+  MY_CHECKLIST_TRACKER
+  PLAN_SUPPLEMENT
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  SLEEP_QUALITY_SCORE_TRACKER
+  SLEEP_TIME_TRACKER
+  STEPS_TRACKER
+  TODAY_FOOD
+  TODAY_SUPPLEMENT
+  WEIGHT_TRACKER
+}
+
 type TrackingDailyGoal {
   entryType: EntryType!
   goal: Int
@@ -4862,6 +4908,17 @@ input UpdateSupplementRecommendedInput {
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
   supplementId: ID
+}
+
+type UpdateThirdPartyTrackerComponent {
+  enabledComponents: [TrackerComponent!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateThirdPartyTrackerComponentInput {
+  components: [TrackerComponent!]!
+  operation: Operation!
 }
 
 type UpdateUserProgram {
