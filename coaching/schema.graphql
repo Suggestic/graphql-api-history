@@ -1693,6 +1693,34 @@ type MemberResetPasswordPayload {
   clientMutationId: String
 }
 
+type MemberSearch implements Node {
+  """The ID of the object."""
+  id: ID!
+  email: String!
+  name: String
+  birthdate: String
+  thirdPartyId: Int!
+  avatar: String
+}
+
+type MemberSearchConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MemberSearchEdge]!
+  count: Int
+}
+
+"""A Relay edge containing a `MemberSearch` and its cursor."""
+type MemberSearchEdge {
+  """The item at the end of the edge"""
+  node: MemberSearch
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 input MemberSearchFilters {
   name: String
   email: String
@@ -2175,6 +2203,14 @@ type Query {
   groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
   coachTypes(id: ID, filters: CoachTypesFilterInput, before: String, after: String, first: Int, last: Int): CoachTypeConnection
   coachTeams(id: ID, filters: CoachTeamsFilterInput, before: String, after: String, first: Int, last: Int): CoachTeamConnection
+  memberSearch(
+    """Query search term"""
+    query: String
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): MemberSearchConnection
 }
 
 type QuizAnswer {
