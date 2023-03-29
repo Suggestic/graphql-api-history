@@ -98,6 +98,21 @@ input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
 }
 
+enum AlertAction {
+  ATTEMPTED
+  CONTACTED
+}
+
+enum AlertStatus {
+  IN_REVIEW
+  REVIEWED
+  OUT_OF_RANGE
+  OTHER
+  FOLLOW_UP
+  NO_FOLLOW_UP
+  COMPLETED
+}
+
 type AnswerCounter {
   total: Int!
   answer: DailyRecapAnswer!
@@ -241,6 +256,8 @@ type Biomarker {
   optimalRange: BiomarkerRange
   borderlineRange: BiomarkerRange
   normalValues: [GenericScalar!]
+  alert: Boolean
+  alertText: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1444,6 +1461,10 @@ type LabTestReport {
   status: LabTestReportStatus
   description: String
   image: String
+  alert: Boolean
+  alertText: String
+  alertStatus: AlertStatus
+  alertAction: AlertAction
 }
 
 type LabTestReportConnection {

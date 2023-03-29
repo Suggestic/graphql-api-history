@@ -902,6 +902,9 @@ type Mutation {
 
   """Delete DailyRecapQuestion"""
   deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion!
+
+  """Update Third Party components"""
+  updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent!
 }
 
 interface Node {
@@ -937,6 +940,12 @@ enum NutrientType {
 enum NutrientUnit {
   PERCENT
   GRAM
+}
+
+enum Operation {
+  ADD
+  REMOVE
+  REPLACE
 }
 
 type PageInfo {
@@ -1093,13 +1102,23 @@ type Query {
   thirdPartyDailyRecapQuestions(question: String, answers: [ID!], before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
 
   """Retrieve Recipe tags"""
-  recipeTags(recipeId: ID): [String!]
+  recipeTags(name: String, before: String, after: String, first: Int, last: Int): RecipeTagConnection
 }
 
 type RecipeTag implements Node {
   id: ID!
   displayName: String!
   termName: String!
+}
+
+type RecipeTagConnection {
+  pageInfo: PageInfo!
+  edges: [RecipeTagEdge]!
+}
+
+type RecipeTagEdge {
+  node: RecipeTag
+  cursor: String!
 }
 
 type RequestPasswordReset {
@@ -1318,6 +1337,27 @@ enum TimeOfDay {
   WITH_LUNCH
   WITH_DINNER
   AT_BEDTIME
+}
+
+enum TrackerComponent {
+  DAILY_RECAP
+  DAILY_MOOD
+  WEIGHT_TRACKER
+  MP_MEAL_TRACKER
+  HYDRATION_TRACKER
+  TODAY_FOOD
+  TODAY_SUPPLEMENT
+  FOOD_LOGS
+  STEPS_TRACKER
+  EXERCISE_TRACKER
+  PLAN_SUPPLEMENT
+  MY_CHECKLIST_TRACKER
+  SLEEP_TIME_TRACKER
+  SLEEP_QUALITY_SCORE_TRACKER
+  HRV_TRACKER
+  HEART_RATE_TRACKER
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  FOOD_LOG_MEAL_TRACKER
 }
 
 type UpdateArticleRecommended {
@@ -1558,6 +1598,17 @@ input UpdateThirdPartyAppCustomizationInput {
   primaryColor: String
   secondaryColor: String
   selectedFeatures: [FeatureOption!]
+}
+
+type UpdateThirdPartyTrackerComponent {
+  success: Boolean!
+  message: String!
+  enabledComponents: [TrackerComponent!]
+}
+
+input UpdateThirdPartyTrackerComponentInput {
+  components: [TrackerComponent!]!
+  operation: Operation!
 }
 
 type UpdateUser {
