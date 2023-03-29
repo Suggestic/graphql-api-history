@@ -45,6 +45,8 @@ type AddBiomarker {
 }
 
 input AddBiomarkerInput {
+  alert: Boolean
+  alertText: String
   aliases: [BiomarkerAliasInput!]
   borderlineRange: BiomarkerRangeInput
   category: ID!
@@ -52,7 +54,7 @@ input AddBiomarkerInput {
   isVisible: Boolean = true
   method: String
   name: String!
-  normalValues: [GenericScalar!]
+  normalValues: [GenericScalar!] = ["{}"]
   optimalRange: BiomarkerRangeInput
   order: Int = 0
   range: BiomarkerRangeInput
@@ -178,6 +180,21 @@ type AggregateMeta {
   rawQty: Float
 }
 
+enum AlertAction {
+  ATTEMPTED
+  CONTACTED
+}
+
+enum AlertStatus {
+  COMPLETED
+  FOLLOW_UP
+  IN_REVIEW
+  NO_FOLLOW_UP
+  OTHER
+  OUT_OF_RANGE
+  REVIEWED
+}
+
 type Answer {
   answer: String
   id: ID
@@ -298,6 +315,8 @@ enum BiologicalSex {
 }
 
 type Biomarker {
+  alert: Boolean
+  alertText: String
   aliases: [BiomarkerAlias!]
   borderlineRange: BiomarkerRange
   category: BiomarkerCategory!
@@ -806,6 +825,12 @@ type CPCIngredientGroup {
   increase: [CPC]
 }
 
+type CPCRule {
+  avoid: [CPC]
+  decrease: [CPC]
+  increase: [CPC]
+}
+
 type CreateAppointment {
   appointment: Appointment
   message: String!
@@ -1167,6 +1192,7 @@ type DailyRecapAnswer implements Node {
   answer: String!
   answers(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
   id: ID!
+  imageUrl: String
   type: String!
 }
 
@@ -1446,7 +1472,6 @@ type EdamamFoodResult implements Node {
 }
 
 type Entry {
-  createdAt: DateTime
   date: Date
   source: SourceType
   value: Float
@@ -1924,6 +1949,10 @@ type JourneyType {
 scalar JSONString
 
 type LabTestReport {
+  alert: Boolean
+  alertAction: AlertAction
+  alertStatus: AlertStatus
+  alertText: String
   createdAt: DateTime!
   description: String
   externalId: String
@@ -2465,7 +2494,7 @@ type Mutation {
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
-  createLabTestReport(description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
+  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!): CreateLabTestReport
   createMealEntry(mealId: ID!, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
@@ -2569,6 +2598,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachType
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
@@ -2578,7 +2608,7 @@ type Mutation {
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
-  updateLabTestReport(description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
+  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   updateMealPlanTemplate(coach: ID, coachTypes: [ID!], description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
@@ -3331,6 +3361,7 @@ type Program implements Node {
   contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection!
   cover: String
   cpcsIngredientGroups: CPCIngredientGroup
+  cpcsRecipeTags: CPCRule
   createdAt: DateTime!
   databaseId: String
   defaultVideoThumnail: String
@@ -4470,10 +4501,13 @@ type ThirdPartyAppCustomization implements Node {
 
 type ThirdPartyDailyRecapQuestion implements Node {
   answers: [DailyRecapAnswer!]
+  group: String
   id: ID!
-  imageUrl: String!
+  imageUrl: String
+  isDefault: Boolean
   program: Program
   question: String!
+  title: String
 }
 
 type ThirdPartyDailyRecapQuestionConnection {
@@ -4595,6 +4629,31 @@ input UpdateArticleRecommendedInput {
   id: ID!
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
+}
+
+type UpdateBiomarker {
+  biomarker: Biomarker
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateBiomarkerInput {
+  alert: Boolean
+  alertText: String
+  aliases: [BiomarkerAliasInput!]
+  borderlineRange: BiomarkerRangeInput
+  category: ID
+  description: String
+  id: ID!
+  isVisible: Boolean = true
+  method: String
+  name: String
+  normalValues: [GenericScalar!] = ["{}"]
+  optimalRange: BiomarkerRangeInput
+  order: Int = 0
+  range: BiomarkerRangeInput
+  units: [ID!]
 }
 
 type UpdateCoachTeam {
@@ -5054,7 +5113,6 @@ input WeightEntryInput {
 
 type WeightTracker {
   entries: [Entry]
-  latestEntry: DateTime
   start: Float
   tendency: Tendency
   today: Float
