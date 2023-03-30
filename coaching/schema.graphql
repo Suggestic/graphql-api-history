@@ -1714,8 +1714,7 @@ type MemberResetPasswordPayload {
   clientMutationId: String
 }
 
-type MemberSearch implements Node {
-  """The ID of the object."""
+type MemberSearch {
   id: ID!
   email: String!
   name: String
