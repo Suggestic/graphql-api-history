@@ -45,8 +45,6 @@ type AddBiomarker {
 }
 
 input AddBiomarkerInput {
-  alert: Boolean
-  alertText: String
   aliases: [BiomarkerAliasInput!]
   borderlineRange: BiomarkerRangeInput
   category: ID!
@@ -315,8 +313,6 @@ enum BiologicalSex {
 }
 
 type Biomarker {
-  alert: Boolean
-  alertText: String
   aliases: [BiomarkerAlias!]
   borderlineRange: BiomarkerRange
   category: BiomarkerCategory!
@@ -428,6 +424,8 @@ input BiomarkerRangeInput {
 }
 
 input BiomarkerResultInput {
+  alert: Boolean
+  alertText: String
   biomarkerId: ID!
   biomarkerUnitId: ID!
   date: DateTime!
@@ -860,6 +858,18 @@ input CreateArticleRecommendedInput {
   range: BiomarkerRangeInput
 }
 
+type CreateBiomarkerCategory {
+  biomarkerCategory: BiomarkerCategory
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateBiomarkerCategoryInput {
+  name: String!
+  parent: ID
+}
+
 type CreateCoachTeam {
   coachTeam: CoachTeam
   errors: [FormError!]
@@ -1264,6 +1274,12 @@ type DebugMPMealTimeValues {
 
 type DeleteArticleRecommended {
   articleRecommended: ArticleRecommended
+  message: String!
+  success: Boolean!
+}
+
+type DeleteBiomarkerCategory {
+  biomarkerCategory: BiomarkerCategory
   message: String!
   success: Boolean!
 }
@@ -2485,6 +2501,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
   createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory
@@ -2519,6 +2536,7 @@ type Mutation {
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
+  deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   deleteCoachType(id: ID!): DeleteCoachType
   deleteContentCategory(id: ID!): DeleteContentCategory
@@ -2599,6 +2617,7 @@ type Mutation {
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker
+  updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachType
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
@@ -3198,6 +3217,8 @@ type ProductVariant {
 }
 
 type ProfileBiomarker implements Node {
+  alert: Boolean
+  alertText: String
   biomarker: Biomarker!
   biomarkerUnit: BiomarkerUnit
   createdAt: DateTime!
@@ -4638,9 +4659,20 @@ type UpdateBiomarker {
   success: Boolean!
 }
 
+type UpdateBiomarkerCategory {
+  biomarkerCategory: BiomarkerCategory
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateBiomarkerCategoryInput {
+  id: ID!
+  name: String
+  parent: ID
+}
+
 input UpdateBiomarkerInput {
-  alert: Boolean
-  alertText: String
   aliases: [BiomarkerAliasInput!]
   borderlineRange: BiomarkerRangeInput
   category: ID
