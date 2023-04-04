@@ -3600,6 +3600,7 @@ type Query {
   subscriptions(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTypeConnection
   suggestMeal(date: Date!, mealTime: MealTime!): SuggestedMeal
   suggestedMeals(date: Date!): SuggestedMeals
+  supplement(id: ID!): Supplement
   supplementParent(supplementId: ID!): SupplementParent
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
