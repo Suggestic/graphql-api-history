@@ -662,6 +662,7 @@ input CoachUpdateInput {
   affiliateId: String
   coachTypes: [ID!]
   coachTeams: [ID!]
+  roles: [String]
   clientMutationId: String
 }
 
@@ -1377,6 +1378,7 @@ input InviteCoachInput {
   enable2fa: Boolean
   coachTypes: [ID!]
   coachTeams: [ID!]
+  roles: [String]
   clientMutationId: String
 }
 
