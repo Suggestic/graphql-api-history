@@ -335,6 +335,7 @@ input CreateProgramInput {
   descriptionLong: String
   restrictions: [ID!]
   visibility: Boolean
+  energyNutrientEquation: Equation
   image: Upload
   cover: Upload
   backgroundImage: Upload
@@ -591,6 +592,11 @@ type DeleteUserSegment {
 }
 
 scalar Email
+
+enum Equation {
+  HARRIS_BENEDICT
+  ONCOLOGY
+}
 
 enum FeatureOption {
   MEAL_PLANNER
@@ -994,6 +1000,7 @@ type Program implements Node {
   isReadOnly: Boolean!
   restrictions: [Restriction!]!
   visibility: Boolean!
+  energyNutrientEquation: Equation
 }
 
 type ProgramConnection {
@@ -1520,6 +1527,7 @@ input UpdateProgramInput {
   descriptionLong: String
   restrictions: [ID!]
   visibility: Boolean
+  energyNutrientEquation: Equation
   image: Upload
   cover: Upload
   backgroundImage: Upload
