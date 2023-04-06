@@ -1378,7 +1378,7 @@ input InviteCoachInput {
   enable2fa: Boolean
   coachTypes: [ID!]
   coachTeams: [ID!]
-  roles: [String]
+  roles: [String] = ["NON_VERIFIED_COACH", "COACH"]
   clientMutationId: String
 }
 
