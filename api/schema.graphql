@@ -2184,6 +2184,12 @@ type Meal {
   recipe: Recipe
 }
 
+type MealBalanceIndexScore {
+  errors: [String!]
+  message: String
+  score: Int
+}
+
 type MealCustomPlannerDays {
   day1: [MealPlanDayRecipe]
   day2: [MealPlanDayRecipe]
@@ -3713,6 +3719,7 @@ type Recipe implements Node {
   language: String
   logo: String
   mainImage: String
+  mealBalanceIndex: MealBalanceIndexScore
   mealTags: [String]
   name: String
   nameLowercase: String @deprecated(reason: "Not used, will be removed")
