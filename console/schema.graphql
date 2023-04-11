@@ -318,6 +318,8 @@ input CreateProgramGoalInput {
   biologicalSex: BiologicalSex!
   programId: ID!
   nutrients: [NutrientGoalInput!]!
+  minAge: Int
+  maxAge: Int
   monday: Boolean!
   tuesday: Boolean!
   wednesday: Boolean!
@@ -637,6 +639,8 @@ type Goal implements Node {
   biologicalSex: BiologicalSex!
   programId: ID!
   nutrients: [NutrientGoal!]!
+  minAge: Int
+  maxAge: Int
   slug: String
   monday: Boolean!
   tuesday: Boolean!
@@ -1543,6 +1547,8 @@ input UpdateProgramGoalInput {
   biologicalSex: BiologicalSex
   programId: ID
   nutrients: [NutrientGoalInput!]
+  minAge: Int
+  maxAge: Int
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
