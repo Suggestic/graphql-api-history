@@ -2800,6 +2800,45 @@ type Nutrient {
   unit: String
 }
 
+type NutrientAggregationsByFoodLog {
+  alphaLinolenicacid: Float
+  biotin: Float
+  calcium: Float
+  chloride: Float
+  chocdf: Float
+  choline: Float
+  chromium: Float
+  copper: Float
+  fat: Float
+  fluoride: Float
+  folate: Float
+  iodine: Float
+  iron: Float
+  linoleicacid: Float
+  magnesium: Float
+  manganese: Float
+  molybdenum: Float
+  netcarbs: Float
+  niacin: Float
+  pantothenicacid: Float
+  phosphorus: Float
+  potassium: Float
+  procnt: Float
+  riboflavin: Float
+  selenium: Float
+  sodium: Float
+  thiamin: Float
+  totalfiber: Float
+  vitamina: Float
+  vitaminb6: Float
+  vitaminb12: Float
+  vitaminc: Float
+  vitamind: Float
+  vitamine: Float
+  vitamink: Float
+  zinc: Float
+}
+
 enum NutrientEnum {
   ACETIC_ACID
   ALANINE
@@ -3557,6 +3596,7 @@ type Query {
   myRecipes(after: String, before: String, first: Int, id: ID, last: Int): UserRecipeConnection
   nextIntakes(category: IntakeCategory!): IntakesChecklistDay
   notes(after: String, before: String, eventId: ID, first: Int, id: ID, last: Int, offset: Int): NoteConnection
+  nutrientAggregationsByFoodLog(fromDate: Date!, toDate: Date!): NutrientAggregationsByFoodLog
   onProgramPopularRestaurants(lat: Float!, lon: Float!): [Restaurant]
   outocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection @deprecated(reason: "Deprecating soon.")
   ownFoodItem(id: ID!): MealLog
