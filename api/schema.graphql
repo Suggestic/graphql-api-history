@@ -1421,6 +1421,26 @@ type DeleteWeightEntry {
   success: Boolean!
 }
 
+type Depletion implements Node {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  ingredient: DrugIngredient
+  referenceUrl: String
+  restrictions: [Restriction!]
+  updatedAt: DateTime!
+}
+
+type DepletionConnection {
+  edges: [DepletionEdge]!
+  pageInfo: PageInfo!
+}
+
+type DepletionEdge {
+  cursor: String!
+  node: Depletion
+}
+
 enum DialogCollectionType {
   BOOL
   CHAR
@@ -1472,6 +1492,43 @@ enum DietaryTag {
 input DirectionsOfUseInput {
   quantity: Float!
   timeOfDay: TimeOfDay!
+}
+
+type Drug implements Node {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type DrugGroup implements Node {
+  createdAt: DateTime!
+  depletions(after: String, before: String, first: Int, last: Int, offset: Int): DepletionConnection
+  drugs: [Drug!]
+  id: ID!
+  interactions(after: String, before: String, first: Int, last: Int, offset: Int): InteractionConnection
+  name: String!
+  updatedAt: DateTime!
+}
+
+type DrugGroupConnection {
+  edges: [DrugGroupEdge]!
+  pageInfo: PageInfo!
+}
+
+type DrugGroupEdge {
+  cursor: String!
+  node: DrugGroup
+}
+
+type DrugIngredient {
+  groups: [String!]
+  id: ID!
+  name: String!
+}
+
+input DrugNutrientInteractionsFilterInput {
+  name: String
 }
 
 type DuplicateMealPlanTemplate {
@@ -1892,6 +1949,26 @@ type IntakesChecklist {
 type IntakesChecklistDay {
   date: Date!
   items: [AvailableChecklistItems!]!
+}
+
+type Interaction implements Node {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  ingredient: DrugIngredient
+  referenceUrl: String
+  restrictions: [Restriction!]
+  updatedAt: DateTime!
+}
+
+type InteractionConnection {
+  edges: [InteractionEdge]!
+  pageInfo: PageInfo!
+}
+
+type InteractionEdge {
+  cursor: String!
+  node: Interaction
 }
 
 input IntValueByMealTime {
@@ -3546,6 +3623,7 @@ type Query {
   dailyRecapQuestions(group: GroupQuestion): [DailyQuestion!]!
   dailyRecaps(endDate: Date!, group: GroupQuestion, startDate: Date!): [DailyRecap!]!
   dashboard: Dashboard
+  drugNutrientInteractions(after: String, before: String, filters: DrugNutrientInteractionsFilterInput, first: Int, last: Int, offset: Int): DrugGroupConnection
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
