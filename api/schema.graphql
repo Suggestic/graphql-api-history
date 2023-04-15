@@ -1424,6 +1424,8 @@ type DeleteWeightEntry {
 type Depletion implements Node {
   createdAt: DateTime!
   description: String
+  foods: String
+  foodsSourceUrl: String
   id: ID!
   ingredient: DrugIngredient
   referenceUrl: String
@@ -1954,6 +1956,8 @@ type IntakesChecklistDay {
 type Interaction implements Node {
   createdAt: DateTime!
   description: String
+  foods: String
+  foodsSourceUrl: String
   id: ID!
   ingredient: DrugIngredient
   referenceUrl: String
