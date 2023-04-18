@@ -2882,42 +2882,42 @@ type Nutrient {
 }
 
 type NutrientAggregationsByFoodLog {
-  alphaLinolenicacid: NutrientGoalComparison
-  biotin: NutrientGoalComparison
-  calcium: NutrientGoalComparison
-  chloride: NutrientGoalComparison
-  chocdf: NutrientGoalComparison
-  choline: NutrientGoalComparison
-  chromium: NutrientGoalComparison
-  copper: NutrientGoalComparison
-  fat: NutrientGoalComparison
-  fluoride: NutrientGoalComparison
-  folate: NutrientGoalComparison
-  iodine: NutrientGoalComparison
-  iron: NutrientGoalComparison
-  linoleicacid: NutrientGoalComparison
-  magnesium: NutrientGoalComparison
-  manganese: NutrientGoalComparison
-  molybdenum: NutrientGoalComparison
-  netcarbs: NutrientGoalComparison
-  niacin: NutrientGoalComparison
-  pantothenicacid: NutrientGoalComparison
-  phosphorus: NutrientGoalComparison
-  potassium: NutrientGoalComparison
-  procnt: NutrientGoalComparison
-  riboflavin: NutrientGoalComparison
-  selenium: NutrientGoalComparison
-  sodium: NutrientGoalComparison
-  thiamin: NutrientGoalComparison
-  totalfiber: NutrientGoalComparison
-  vitamina: NutrientGoalComparison
-  vitaminb6: NutrientGoalComparison
-  vitaminb12: NutrientGoalComparison
-  vitaminc: NutrientGoalComparison
-  vitamind: NutrientGoalComparison
-  vitamine: NutrientGoalComparison
-  vitamink: NutrientGoalComparison
-  zinc: NutrientGoalComparison
+  alphaLinolenicacid: Float
+  biotin: Float
+  calcium: Float
+  chloride: Float
+  chocdf: Float
+  choline: Float
+  chromium: Float
+  copper: Float
+  fat: Float
+  fluoride: Float
+  folate: Float
+  iodine: Float
+  iron: Float
+  linoleicacid: Float
+  magnesium: Float
+  manganese: Float
+  molybdenum: Float
+  netcarbs: Float
+  niacin: Float
+  pantothenicacid: Float
+  phosphorus: Float
+  potassium: Float
+  procnt: Float
+  riboflavin: Float
+  selenium: Float
+  sodium: Float
+  thiamin: Float
+  totalfiber: Float
+  vitamina: Float
+  vitaminb6: Float
+  vitaminb12: Float
+  vitaminc: Float
+  vitamind: Float
+  vitamine: Float
+  vitamink: Float
+  zinc: Float
 }
 
 enum NutrientEnum {
@@ -3082,11 +3082,6 @@ enum NutrientEnum {
 input NutrientFilterInput {
   nutrient: NutrientEnum!
   range: RangeFilter
-}
-
-type NutrientGoalComparison {
-  goal: Float
-  value: Float
 }
 
 input NutrientInput {
