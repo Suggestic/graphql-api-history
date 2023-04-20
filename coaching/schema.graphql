@@ -1468,6 +1468,7 @@ type LabTestReport {
   alertStatus: AlertStatus
   alertAction: AlertAction
   videoUrl: String
+  imageUrl: String
 }
 
 type LabTestReportConnection {
@@ -1874,8 +1875,8 @@ type Mutation {
   generate2faUri(email: String!): Generate2faUri
   verify2faCode(code: String!, email: String!): Verify2faCode
   deleteLabTestReport(id: ID!, memberId: ID!): DeleteLabTestReport
-  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!, videoUrl: String): CreateLabTestReport
-  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
+  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!, videoUrl: String): CreateLabTestReport
+  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
   cronofyAuthRevoke: CronofyAuthRevoke
   cronofyAuthToken(code: String!, redirectUri: String!): CronofyAuthToken
   cronofyElementToken(permissions: [String]!): CronofyElementToken
