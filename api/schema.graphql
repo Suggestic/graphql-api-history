@@ -1547,6 +1547,7 @@ type EdamamFoodResult implements Node {
 }
 
 type Entry {
+  createdAt: DateTime
   date: Date
   source: SourceType
   value: Float
@@ -5282,6 +5283,7 @@ input WeightEntryInput {
 
 type WeightTracker {
   entries: [Entry]
+  latestEntry: DateTime
   start: Float
   tendency: Tendency
   today: Float
