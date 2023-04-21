@@ -1007,7 +1007,7 @@ type Profile {
   permissions: [String!]!
   companyName: String!
   apiToken: String
-  selfReportedRole: String
+  selfReportedRole: String @deprecated(reason: "Use roles instead")
   freeTrialRemainingDays: Int
   active: Boolean
   invitationExpireAt: Datetime
@@ -1672,6 +1672,7 @@ input UpdateUserInput {
   enable2fa: Boolean
   selfReportedRole: Role
   active: Boolean
+  roles: [Role!]
 }
 
 type UpdateUserSegment {
@@ -1717,7 +1718,7 @@ type User implements Node {
   email: String!
   roles: [Role!]!
   freeTrialRemainingDays: Int
-  selfReportedRole: String
+  selfReportedRole: String @deprecated(reason: "Use roles instead")
   active: Boolean
   createdAt: Datetime!
   invitationExpireAt: Datetime
