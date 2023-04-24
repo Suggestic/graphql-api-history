@@ -1148,6 +1148,9 @@ type Query {
 
   """Retrieve Recipe tags"""
   recipeTags(name: String, before: String, after: String, first: Int, last: Int): RecipeTagConnection
+
+  """Retrieve third-party enabled trackers"""
+  enabledTrackers: [TrackerComponent!]
 }
 
 type RecipeTag implements Node {
