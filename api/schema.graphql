@@ -1185,7 +1185,7 @@ type DailyMoodSummary {
 type DailyQuestion {
   answers: [Answer]
   done: Boolean
-  group: String
+  group: GroupQuestion
   id: ID
   imageUrl: String
   isDefault: Boolean!
