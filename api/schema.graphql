@@ -2602,7 +2602,7 @@ type Mutation {
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!, videoUrl: String): CreateLabTestReport
-  createMealEntry(mealId: ID!, value: MealTrackStatus): CreateMealEntry
+  createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
   createMyBrandedFoods(input: CreateMyBrandedFoodInput!): CreateMyBrandedFood
