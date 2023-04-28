@@ -289,6 +289,62 @@ type ArticleRecommendedEdge {
   node: ArticleRecommended
 }
 
+type Assessment implements Node {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
+  title: String!
+  updatedAt: DateTime!
+}
+
+type AssessmentAnswer implements Node {
+  createdAt: DateTime!
+  id: ID!
+  isCorrect: Boolean!
+  isSkip: Boolean!
+  nextQuestion: AssessmentQuestion
+  score: Int
+  text: String!
+  updatedAt: DateTime!
+}
+
+type AssessmentConnection {
+  edges: [AssessmentEdge]!
+  pageInfo: PageInfo!
+}
+
+type AssessmentEdge {
+  cursor: String!
+  node: Assessment
+}
+
+type AssessmentQuestion implements Node {
+  answers: [AssessmentAnswer!]
+  assessment: Assessment
+  createdAt: DateTime!
+  hasSkipAnswer: Boolean!
+  id: ID!
+  questionType: QuestionType!
+  text: String!
+  updatedAt: DateTime!
+}
+
+type AssessmentQuestionConnection {
+  edges: [AssessmentQuestionEdge]!
+  pageInfo: PageInfo!
+}
+
+type AssessmentQuestionEdge {
+  cursor: String!
+  node: AssessmentQuestion
+}
+
+input AssessmentsFilterInput {
+  description: String
+  title: String
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -829,6 +885,14 @@ type CPCRule {
   increase: [CPC]
 }
 
+input CreateAnswerInput {
+  isCorrect: Boolean = false
+  isSkip: Boolean = false
+  nextQuestion: ID
+  score: Int
+  text: String!
+}
+
 type CreateAppointment {
   appointment: Appointment
   message: String!
@@ -856,6 +920,18 @@ input CreateArticleRecommendedInput {
   biomarkerId: ID!
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
+}
+
+type CreateAssessment {
+  assessment: Assessment
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input CreateAssessmentInput {
+  description: String
+  title: String!
 }
 
 type CreateBiomarkerCategory {
@@ -1089,6 +1165,20 @@ type CreateProfileCustomAttributes {
   success: Boolean
 }
 
+type CreateQuestion {
+  errors: [FormError!]
+  message: String!
+  question: AssessmentQuestion
+  success: Boolean!
+}
+
+input CreateQuestionInput {
+  answers: [CreateAnswerInput!]!
+  assessmentId: ID!
+  questionType: QuestionType = SINGLE_SELECT
+  text: String!
+}
+
 type CreateQuizResult {
   errors: [ErrorType]
   success: Boolean
@@ -1278,6 +1368,12 @@ type DeleteArticleRecommended {
   success: Boolean!
 }
 
+type DeleteAssessment {
+  assessment: Assessment
+  message: String!
+  success: Boolean!
+}
+
 type DeleteBiomarkerCategory {
   biomarkerCategory: BiomarkerCategory
   message: String!
@@ -1392,6 +1488,12 @@ type DeleteMyRecipe {
 type DeleteNote {
   message: String!
   note: Note
+  success: Boolean!
+}
+
+type DeleteQuestion {
+  message: String!
+  question: AssessmentQuestion
   success: Boolean!
 }
 
@@ -2591,6 +2693,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
+  createAssessment(input: CreateAssessmentInput!): CreateAssessment
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
@@ -2619,6 +2722,7 @@ type Mutation {
   createOwnRecipe(ingredients: [OwnRecipeIngredient], logAfterCreation: Boolean, quantity: Float!, recipeName: String!): CreateOwnRecipe
   createProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): CreateProfileBiomarkers
   createProfileCustomAttributes(append: Boolean, attributes: [ProfileCustomAttribute!]!): CreateProfileCustomAttributes
+  createQuestion(input: CreateQuestionInput!): CreateQuestion
   createQuizResult(answers: [String]!, result: String!): CreateQuizResult
   createSupplement(input: CreateSupplementInput!): CreateSupplement
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
@@ -2626,6 +2730,7 @@ type Mutation {
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
+  deleteAssessment(id: ID!): DeleteAssessment
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   deleteCoachType(id: ID!): DeleteCoachType
@@ -2656,6 +2761,7 @@ type Mutation {
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
   deleteNote(noteId: ID!): DeleteNote
+  deleteQuestion(id: ID!): DeleteQuestion
 
   """deleteSleepQualityScore delete sleep quality score entry"""
   deleteSleepQualityScore(id: ID!): DeleteSleepQualityScore!
@@ -2706,6 +2812,7 @@ type Mutation {
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
+  updateAssessment(input: UpdateAssessmentInput!): UpdateAssessment
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
@@ -2731,6 +2838,7 @@ type Mutation {
   updateProfile(birthdate: Date, country: String, email: String, isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, timezone: String): UpdateProfile
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
+  updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
   updateShoppingListRecipeServings(numberOfServings: Int!, recipeId: String!): UpdateShoppingListRecipeServings
   updateSubscription(profileId: String, subscriptionId: String!, userId: String): UpdateSubscription
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
@@ -3610,6 +3718,8 @@ type Query {
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
+  assessment(id: ID!): Assessment
+  assessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
@@ -3700,6 +3810,8 @@ type Query {
   program(id: ID!): Program
   programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int, orderBy: ProgramOrderBy): ProgramConnection
   purchases: UserPurchases
+  question(id: ID!): AssessmentQuestion
+  questions(after: String, before: String, filters: QuestionsFilterInput, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   quizAnswers: [QuizAnswer!]!
   quizPrograms: [QuizProgram]
   recentMealLogs: [MealLog]
@@ -3752,6 +3864,21 @@ type Query {
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
+}
+
+input QuestionsFilterInput {
+  assessmentId: ID
+  hasSkipAnswer: Boolean
+  questionType: QuestionType
+  text: String
+}
+
+enum QuestionType {
+  DATE_PICKER
+  MULTI_SELECT
+  OPEN_NUMBER
+  OPEN_TEXT
+  SINGLE_SELECT
 }
 
 type QuizAnswer {
@@ -4790,6 +4917,19 @@ input UpdateArticleRecommendedInput {
   range: BiomarkerRangeInput
 }
 
+type UpdateAssessment {
+  assessment: Assessment
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateAssessmentInput {
+  description: String
+  id: ID!
+  title: String
+}
+
 type UpdateBiomarker {
   biomarker: Biomarker
   errors: [FormError!]
@@ -5064,6 +5204,21 @@ input UpdateProtocolInput {
   group: ProtocolGroup
   id: ID!
   isActive: Boolean
+}
+
+type UpdateQuestion {
+  errors: [FormError!]
+  message: String!
+  question: AssessmentQuestion
+  success: Boolean!
+}
+
+input UpdateQuestionInput {
+  answers: [CreateAnswerInput!]
+  assessmentId: ID
+  id: ID!
+  questionType: QuestionType
+  text: String
 }
 
 type UpdateShoppingListRecipeServings {
