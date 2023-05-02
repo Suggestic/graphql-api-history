@@ -1025,6 +1025,7 @@ type CreateDailyRecapAnswer {
 
 input CreateDailyRecapAnswerInput {
   answer: String!
+  lang: GenericScalar
   type: String!
 }
 
@@ -1043,6 +1044,7 @@ type CreateDailyRecapQuestion {
 input CreateDailyRecapQuestionInput {
   answers: [ID]!
   imageUrl: String
+  lang: GenericScalar
   program: ID
   question: String!
 }
@@ -1289,10 +1291,10 @@ type DailyRecap {
 }
 
 type DailyRecapAnswer implements Node {
-  answer: String!
-  answers(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
+  answer: String
   id: ID!
   imageUrl: String
+  lang: JSONString!
   type: String!
 }
 
@@ -4791,8 +4793,9 @@ type ThirdPartyDailyRecapQuestion implements Node {
   id: ID!
   imageUrl: String
   isDefault: Boolean
+  lang: JSONString!
   program: Program
-  question: String!
+  question: String
   title: String
 }
 
@@ -5050,6 +5053,7 @@ type UpdateDailyRecapAnswer {
 input UpdateDailyRecapAnswerInput {
   answer: String
   id: ID!
+  lang: GenericScalar
   type: String
 }
 
@@ -5064,6 +5068,7 @@ input UpdateDailyRecapQuestionInput {
   answers: [ID]
   id: ID!
   imageUrl: String
+  lang: GenericScalar
   program: ID
   question: String
 }
