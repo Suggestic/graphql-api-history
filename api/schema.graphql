@@ -2801,7 +2801,6 @@ type Mutation {
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
   setActiveSource(source: SourceType!): SetActiveSource
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
-  setUserAnswer(input: SetUserAnswerInput!): SetUserAnswer
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
   swapMealPlanRecipe(mealId: String, mealTag: MealTime, recipeId: String!, serving: Int): SwapMealPlanRecipe
@@ -4265,19 +4264,6 @@ type SetMealPlanToTemplate {
   success: Boolean!
 }
 
-type SetUserAnswer {
-  errors: [FormError!]
-  message: String!
-  success: Boolean!
-  userAnswer: UserAnswer
-}
-
-input SetUserAnswerInput {
-  answerId: ID!
-  assessmentId: ID!
-  questionId: ID!
-}
-
 type SgScores {
   keto: Float
 }
@@ -5359,16 +5345,6 @@ type User implements Node {
   subscription: SubscriptionType
   updatedAt: DateTime!
   userSource: String
-}
-
-type UserAnswer implements Node {
-  answer: AssessmentAnswer!
-  assessment: Assessment!
-  createdAt: DateTime!
-  id: ID!
-  profile: ProfileType!
-  question: AssessmentQuestion!
-  updatedAt: DateTime!
 }
 
 type UserConnection {
