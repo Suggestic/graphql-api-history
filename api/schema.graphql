@@ -290,9 +290,12 @@ type ArticleRecommendedEdge {
 }
 
 type Assessment implements Node {
+  assessmentType: AssessmentType
   createdAt: DateTime!
   description: String
   id: ID!
+  initialQuestion: AssessmentQuestion
+  progress: String
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   title: String!
   updatedAt: DateTime!
@@ -302,6 +305,7 @@ type AssessmentAnswer implements Node {
   createdAt: DateTime!
   id: ID!
   isCorrect: Boolean!
+  isSelected: Boolean
   isSkip: Boolean!
   nextQuestion: AssessmentQuestion
   score: Int
@@ -325,6 +329,7 @@ type AssessmentQuestion implements Node {
   createdAt: DateTime!
   hasSkipAnswer: Boolean!
   id: ID!
+  isInitialQuestion: Boolean!
   questionType: QuestionType!
   text: String!
   updatedAt: DateTime!
@@ -343,6 +348,11 @@ type AssessmentQuestionEdge {
 input AssessmentsFilterInput {
   description: String
   title: String
+}
+
+enum AssessmentType {
+  COMMON
+  ON_BOARDING
 }
 
 type Attendee {
@@ -930,6 +940,7 @@ type CreateAssessment {
 }
 
 input CreateAssessmentInput {
+  assessmentType: AssessmentType = COMMON
   description: String
   title: String!
 }
@@ -1177,6 +1188,7 @@ type CreateQuestion {
 input CreateQuestionInput {
   answers: [CreateAnswerInput!]!
   assessmentId: ID!
+  isInitialQuestion: Boolean
   questionType: QuestionType = SINGLE_SELECT
   text: String!
 }
@@ -2801,7 +2813,7 @@ type Mutation {
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
   setActiveSource(source: SourceType!): SetActiveSource
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
-  setUserAnswer(input: SetUserAnswerInput!): SetUserAnswer
+  setUserAnswers(input: SetUserAnswersInput!): SetUserAnswers
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
   swapMealPlanRecipe(mealId: String, mealTag: MealTime, recipeId: String!, serving: Int): SwapMealPlanRecipe
@@ -3865,6 +3877,7 @@ type Query {
   trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
+  userAnswersByAssessment(id: ID!): Assessment
   users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
@@ -4265,17 +4278,16 @@ type SetMealPlanToTemplate {
   success: Boolean!
 }
 
-type SetUserAnswer {
+type SetUserAnswers {
   errors: [FormError!]
   message: String!
   success: Boolean!
-  userAnswer: UserAnswer
+  userAnswers: [UserAnswer!]
 }
 
-input SetUserAnswerInput {
-  answerId: ID!
+input SetUserAnswersInput {
   assessmentId: ID!
-  questionId: ID!
+  userAnswers: [UserAnswerInput!]!
 }
 
 type SgScores {
@@ -4942,6 +4954,7 @@ type UpdateAssessment {
 }
 
 input UpdateAssessmentInput {
+  assessmentType: AssessmentType
   description: String
   id: ID!
   title: String
@@ -5236,6 +5249,7 @@ input UpdateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID
   id: ID!
+  isInitialQuestion: Boolean
   questionType: QuestionType
   text: String
 }
@@ -5369,6 +5383,11 @@ type UserAnswer implements Node {
   profile: ProfileType!
   question: AssessmentQuestion!
   updatedAt: DateTime!
+}
+
+input UserAnswerInput {
+  answerId: ID!
+  questionId: ID!
 }
 
 type UserConnection {
