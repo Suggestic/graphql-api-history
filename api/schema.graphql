@@ -2222,6 +2222,16 @@ type Limitation {
   subscriptionId: ID!
 }
 
+type LinkUserAssessment {
+  message: String!
+  success: Boolean!
+}
+
+input LinkUserAssessmentInput {
+  assessmentId: ID!
+  profileId: ID!
+}
+
 type ListItem implements Node {
   aggregation(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection!
   aisleName: String
@@ -2790,6 +2800,7 @@ type Mutation {
   generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
+  linkUserAssessment(input: LinkUserAssessmentInput!): LinkUserAssessment
   login(userId: String!): LoginUser
   mergeUser(input: MergeUserInput!): MergeUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
@@ -2824,6 +2835,7 @@ type Mutation {
   uncheckIntake(category: IntakeCategory!, date: Date!, itemId: ID!, timeOfDay: TimeOfDay): UncheckIntake!
   uncheckTodayFood(date: Date!, itemId: ID!): UncheckTodayFood @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
+  unlinkUserAssessment(input: LinkUserAssessmentInput!): UnlinkUserAssessment
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
@@ -3878,6 +3890,8 @@ type Query {
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   userAnswersByAssessment(id: ID!): Assessment
+  userAssessment(assessmentId: ID!): Assessment
+  userAssessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
@@ -4909,6 +4923,11 @@ type UncheckTodaySupplement {
 enum UnitSystem {
   IMPERIAL
   METRIC
+}
+
+type UnlinkUserAssessment {
+  message: String!
+  success: Boolean!
 }
 
 type UpdateAppointment {
