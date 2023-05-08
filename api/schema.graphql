@@ -1270,6 +1270,21 @@ type CreateWeightEntry {
   success: Boolean
 }
 
+type Cuisine implements Node {
+  id: ID!
+  name: String!
+}
+
+type CuisineConnection {
+  edges: [CuisineEdge]!
+  pageInfo: PageInfo!
+}
+
+type CuisineEdge {
+  cursor: String!
+  node: Cuisine
+}
+
 type DailyChecklist {
   days: [DayChecklistItems!]!
   icon: String
@@ -3576,7 +3591,7 @@ type ProfileType {
   activityLevel: ActivityLevel
   adherenceScore: Float!
   age: Int
-  appVersion: Float!
+  appVersion: String!
   basalMetabolicRate: Int
   biologicalSex: BiologicalSex
   biomarkers: ProfileBiomarkers
@@ -3764,6 +3779,7 @@ type Query {
   contentLibrary(after: String, before: String, categories: [ID], first: Int, id: ID, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
   countries: [GenericScalar]
+  cuisines(after: String, before: String, first: Int, last: Int, name: String): CuisineConnection
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
   customMealPlan(breakfastDistribution: Float, calories: Int!, carbs: Float, days: Int, dinnerDistribution: Float, error: Float, fat: Float, format: [MealTime]!, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxTimeMinutes: IntValueByMealTime, omega3: Float, program: ID, protein: Float, skipRecipes: [ID!], snackDistribution: Float): [MealPlanDay]
   dailyMoodSummary(endDate: Date!, startDate: Date!): DailyMoodSummary!
@@ -3854,7 +3870,7 @@ type Query {
   restaurant(id: ID!): Restaurant
   restaurantAutocomplete(lat: Float!, lon: Float!, query: String!): [Restaurant]
   restaurantRecommendedMenuitems(restaurantId: String!): [MenuItem]
-  restaurantSearch(address: String, after: String, before: String, cuisines: [String], distance: Int = 3, first: Int, geoBoundingBox: GeoBoundingBox, gotAr: Boolean, isOpen: Boolean, last: Int, lat: Float, lon: Float, meals: [String], postalCode: String, priceRating: [PriceRate], program: String, query: String, stateProvince: String): RestaurantConnection
+  restaurantSearch(address: String, after: String, before: String, cuisines: [String], distance: Int = 3, first: Int, geoBoundingBox: GeoBoundingBox, gotAr: Boolean, isOpen: Boolean, last: Int, lat: Float, lon: Float, postalCode: String, priceRating: [PriceRate], program: String, query: String, stateProvince: String): RestaurantConnection
   restaurantSearchByLocation(cuisine: String, geoBoundingBox: GeoBoundingBox, geolat: Float, geolon: Float, lat: Float!, lon: Float!, query: String): RestaurantSearchResult
   restaurantsByLocation(after: String, before: String, first: Int, last: Int, lat: Float, lon: Float): RestaurantConnection
   restriction(id: ID!): Restriction
