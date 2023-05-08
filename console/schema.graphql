@@ -727,6 +727,9 @@ type Mutation {
   """Set a new role to the userID"""
   setRole(userID: ID!, role: Role!): SetRole!
 
+  """Replace the roles of the userID"""
+  setRoles(userID: ID!, roles: [Role!]!): SetRoles!
+
   """Create a new user with a non-admin role and member of a third party"""
   createUser(input: CreateUserInput!): CreateUser!
 
@@ -1270,6 +1273,11 @@ type SetContentSubcategory {
 }
 
 type SetRole {
+  success: Boolean!
+  message: String!
+}
+
+type SetRoles {
   success: Boolean!
   message: String!
 }
