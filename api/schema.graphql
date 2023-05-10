@@ -306,7 +306,6 @@ type AssessmentAnswer implements Node {
   id: ID!
   isCorrect: Boolean!
   isSelected: Boolean
-  isSkip: Boolean!
   nextQuestion: AssessmentQuestion
   score: Int
   text: String!
@@ -326,10 +325,11 @@ type AssessmentEdge {
 type AssessmentQuestion implements Node {
   answers: [AssessmentAnswer!]
   assessment: Assessment
+  canSkip: Boolean!
   createdAt: DateTime!
-  hasSkipAnswer: Boolean!
   id: ID!
   isInitialQuestion: Boolean!
+  nextQuestion: AssessmentQuestion
   questionType: QuestionType!
   text: String!
   updatedAt: DateTime!
@@ -897,8 +897,7 @@ type CPCRule {
 
 input CreateAnswerInput {
   isCorrect: Boolean = false
-  isSkip: Boolean = false
-  nextQuestion: ID
+  nextQuestionId: ID
   score: Int
   text: String!
 }
@@ -1188,7 +1187,9 @@ type CreateQuestion {
 input CreateQuestionInput {
   answers: [CreateAnswerInput!]!
   assessmentId: ID!
+  canSkip: Boolean = false
   isInitialQuestion: Boolean
+  nextQuestionId: ID
   questionType: QuestionType = SINGLE_SELECT
   text: String!
 }
@@ -3914,7 +3915,7 @@ type Query {
 
 input QuestionsFilterInput {
   assessmentId: ID
-  hasSkipAnswer: Boolean
+  canSkip: Boolean
   questionType: QuestionType
   text: String
 }
@@ -5283,8 +5284,10 @@ type UpdateQuestion {
 input UpdateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID
+  canSkip: Boolean
   id: ID!
   isInitialQuestion: Boolean
+  nextQuestionId: ID
   questionType: QuestionType
   text: String
 }
@@ -5411,7 +5414,8 @@ type User implements Node {
 }
 
 type UserAnswer implements Node {
-  answer: AssessmentAnswer!
+  answer: AssessmentAnswer
+  answerText: String
   assessment: Assessment!
   createdAt: DateTime!
   id: ID!
@@ -5421,7 +5425,8 @@ type UserAnswer implements Node {
 }
 
 input UserAnswerInput {
-  answerId: ID!
+  answerId: ID
+  answerText: String
   questionId: ID!
 }
 
