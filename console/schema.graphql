@@ -460,6 +460,20 @@ input CreateUserSegmentInput {
   rules: [ID!]!
 }
 
+type Cuisine {
+  name: String!
+}
+
+type CuisineConnection {
+  edges: [CuisineEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CuisineEdge {
+  cursor: String!
+  node: Cuisine
+}
+
 type CustomAttribute {
   id: ID!
   label: String!
@@ -1154,6 +1168,9 @@ type Query {
 
   """Retrieve third-party enabled trackers"""
   enabledTrackers: [TrackerComponent!]
+
+  """List Recipe's Cuisines"""
+  cuisines(name: String, before: String, after: String, first: Int, last: Int): CuisineConnection
 }
 
 type RecipeTag implements Node {
