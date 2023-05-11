@@ -209,6 +209,18 @@ input CreateArticleRecommendedInput {
   articleId: ID!
 }
 
+type CreateBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarkerCategory: BiomarkerCategory
+}
+
+input CreateBiomarkerCategoryInput {
+  name: String!
+  parent: ID
+}
+
 type CreateContentCategory {
   success: Boolean!
   message: String!
@@ -932,6 +944,12 @@ type Mutation {
 
   """Update Third Party components"""
   updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent!
+
+  """Create Biomarker Category"""
+  createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory!
+
+  """Update Biomarker Category"""
+  updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory!
 }
 
 interface Node {
@@ -1446,6 +1464,19 @@ input UpdateArticleRecommendedInput {
   range: BiomarkerRangeInput
   normalValues: [Generic!]
   articleId: ID
+}
+
+type UpdateBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarkerCategory: BiomarkerCategory
+}
+
+input UpdateBiomarkerCategoryInput {
+  id: ID!
+  name: String
+  parent: ID
 }
 
 type UpdateContentCategory {
