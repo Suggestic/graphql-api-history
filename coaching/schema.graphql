@@ -1193,6 +1193,10 @@ enum ExerciseType {
   PILATES
   HIKE
   DANCE
+  HOUSEHOLD_CHORES
+  YARD_WORK
+  PHYSICAL_THERAPY_EXERCISES
+  IN_BED_EXERCIES
 }
 
 type ExternalCalendarEvent {
