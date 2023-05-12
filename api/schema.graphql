@@ -2249,7 +2249,6 @@ type LinkUserAssessment {
 
 input LinkUserAssessmentInput {
   assessmentId: ID!
-  profileId: ID!
 }
 
 type ListItem implements Node {
