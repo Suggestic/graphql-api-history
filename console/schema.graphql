@@ -3,6 +3,28 @@ type AcceptUserInvite {
   message: String!
 }
 
+type AddBiomarker {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarker: Biomarker
+}
+
+input AddBiomarkerInput {
+  name: String!
+  category: ID!
+  method: String
+  description: String
+  order: Int
+  isVisible: Boolean
+  range: BiomarkerRangeInput
+  optimalRange: BiomarkerRangeInput
+  borderlineRange: BiomarkerRangeInput
+  units: [ID!]!
+  aliases: [BiomarkerAliasInput!]
+  normalValues: [Generic!]
+}
+
 type appCustomizationFeature {
   key: String!
   name: String!
@@ -56,12 +78,51 @@ type BiomarkerAlias {
   language: String!
 }
 
+input BiomarkerAliasInput {
+  name: String!
+  language: BiomarkerLanguage!
+}
+
 type BiomarkerCategory {
   name: String!
   parent: BiomarkerCategory
   createdAt: Datetime!
   updatedAt: Datetime!
   id: ID!
+}
+
+enum BiomarkerLanguage {
+  AFRIKAANS
+  ALBANIAN
+  ARABIC
+  CATALAN
+  CHINESE
+  CROATIAN
+  CZECH
+  DANISH
+  DUTCH
+  ENGLISH
+  ESTONIAN
+  FRENCH
+  GERMAN
+  HEBREW
+  HINDI
+  INDONESIAN
+  ITALIAN
+  JAPANESE
+  KOREAN
+  POLISH
+  PORTUGUESE
+  ROMANIAN
+  RUSSIAN
+  SERBIAN
+  SPANISH
+  SWEDISH
+  THAI
+  TURKISH
+  UKRAINIAN
+  VIETNAMESE
+  ZULU
 }
 
 type BiomarkerRange {
@@ -950,6 +1011,12 @@ type Mutation {
 
   """Update Biomarker Category"""
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory!
+
+  """Create Third Party Biomarker"""
+  addBiomarker(input: AddBiomarkerInput!): AddBiomarker!
+
+  """Update Third Party Biomarker"""
+  updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker!
 }
 
 interface Node {
@@ -1466,6 +1533,13 @@ input UpdateArticleRecommendedInput {
   articleId: ID
 }
 
+type UpdateBiomarker {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarker: Biomarker
+}
+
 type UpdateBiomarkerCategory {
   success: Boolean!
   message: String!
@@ -1477,6 +1551,22 @@ input UpdateBiomarkerCategoryInput {
   id: ID!
   name: String
   parent: ID
+}
+
+input UpdateBiomarkerInput {
+  id: ID!
+  name: String
+  category: ID
+  method: String
+  description: String
+  order: Int
+  isVisible: Boolean
+  range: BiomarkerRangeInput
+  optimalRange: BiomarkerRangeInput
+  borderlineRange: BiomarkerRangeInput
+  units: [ID!]
+  aliases: [BiomarkerAliasInput!]
+  normalValues: [Generic!]
 }
 
 type UpdateContentCategory {
