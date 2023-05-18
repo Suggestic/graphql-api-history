@@ -290,15 +290,22 @@ type ArticleRecommendedEdge {
 }
 
 type Assessment implements Node {
-  assessmentType: AssessmentType
+  assessmentType: AssessmentType!
   createdAt: DateTime!
   description: String
+  icon: String
   id: ID!
   initialQuestion: AssessmentQuestion
+  interval: Int
+  isDraft: Boolean!
+  isPublic: Boolean!
+  order: Int!
   progress: String
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
+  status: AssessmentStatus
   title: String!
   updatedAt: DateTime!
+  weight: Int
 }
 
 type AssessmentAnswer implements Node {
@@ -348,6 +355,12 @@ type AssessmentQuestionEdge {
 input AssessmentsFilterInput {
   description: String
   title: String
+}
+
+enum AssessmentStatus {
+  DONE
+  NEEDS_UPDATE
+  TODO
 }
 
 enum AssessmentType {
@@ -941,7 +954,13 @@ type CreateAssessment {
 input CreateAssessmentInput {
   assessmentType: AssessmentType = COMMON
   description: String
+  icon: Upload
+  interval: Int
+  isDraft: Boolean = true
+  isPublic: Boolean = true
+  order: Int = 0
   title: String!
+  weight: Int
 }
 
 type CreateBiomarkerCategory {
@@ -3911,7 +3930,7 @@ type Query {
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   userAnswersByAssessment(id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
-  userAssessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
+  userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
@@ -4995,8 +5014,14 @@ type UpdateAssessment {
 input UpdateAssessmentInput {
   assessmentType: AssessmentType
   description: String
+  icon: Upload
   id: ID!
+  interval: Int
+  isDraft: Boolean
+  isPublic: Boolean
+  order: Int
   title: String
+  weight: Int
 }
 
 type UpdateBiomarker {
@@ -5431,6 +5456,12 @@ input UserAnswerInput {
   answerId: ID
   answerText: String
   questionId: ID!
+}
+
+input UserAssessmentsFilterInput {
+  description: String
+  status: AssessmentStatus
+  title: String
 }
 
 type UserConnection {
