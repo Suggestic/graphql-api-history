@@ -363,12 +363,14 @@ input AssessmentsFilterInput {
 
 enum AssessmentStatus {
   DONE
+  IN_PROGRESS
   NEEDS_UPDATE
   TODO
 }
 
 enum AssessmentType {
   COMMON
+  DIET_ID
   ON_BOARDING
 }
 
