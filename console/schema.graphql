@@ -91,6 +91,31 @@ type BiomarkerCategory {
   id: ID!
 }
 
+type BiomarkerCategoryConnection {
+  edges: [BiomarkerCategoryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerCategoryEdge {
+  cursor: String!
+  node: BiomarkerCategory
+}
+
+type BiomarkerConnection {
+  edges: [BiomarkerEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerEdge {
+  cursor: String!
+  node: Biomarker
+}
+
+input BiomarkerFilterInput {
+  name: String
+  categoryId: ID
+}
+
 enum BiomarkerLanguage {
   AFRIKAANS
   ALBANIAN
@@ -1256,6 +1281,12 @@ type Query {
 
   """List Recipe's Cuisines"""
   cuisines(name: String, before: String, after: String, first: Int, last: Int): CuisineConnection
+
+  """List biomarkers"""
+  biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
+
+  """List biomarker categories"""
+  biomarkerCategories(id: ID, parentId: ID, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
 }
 
 type RecipeTag implements Node {
