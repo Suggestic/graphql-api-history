@@ -293,6 +293,7 @@ type Assessment implements Node {
   assessmentType: AssessmentType!
   createdAt: DateTime!
   description: String
+  finalQuestion: AssessmentQuestion
   icon: String
   id: ID!
   initialQuestion: AssessmentQuestion
@@ -300,7 +301,6 @@ type Assessment implements Node {
   isDraft: Boolean!
   isPublic: Boolean!
   order: Int!
-  percentageProgress: String
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   score: Float
   status: AssessmentStatus
@@ -337,6 +337,7 @@ type AssessmentQuestion implements Node {
   canSkip: Boolean!
   createdAt: DateTime!
   id: ID!
+  isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   nextQuestion: AssessmentQuestion
   questionType: QuestionType!
@@ -1210,9 +1211,10 @@ type CreateQuestion {
 }
 
 input CreateQuestionInput {
-  answers: [CreateAnswerInput!]!
+  answers: [CreateAnswerInput!]
   assessmentId: ID!
   canSkip: Boolean = false
+  isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
   questionType: QuestionType = SINGLE_SELECT
@@ -5331,6 +5333,7 @@ input UpdateQuestionInput {
   assessmentId: ID
   canSkip: Boolean
   id: ID!
+  isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
   questionType: QuestionType
@@ -5537,7 +5540,6 @@ type UserProgress implements Node {
   endDate: DateTime!
   id: ID!
   profile: ProfileType!
-  progress: Float!
   score: Float
   startDate: DateTime!
   updatedAt: DateTime!
@@ -5599,7 +5601,6 @@ input UsersProgressFilterInput {
   assessmentId: ID
   currentQuestionId: ID
   profileId: ID
-  progressRange: RangeOperator
   scoreRange: RangeOperator
 }
 
