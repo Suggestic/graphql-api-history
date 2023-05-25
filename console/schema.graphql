@@ -1042,6 +1042,9 @@ type Mutation {
 
   """Update Third Party Biomarker"""
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker!
+
+  """Update openIA key field of third party model"""
+  setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 }
 
 interface Node {
@@ -1138,6 +1141,7 @@ type Profile {
   freeTrialRemainingDays: Int
   active: Boolean
   invitationExpireAt: Datetime
+  thirdParty: ThirdParty
 }
 
 """Diet Program that an app user can be subscribed to"""
@@ -1405,6 +1409,16 @@ type SetContentSubcategory {
   message: String!
 }
 
+type SetOpenAIKey {
+  success: Boolean!
+  message: String!
+  key: String
+}
+
+input SetOpenAIKeyInput {
+  key: String!
+}
+
 type SetRole {
   success: Boolean!
   message: String!
@@ -1488,6 +1502,7 @@ type SupplementRecommendedEdge {
 type ThirdParty {
   name: String!
   slug: String!
+  openaiKey: String
 }
 
 type ThirdPartyAppCustomization {
