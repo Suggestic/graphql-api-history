@@ -564,6 +564,22 @@ type CoachMakeAdminPayload {
   clientMutationId: String
 }
 
+input CoachResetPasswordExpiredInput {
+  email: String!
+  oldPassword: String!
+  newPassword: String!
+  clientMutationId: String
+}
+
+type CoachResetPasswordExpiredPayload {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+  me: Coach
+  clientMutationId: String
+}
+
 input CoachResetPasswordInput {
   code: String!
   newPassword: String!
@@ -1848,6 +1864,7 @@ type Mutation {
   requestCoachResetPassword(input: RequestCoachResetPasswordInput!): RequestCoachResetPasswordPayload
   memberResetPassword(input: MemberResetPasswordInput!): MemberResetPasswordPayload
   coachResetPassword(input: CoachResetPasswordInput!): CoachResetPasswordPayload
+  coachResetPasswordExpired(input: CoachResetPasswordExpiredInput!): CoachResetPasswordExpiredPayload
   coachUpdate(input: CoachUpdateInput!): CoachUpdatePayload
   coachDelete(input: CoachDeleteInput!): CoachDeletePayload
   coachUpdateAvatar(input: CoachUpdateAvatarInput!): CoachUpdateAvatarPayload
