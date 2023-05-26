@@ -857,6 +857,9 @@ type Mutation {
   """Set a new password for the user"""
   resetPassword(token: String!, password: String!): ResetPassword!
 
+  """Reset your password if has expired"""
+  resetPasswordExpired(email: String!, old: String!, new: String!): ResetPasswordExpired!
+
   """Create a new developer user and third party app"""
   signUpDeveloper(input: SignUpDeveloperInput!): SignUpDeveloper!
   verifyDeveloperEmail(token: String!, password: String!): VerifyDeveloperEmail!
@@ -1317,6 +1320,13 @@ type RequestPasswordReset {
 type ResetPassword {
   success: Boolean!
   message: String!
+}
+
+type ResetPasswordExpired {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
 }
 
 type Restriction implements Node {
