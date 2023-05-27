@@ -375,6 +375,14 @@ enum AssessmentType {
   ON_BOARDING
 }
 
+type AssistantIngredient {
+  grams: Float
+  id: String
+  index: String
+  match: String
+  name: String
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -1854,6 +1862,10 @@ type FoodLog {
   servings: Float
   time: Time
   type: FoodCategory!
+}
+
+type FoodLogAssistant {
+  ingredients: [AssistantIngredient]
 }
 
 type FoodLogConnection {
@@ -3826,6 +3838,7 @@ type Query {
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
   foodLog(id: ID!): MealLog
+  foodLogAssistant(userInput: String!): FoodLogAssistant
   foodLogs(after: String, end: Date!, first: Int, id: ID, start: Date!): FoodLogConnection!
   foodLogsByUser(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!, userId: String!): MealLogConnection
   frequentMealLogs: [MealLog]
