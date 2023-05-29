@@ -301,6 +301,7 @@ type Assessment implements Node {
   isDraft: Boolean!
   isPublic: Boolean!
   order: Int!
+  progressBar: Boolean!
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   score: Float
   status: AssessmentStatus
@@ -336,7 +337,9 @@ type AssessmentQuestion implements Node {
   assessment: Assessment
   canSkip: Boolean!
   createdAt: DateTime!
+  helpText: String
   id: ID!
+  information: String
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   nextQuestion: AssessmentQuestion
@@ -974,6 +977,7 @@ input CreateAssessmentInput {
   isDraft: Boolean = true
   isPublic: Boolean = true
   order: Int = 0
+  progressBar: Boolean = true
   title: String!
   weight: Int
 }
@@ -1222,6 +1226,8 @@ input CreateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID!
   canSkip: Boolean = false
+  helpText: String
+  information: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
@@ -5053,6 +5059,7 @@ input UpdateAssessmentInput {
   isDraft: Boolean
   isPublic: Boolean
   order: Int
+  progressBar: Boolean
   title: String
   weight: Int
 }
@@ -5346,7 +5353,9 @@ input UpdateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID
   canSkip: Boolean
+  helpText: String
   id: ID!
+  information: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
