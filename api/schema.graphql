@@ -380,10 +380,9 @@ enum AssessmentType {
 
 type AssistantIngredient {
   grams: Float
-  id: String
-  index: String
-  match: String
   name: String
+  quantity: Int
+  unit: String
 }
 
 type Attendee {
@@ -806,6 +805,16 @@ type CommonFoodNodeProxy {
 type ComponentGoal {
   component: EntryType!
   goal: Int!
+}
+
+type ConfirmFoodLogAssistant {
+  message: String!
+  success: Boolean!
+}
+
+input ConfirmFoodLogAssistantInput {
+  id: ID!
+  text: String!
 }
 
 type ConnectedSource {
@@ -1871,6 +1880,7 @@ type FoodLog {
 }
 
 type FoodLogAssistant {
+  id: ID!
   ingredients: [AssistantIngredient]
 }
 
@@ -2779,6 +2789,7 @@ type Mutation {
   checkoutCreate(input: CheckoutCreateInput!): CheckoutCreate
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
+  confirmFoodLogAssistant(input: ConfirmFoodLogAssistantInput!): ConfirmFoodLogAssistant
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
