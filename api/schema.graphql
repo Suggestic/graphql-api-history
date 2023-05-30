@@ -814,6 +814,7 @@ type ConfirmFoodLogAssistant {
 
 input ConfirmFoodLogAssistantInput {
   id: ID!
+  mealTime: MealTime!
   text: String!
 }
 
