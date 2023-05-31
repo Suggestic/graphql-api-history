@@ -311,6 +311,7 @@ type Assessment implements Node {
 }
 
 type AssessmentAnswer implements Node {
+  attribute: GenericScalar
   createdAt: DateTime!
   id: ID!
   isCorrect: Boolean!
@@ -343,6 +344,7 @@ type AssessmentQuestion implements Node {
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   nextQuestion: AssessmentQuestion
+  profileField: QuestionProfileField
   questionType: QuestionType!
   text: String!
   updatedAt: DateTime!
@@ -396,6 +398,12 @@ enum AttrDataType {
   FLOAT
   INT
   STRING
+}
+
+input AttributeInput {
+  dataType: AttrDataType!
+  name: String!
+  value: GenericScalar
 }
 
 union AvailableChecklistItems = ChecklistItem | MyChecklistItemOnPlan | SupplementOnPlan
@@ -937,6 +945,7 @@ type CPCRule {
 }
 
 input CreateAnswerInput {
+  attribute: AttributeInput
   isCorrect: Boolean = false
   nextQuestionId: ID
   score: Int
@@ -1241,6 +1250,7 @@ input CreateQuestionInput {
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
+  profileField: ProfileField
   questionType: QuestionType = SINGLE_SELECT
   text: String!
 }
@@ -2912,6 +2922,7 @@ type Mutation {
   uncheckTodayFood(date: Date!, itemId: ID!): UncheckTodayFood @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   uncheckTodaySupplement(date: Date!, itemId: ID!): UncheckTodaySupplement @deprecated(reason: "No longer supported. Use uncheckIntake instead")
   unlinkUserAssessment(input: LinkUserAssessmentInput!): UnlinkUserAssessment
+  updateAnswer(input: UpdateAnswerInput!): UpdateAnswer
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
@@ -3615,6 +3626,19 @@ input ProfileCustomAttribute {
   value: GenericScalar!
 }
 
+enum ProfileField {
+  ACTIVITY_LEVEL
+  BIOLOGICAL_SEX
+  BIRTHDATE
+  CUSTOM_ATTRIBUTES
+  FAVORITE_CUISINES
+  HEIGHT
+  RESTRICTIONS
+  STARTING_WEIGHT
+  TARGET_WEIGHT
+  WEEKLY_WEIGHT_GOAL
+}
+
 type ProfileMacroGoalsSettings {
   bmi: Int
   bmr: Int
@@ -3978,6 +4002,19 @@ type Query {
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
 
+enum QuestionProfileField {
+  ACTIVITY_LEVEL
+  BIOLOGICAL_SEX
+  BIRTHDATE
+  CUSTOM_ATTRIBUTES
+  FAVORITE_CUISINES
+  HEIGHT
+  RESTRICTIONS
+  STARTING_WEIGHT
+  TARGET_WEIGHT
+  WEEKLY_WEIGHT_GOAL
+}
+
 input QuestionsFilterInput {
   assessmentId: ID
   canSkip: Boolean
@@ -3987,10 +4024,12 @@ input QuestionsFilterInput {
 
 enum QuestionType {
   DATE_PICKER
+  DROPDOWN
   MULTI_SELECT
   OPEN_NUMBER
   OPEN_TEXT
   SINGLE_SELECT
+  TIME_PICKER
 }
 
 type QuizAnswer {
@@ -5020,6 +5059,22 @@ type UnlinkUserAssessment {
   success: Boolean!
 }
 
+type UpdateAnswer {
+  answer: AssessmentAnswer
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateAnswerInput {
+  attribute: AttributeInput
+  id: ID!
+  isCorrect: Boolean
+  nextQuestionId: ID
+  score: Int
+  text: String
+}
+
 type UpdateAppointment {
   appointment: Appointment
   message: String!
@@ -5371,6 +5426,7 @@ input UpdateQuestionInput {
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
+  profileField: ProfileField
   questionType: QuestionType
   text: String
 }
