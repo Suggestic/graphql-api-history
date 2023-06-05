@@ -225,6 +225,7 @@ type Appointment {
 type AppointmentCredit {
   appointmentType: AppointmentType!
   id: ID!
+  labTestReports(after: String, before: String, first: Int, last: Int): LabTestReportConnection
   value: Int!
 }
 
@@ -2924,7 +2925,7 @@ type Mutation {
   unlinkUserAssessment(input: LinkUserAssessmentInput!): UnlinkUserAssessment
   updateAnswer(input: UpdateAnswerInput!): UpdateAnswer
   updateAppointment(input: UpdateAppointmentInput!): UpdateAppointment
-  updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, profile: ID!, value: Int): UpdateAppointmentCredits
+  updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, labTestReports: [ID], profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
   updateAssessment(input: UpdateAssessmentInput!): UpdateAssessment
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker

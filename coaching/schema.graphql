@@ -142,6 +142,7 @@ type AppointmentCredit {
   id: ID!
   appointmentType: AppointmentType!
   value: Int!
+  labTestReports(before: String, after: String, first: Int, last: Int): LabTestReportConnection
 }
 
 type AppointmentFrequency {
@@ -1911,7 +1912,7 @@ type Mutation {
   createNoteTemplate(text: String!, title: String!): CreateNoteTemplate
   updateNoteTemplate(id: ID!, text: String, title: String): UpdateNoteTemplate
   deleteNoteTemplate(id: ID!): DeleteNoteTemplate
-  addAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, member: ID!, value: Int): AddAppointmentCredits
+  addAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, labTestReports: [ID], member: ID!, value: Int): AddAppointmentCredits
   setAppointmentSettings(
     """Set of reminders in hours before start"""
     emailReminders: [Int!]
@@ -2253,6 +2254,7 @@ type Query {
   memberSearch(
     """Query search term"""
     query: String
+    hasSendbirdId: Boolean
     before: String
     after: String
     first: Int
