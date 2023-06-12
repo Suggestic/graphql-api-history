@@ -86,6 +86,17 @@ type AddFoodLog {
   success: Boolean!
 }
 
+type AddGPTFoodLog {
+  message: String!
+  success: Boolean!
+}
+
+input AddGPTFoodLogInput {
+  id: ID!
+  mealTime: MealTime!
+  recipeName: String!
+}
+
 type AddHeartRateLog {
   message: String!
   success: Boolean!
@@ -2773,6 +2784,7 @@ type Mutation {
   addFoodLog logs that the user ate specific food, like a recipe, a personal recipe, a meal plan's meal, etc
   """
   addFoodLog(date: Date!, foodId: ID!, grams: Int, mealTime: MealTime!, milligrams: Int, portionModifier: String, servings: Float, time: Time): AddFoodLog!
+  addGPTFoodLog(input: AddGPTFoodLogInput!): AddGPTFoodLog
 
   """addHRVLog add HRV log"""
   addHRVLog(source: SourceType, timestamp: DateTime, value: PositiveFloat!): AddHRVLog!
