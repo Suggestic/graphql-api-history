@@ -197,6 +197,54 @@ input AppUserActivityLogFiltersInput {
   eventName: String
 }
 
+type Assessment {
+  id: ID!
+  assessmentType: String
+  createdAt: String
+  description: String
+  icon: String
+  interval: Int
+  isDraft: Boolean
+  isPublic: Boolean
+  order: Int
+  progressBar: Boolean
+  score: Int
+  status: String
+  updatedAt: String
+  weight: Int
+  initialQuestion: AssessmentQuestion
+  finalQuestion: AssessmentQuestion
+  questions: QuestionConnection
+}
+
+type AssessmentAnswer {
+  id: ID!
+  isCorrect: Boolean
+  isSelected: Boolean
+  score: Int
+  nextQuestion: String
+  text: String
+  attribute: String
+  createdAt: String
+  updatedAt: String
+}
+
+type AssessmentQuestion {
+  id: ID!
+  answerText: String
+  answers: [AssessmentAnswer]
+  canSkip: Boolean
+  createdAt: String
+  helpText: String
+  information: String
+  isFinalQuestion: Boolean
+  isInitialQuestion: Boolean
+  profileField: String
+  questionType: String
+  text: String
+  updatedAt: String
+}
+
 type Attendee {
   email: String!
   status: EventParticipationStatus!
@@ -1746,6 +1794,7 @@ type MemberSearch {
   birthdate: String
   thirdPartyId: Int!
   avatar: String
+  sendbirdId: String
 }
 
 type MemberSearchConnection {
@@ -2260,6 +2309,24 @@ type Query {
     first: Int
     last: Int
   ): MemberSearchConnection
+  userAnswersByAssessment(memberId: ID!, assessmentId: ID): Assessment
+}
+
+type QuestionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [QuestionEdge]!
+}
+
+"""A Relay edge containing a `Question` and its cursor."""
+type QuestionEdge {
+  """The item at the end of the edge"""
+  node: AssessmentQuestion
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type QuizAnswer {
