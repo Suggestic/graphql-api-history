@@ -2928,6 +2928,7 @@ type Mutation {
   startOverMealPlan: StartOverMealPlan
   swapMealPlanRecipe(mealId: String, mealTag: MealTime, recipeId: String!, serving: Int): SwapMealPlanRecipe
   toggleShoppingListItem(isAggregate: Boolean!, itemId: String!): ToggleShoppingListItem
+  toggleShoppingListItems(isAggregate: Boolean!, itemIds: [String!]!): ToggleShoppingListItems
   toggleTaskCompleted(keysHash: String!): ToggleTaskCompleted
 
   """uncheckIntake is the opposite of checkIntake. It undoes the check"""
@@ -5008,6 +5009,11 @@ type TimePeriod {
 }
 
 type ToggleShoppingListItem {
+  message: String
+  success: Boolean
+}
+
+type ToggleShoppingListItems {
   message: String
   success: Boolean
 }
