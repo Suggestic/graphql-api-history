@@ -399,6 +399,13 @@ type AssistantIngredient {
   unit: String
 }
 
+input AssistantIngredientInput {
+  grams: Float
+  name: String
+  quantity: Int
+  unit: String
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -2734,6 +2741,12 @@ input MergeUserInput {
   userTarget: ID!
 }
 
+input MessageGPTInput {
+  id: ID!
+  ingredients: [AssistantIngredientInput]
+  message: String
+}
+
 type Money {
   amount: Float!
   currencyCode: String!
@@ -2950,6 +2963,7 @@ type Mutation {
   updateContentTag(id: ID!, name: String!): UpdateContentTag
   updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
+  updateGPTMessage(input: MessageGPTInput!): UpdateGPTMessage
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
@@ -3858,6 +3872,7 @@ type PurchaseMealRecipe {
 }
 
 type Query {
+  allUsersAnswersByAssessment(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int, orderBy: UserAnswerOrderBy): UserAnswerConnection
   appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
@@ -5290,6 +5305,11 @@ input UpdateDailyRecapQuestionInput {
   question: String
 }
 
+type UpdateGPTMessage {
+  message: String!
+  success: Boolean!
+}
+
 type UpdateHydration {
   message: String
   success: Boolean
@@ -5601,14 +5621,40 @@ type UserAnswer implements Node {
   answerText: String
   createdAt: DateTime!
   id: ID!
+  profile: ProfileType!
   question: AssessmentQuestion!
   updatedAt: DateTime!
+}
+
+type UserAnswerConnection {
+  edges: [UserAnswerEdge]!
+  pageInfo: PageInfo!
+}
+
+type UserAnswerEdge {
+  cursor: String!
+  node: UserAnswer
 }
 
 input UserAnswerInput {
   answerId: ID
   answerText: String
   questionId: ID!
+}
+
+input UserAnswerOrderBy {
+  field: UserAnswerOrderByField = profile
+  order: SortOrder = ASC
+}
+
+enum UserAnswerOrderByField {
+  answer
+  answer_text
+  created_at
+  id
+  profile
+  question
+  updated_at
 }
 
 input UserAssessmentsFilterInput {
