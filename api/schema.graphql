@@ -466,6 +466,7 @@ type BiomarkerCategory implements Node {
   createdAt: DateTime!
   id: ID!
   name: String!
+  order: Int
   parent: BiomarkerCategory
   updatedAt: DateTime!
 }
@@ -1029,6 +1030,7 @@ type CreateBiomarkerCategory {
 
 input CreateBiomarkerCategoryInput {
   name: String!
+  order: Int
   parent: ID
 }
 
@@ -5182,6 +5184,7 @@ type UpdateBiomarkerCategory {
 input UpdateBiomarkerCategoryInput {
   id: ID!
   name: String
+  order: Int
   parent: ID
 }
 
