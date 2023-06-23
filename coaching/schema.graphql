@@ -322,6 +322,7 @@ input BiomarkerAliasInput {
 type BiomarkerCategory implements Node {
   name: String!
   parent: BiomarkerCategory
+  order: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 
@@ -1756,6 +1757,7 @@ type Member implements Node {
   timezone: String!
   connectedSources: [ConnectedSource!]!
   appVersion: String
+  language: String
 }
 
 type MemberConnection {
