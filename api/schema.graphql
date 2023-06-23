@@ -2758,6 +2758,7 @@ input MergeUserInput {
 input MessageGPTInput {
   id: ID!
   ingredients: [AssistantIngredientInput]
+  mealTime: MealTime
   message: String
 }
 
