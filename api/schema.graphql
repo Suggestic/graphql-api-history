@@ -447,6 +447,7 @@ type Biomarker {
   normalStringValues: JSONString
   normalValues: [GenericScalar!]
   optimalRange: BiomarkerRange
+  order: Int
   range: BiomarkerRange
   units: [BiomarkerUnit!]!
   updatedAt: DateTime!
