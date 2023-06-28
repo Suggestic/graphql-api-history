@@ -348,9 +348,11 @@ type AssessmentQuestion implements Node {
   answerText: String
   answers: [AssessmentAnswer!]
   assessment: Assessment
+  attributes: [AssessmentQuestionAttribute!]
   canSkip: Boolean!
   createdAt: DateTime!
   helpText: String
+  htmlElement: FormHtmlElement
   id: ID!
   information: String
   isFinalQuestion: Boolean!
@@ -360,6 +362,24 @@ type AssessmentQuestion implements Node {
   questionType: QuestionType!
   text: String!
   updatedAt: DateTime!
+}
+
+type AssessmentQuestionAttribute implements Node {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+  value: String!
+}
+
+type AssessmentQuestionAttributeConnection {
+  edges: [AssessmentQuestionAttributeEdge]!
+  pageInfo: PageInfo!
+}
+
+type AssessmentQuestionAttributeEdge {
+  cursor: String!
+  node: AssessmentQuestionAttribute
 }
 
 type AssessmentQuestionConnection {
@@ -1278,8 +1298,10 @@ type CreateQuestion {
 input CreateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID!
+  attributes: [ID!]
   canSkip: Boolean = false
   helpText: String
+  htmlElement: FormHtmlElement
   information: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
@@ -1718,6 +1740,18 @@ enum DietaryTag {
   VEGETARIAN
 }
 
+type DietPreference {
+  id: ID!
+  name: String!
+  restrictions: [UUID!]!
+  status: DietPreferenceStatus!
+}
+
+enum DietPreferenceStatus {
+  OFF
+  ON
+}
+
 input DirectionsOfUseInput {
   quantity: Float!
   timeOfDay: TimeOfDay!
@@ -1957,6 +1991,14 @@ type FoodProduct {
 type FormError {
   field: String
   messages: [String!]
+}
+
+enum FormHtmlElement {
+  CHECKBOX
+  INPUT
+  RADIO_BUTTON
+  SELECT
+  TEXTAREA
 }
 
 type GenerateMagicLink {
@@ -2333,6 +2375,7 @@ enum LabTestReportStatus {
 enum Language {
   EN
   ES
+  NL
 }
 
 type Limitation {
@@ -3737,6 +3780,7 @@ type ProfileType {
   customAttributes: JSONString
   dailyCaloricIntakeGoal: Int
   debugMealPlanVariables: DebugMealPlanVariables!
+  dietPreferences: [DietPreference!]!
   email: String!
   encodedAttributes: String
   extraData: JSONString
@@ -3888,7 +3932,7 @@ type PurchaseMealRecipe {
 }
 
 type Query {
-  allUsersAnswersByAssessment(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int, orderBy: UserAnswerOrderBy): UserAnswerConnection
+  allUsersAnswersByAssessment(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int, orderBy: UserAnswerOrderByInput): UserAnswerConnection
   appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
@@ -3988,6 +4032,7 @@ type Query {
   programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int, orderBy: ProgramOrderBy): ProgramConnection
   purchases: UserPurchases
   question(id: ID!): AssessmentQuestion
+  questionAttributes(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionAttributeConnection
   questions(after: String, before: String, filters: QuestionsFilterInput, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   quizAnswers: [QuizAnswer!]!
   quizPrograms: [QuizProgram]
@@ -4016,6 +4061,7 @@ type Query {
   shoppingList(after: String, before: String, first: Int, last: Int, offset: Int, recipe: ID): ListItemConnection
   shoppingListAggregate(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection
   shoppingListBadge: Boolean
+  similarCaloriesRecipes(recipeId: ID!, serving: Int, size: Int): [Recipe]
   similarMacrosRecipes(recipeId: String, serving: Int, size: Int): [Recipe]
   sleepQualityScores(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepQualityScoresConnnection!
   sleepTimes(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepTimesConnnection!
@@ -4072,6 +4118,7 @@ enum QuestionType {
   DROPDOWN
   MULTI_SELECT
   OPEN_NUMBER
+  OPEN_QUESTION
   OPEN_TEXT
   SINGLE_SELECT
   TIME_PICKER
@@ -5475,8 +5522,10 @@ type UpdateQuestion {
 input UpdateQuestionInput {
   answers: [CreateAnswerInput!]
   assessmentId: ID
+  attributes: [ID!]
   canSkip: Boolean
   helpText: String
+  htmlElement: FormHtmlElement
   id: ID!
   information: String
   isFinalQuestion: Boolean
@@ -5659,11 +5708,6 @@ input UserAnswerInput {
   questionId: ID!
 }
 
-input UserAnswerOrderBy {
-  field: UserAnswerOrderByField = profile
-  order: SortOrder = ASC
-}
-
 enum UserAnswerOrderByField {
   answer
   answer_text
@@ -5672,6 +5716,11 @@ enum UserAnswerOrderByField {
   profile
   question
   updated_at
+}
+
+input UserAnswerOrderByInput {
+  field: UserAnswerOrderByField = profile
+  order: SortOrder = ASC
 }
 
 input UserAssessmentsFilterInput {
