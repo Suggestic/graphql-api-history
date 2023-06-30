@@ -4055,7 +4055,7 @@ type Query {
   restriction(id: ID!): Restriction
   restrictions(after: String, before: String, first: Int, last: Int): RestrictionConnection
   searchProfile(email: String!): ProfileType
-  searchRecipeByNameOrIngredient(query: String): RecipeSearchResult
+  searchRecipeByNameOrIngredient(cuisines: [String], query: String): RecipeSearchResult
   searchRecipesByIngredients(after: String, before: String, first: Int, last: Int, mustIngredients: [String]!): RecipeConnection
   serchForAllowedIngredient(ingredient: String!): [CPCIngredient]
   shoppingList(after: String, before: String, first: Int, last: Int, offset: Int, recipe: ID): ListItemConnection
