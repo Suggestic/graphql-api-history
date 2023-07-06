@@ -4049,7 +4049,7 @@ type Query {
   ownMealLogs: [MealLog]
   ownRecipe(id: ID!): MealLog
   ownRecipes(after: String, before: String, first: Int, fromDate: Date, last: Int, toDate: Date): MealLogConnection
-  popularRecipes(after: String, before: String, cuisines: [String], first: Int, hidePurchasable: Boolean = true, last: Int): RecipeConnection
+  popularRecipes(after: String, before: String, cuisines: [String!], first: Int, hidePurchasable: Boolean = true, last: Int, tags: [String!]): RecipeConnection
   premiumProgramRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   profileRecommendations: [ProfileRecommendationType]
   program(id: ID!): Program
@@ -4066,7 +4066,7 @@ type Query {
   recipeSearch(after: String, before: String, cuisines: [String], dietaryTag: DietaryTag, filter: FoodFilter, first: Int, hasImage: Boolean, hasInstructions: Boolean, ingredients: [String], isPremium: Boolean, last: Int, macroNutrientsRange: MacroNutrientsRangeInput, maxPrepTime: Int, mealTime: RecipeMealTime, meals: [String], minPrepTime: Int, numberOfIngredients: Int, program: String, query: String, servingQuantity: Int, skillLevel: SkillLevel, tags: [String], totalTime: Float): RecipeConnection
   recipeSwapOptions(recipeId: String, serving: Int): RecipeSwapOptions
   recipeTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): RecipeTagConnection
-  recipesByMealTime(after: String, before: String, cuisines: [String], dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, mealTime: RecipeMealTime): RecipeConnection
+  recipesByMealTime(after: String, before: String, cuisines: [String!], dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, mealTime: RecipeMealTime, tags: [String!]): RecipeConnection
   recipesByTag(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, tag: String): RecipeConnection
   recommendedMenuitems(lat: Float!, lon: Float!): [MenuItem]
   recommendedSwaps(forSimpleMealPlan: Boolean, mealTime: RecipeMealTime!): RecommendedSwaps
@@ -4079,7 +4079,7 @@ type Query {
   restriction(id: ID!): Restriction
   restrictions(after: String, before: String, first: Int, last: Int): RestrictionConnection
   searchProfile(email: String!): ProfileType
-  searchRecipeByNameOrIngredient(cuisines: [String], query: String): RecipeSearchResult
+  searchRecipeByNameOrIngredient(cuisines: [String!], query: String, tags: [String!]): RecipeSearchResult
   searchRecipesByIngredients(after: String, before: String, first: Int, last: Int, mustIngredients: [String]!): RecipeConnection
   serchForAllowedIngredient(ingredient: String!): [CPCIngredient]
   shoppingList(after: String, before: String, first: Int, last: Int, offset: Int, recipe: ID): ListItemConnection
