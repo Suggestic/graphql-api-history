@@ -1536,6 +1536,12 @@ type DeleteAssessment {
   success: Boolean!
 }
 
+type DeleteBiomarker {
+  biomarker: Biomarker
+  message: String!
+  success: Boolean!
+}
+
 type DeleteBiomarkerCategory {
   biomarkerCategory: BiomarkerCategory
   message: String!
@@ -2948,6 +2954,7 @@ type Mutation {
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
+  deleteBiomarker(id: ID!): DeleteBiomarker
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   deleteCoachType(id: ID!): DeleteCoachType
