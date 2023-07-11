@@ -4093,7 +4093,7 @@ type Query {
   shoppingList(after: String, before: String, first: Int, last: Int, offset: Int, recipe: ID): ListItemConnection
   shoppingListAggregate(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection
   shoppingListBadge: Boolean
-  similarCaloriesRecipes(recipeId: ID!, serving: Int, size: Int): [Recipe]
+  similarCaloriesRecipes(numberOfServings: Int, recipeId: ID!, size: Int): [Recipe]
   similarMacrosRecipes(recipeId: String, serving: Int, size: Int): [Recipe]
   sleepQualityScores(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepQualityScoresConnnection!
   sleepTimes(after: String, end: Date!, first: Int, id: ID, source: SourceType, start: Date!): SleepTimesConnnection!
