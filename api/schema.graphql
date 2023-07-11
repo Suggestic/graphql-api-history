@@ -3995,6 +3995,7 @@ type Query {
   dailyRecapQuestions(group: GroupQuestion): [DailyQuestion!]!
   dailyRecaps(endDate: Date!, group: GroupQuestion, startDate: Date!): [DailyRecap!]!
   dashboard: Dashboard
+  dietPreferences(id: ID): [DietPreference]
   drugNutrientInteractions(after: String, before: String, filters: DrugNutrientInteractionsFilterInput, first: Int, last: Int, offset: Int): DrugGroupConnection
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
