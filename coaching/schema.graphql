@@ -209,9 +209,10 @@ type Assessment {
   order: Int
   progressBar: Boolean
   score: Int
-  status: String
+  status: AssessmentStatus
   updatedAt: String
   weight: Int
+  title: String
   initialQuestion: AssessmentQuestion
   finalQuestion: AssessmentQuestion
   questions: QuestionConnection
@@ -229,6 +230,23 @@ type AssessmentAnswer {
   updatedAt: String
 }
 
+type AssessmentConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [AssessmentEdge]!
+}
+
+"""A Relay edge containing a `Assessment` and its cursor."""
+type AssessmentEdge {
+  """The item at the end of the edge"""
+  node: Assessment
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type AssessmentQuestion {
   id: ID!
   answerText: String
@@ -243,6 +261,13 @@ type AssessmentQuestion {
   questionType: String
   text: String
   updatedAt: String
+}
+
+enum AssessmentStatus {
+  TODO
+  DONE
+  NEEDS_UPDATE
+  IN_PROGRESS
 }
 
 type Attendee {
@@ -2325,6 +2350,7 @@ type Query {
     last: Int
   ): MemberSearchConnection
   userAnswersByAssessment(memberId: ID!, assessmentId: ID): Assessment
+  userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
 }
 
 type QuestionConnection {
@@ -3270,6 +3296,12 @@ that will be handled by the multipart request spec
 https://github.com/lmcgartland/graphene-file-upload/blob/master/graphene_file_upload/scalars.py
 """
 scalar Upload
+
+input UserAssessmentsFilterInput {
+  title: String
+  description: String
+  status: AssessmentStatus
+}
 
 """User's goals"""
 input UserGoals {
