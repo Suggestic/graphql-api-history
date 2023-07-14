@@ -3,6 +3,24 @@ type AcceptUserInvite {
   message: String!
 }
 
+type ActivityLog implements Node {
+  id: ID!
+  user: User!
+  eventName: String!
+  payload: Generic
+  createdAt: Datetime
+}
+
+type ActivityLogConnection {
+  edges: [ActivityLogEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ActivityLogEdge {
+  cursor: String!
+  node: ActivityLog
+}
+
 type AddBiomarker {
   success: Boolean!
   message: String!
@@ -52,6 +70,26 @@ type ArticleRecommendedEdge {
   cursor: String!
 }
 
+type Assistant {
+  id: ID!
+  linkedProgram: ID!
+  name: String
+  mainGoal: String
+  journey: Journey
+}
+
+type AssistantEntity {
+  id: ID!
+  name: String
+  mainGoal: String
+}
+
+type AssistantResult {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
 enum BiologicalSex {
   MALE
   FEMALE
@@ -86,6 +124,7 @@ input BiomarkerAliasInput {
 type BiomarkerCategory {
   name: String!
   parent: BiomarkerCategory
+  order: Int
   createdAt: Datetime!
   updatedAt: Datetime!
   id: ID!
@@ -99,6 +138,18 @@ type BiomarkerCategoryConnection {
 type BiomarkerCategoryEdge {
   cursor: String!
   node: BiomarkerCategory
+}
+
+input BiomarkerCategoryOrderBy {
+  field: BiomarkerCategoryOrderByField!
+  order: SortOrder
+}
+
+enum BiomarkerCategoryOrderByField {
+  name
+  order
+  created_at
+  updated_at
 }
 
 type BiomarkerConnection {
@@ -167,6 +218,16 @@ type BiomarkerUnit {
   alias: String
   createdAt: Datetime!
   updatedAt: Datetime!
+}
+
+type BiomarkerUnitConnection {
+  edges: [BiomarkerUnitEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerUnitEdge {
+  cursor: String!
+  node: BiomarkerUnit
 }
 
 type ChangePassword {
@@ -295,6 +356,19 @@ input CreateArticleRecommendedInput {
   articleId: ID!
 }
 
+type CreateAssistant {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
+input CreateAssistantInput {
+  name: String!
+  mainGoal: String!
+  linkedProgram: ID!
+  journey: JourneyInput!
+}
+
 type CreateBiomarkerCategory {
   success: Boolean!
   message: String!
@@ -305,6 +379,7 @@ type CreateBiomarkerCategory {
 input CreateBiomarkerCategoryInput {
   name: String!
   parent: ID
+  order: Int
 }
 
 type CreateContentCategory {
@@ -605,10 +680,34 @@ enum DataType {
 """An ISO-8601 encoded UTC date string."""
 scalar Datetime
 
+type DayJourney {
+  order: Int
+  skipped: Boolean
+  interactions: [Interaction]
+}
+
+input DayJourneyInput {
+  order: Int!
+  skipped: Boolean!
+  interactions: [InteractionInput]
+}
+
 type DeleteArticleRecommended {
   success: Boolean!
   message: String!
   articleRecommended: ArticleRecommended
+}
+
+type DeleteBiomarker {
+  success: Boolean!
+  message: String!
+  biomarker: Biomarker
+}
+
+type DeleteBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  biomarkerCategory: BiomarkerCategory
 }
 
 type DeleteContentCategory {
@@ -801,9 +900,29 @@ enum IngredientGroupType {
   BUILDING_GROUP
 }
 
+type Interaction {
+  order: Int
+  interaction: String
+  goal: String
+}
+
+input InteractionInput {
+  order: Int!
+  interaction: String!
+  goal: String!
+}
+
 enum InvitationStatus {
   SENT
   ACCEPTED
+}
+
+type Journey {
+  dayJourney: [DayJourney]
+}
+
+input JourneyInput {
+  dayJourney: [DayJourneyInput!]
 }
 
 type Login {
@@ -1040,14 +1159,23 @@ type Mutation {
   """Update Biomarker Category"""
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory!
 
+  """Delete Biomarker Category"""
+  deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory!
+
   """Create Third Party Biomarker"""
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker!
 
   """Update Third Party Biomarker"""
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker!
 
+  """Delete Third Party Biomarker"""
+  deleteBiomarker(id: ID!): DeleteBiomarker!
+
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
+
+  """Create a new Assistant with its data"""
+  createAssistant(input: CreateAssistantInput!): CreateAssistant
 }
 
 interface Node {
@@ -1293,7 +1421,19 @@ type Query {
   biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
 
   """List biomarker categories"""
-  biomarkerCategories(id: ID, parentId: ID, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
+  biomarkerCategories(id: ID, parentId: ID, before: String, after: String, first: Int, last: Int, orderBy: BiomarkerCategoryOrderBy): BiomarkerCategoryConnection
+
+  """List biomarker units"""
+  biomarkerUnits(id: ID, before: String, after: String, first: Int, last: Int): BiomarkerUnitConnection
+
+  """List the users logs"""
+  userLoginLogs(first: Int, last: Int, after: String, before: String, startDate: Datetime!, endDate: Datetime!, userId: ID): ActivityLogConnection!
+
+  """List the assistant by the provided ID"""
+  assistant(id: ID): AssistantResult!
+
+  """List all assistants belongs to the third party"""
+  assistants: [AssistantEntity]
 }
 
 type RecipeTag implements Node {
@@ -1607,6 +1747,7 @@ input UpdateBiomarkerCategoryInput {
   id: ID!
   name: String
   parent: ID
+  order: Int
 }
 
 input UpdateBiomarkerInput {
