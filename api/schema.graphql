@@ -3833,6 +3833,7 @@ type ProfileType {
   language: String!
   lat: String
   lon: String
+  malnutritionRisk: Boolean!
   mealPlan(fromDate: Date): [MealPlanDay!]!
   mpCalories: Int
   mpCarbsPerc: Float
@@ -3859,6 +3860,7 @@ type ProfileType {
   thryvePartnerId: String!
   timezone: String!
   totalDailyEnergyExpenditure: Int
+  tubeFeedingOralIntake: Int
   updatedAt: DateTime
   userId: String
   weeklyWeightGoal: WeeklyWeightGoal
