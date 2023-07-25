@@ -416,7 +416,7 @@ enum AssessmentType {
 type AssistantIngredient {
   grams: Float
   name: String
-  quantity: Int
+  quantity: Float
   unit: String
 }
 
