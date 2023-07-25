@@ -427,6 +427,17 @@ input AssistantIngredientInput {
   unit: String
 }
 
+type AssistantType {
+  constraints: [ConstraintType]
+  escalations: [EscalationType]
+  id: ID!
+  journey: [JourneyAssistantType]
+  knowledgeBase: [KnowledgeBaseType]
+  mainGoal: String!
+  name: String!
+  program: ID!
+}
+
 type Attendee {
   displayName: String
   email: String!
@@ -888,6 +899,17 @@ type ConnectedSource {
   sourceName: SourceType!
 }
 
+input ConstraintInput {
+  description: String!
+  name: String!
+}
+
+type ConstraintType {
+  description: String!
+  id: ID
+  name: String!
+}
+
 type ContentCategoryType implements Node {
   contentLibrary(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection!
   contentlibrarySet(after: String, before: String, first: Int, last: Int, offset: Int): ContentLibraryTypeConnection! @deprecated(reason: "Not used. Renamed to contentLibrary")
@@ -1054,6 +1076,22 @@ input CreateAssessmentInput {
   progressBar: Boolean = true
   title: String!
   weight: Int
+}
+
+type CreateAssistant {
+  assistant: AssistantType
+  message: String!
+  success: Boolean!
+}
+
+input CreateAssistantInput {
+  constraints: [ConstraintInput]
+  escalations: [EscalationInput]
+  journey: JourneyInput!
+  knowledgeBase: [KnowledgeBaseInput]
+  mainGoal: String!
+  name: String!
+  program: ID!
 }
 
 type CreateBiomarkerCategory {
@@ -1485,6 +1523,19 @@ type DayChecklistItems {
   items: [ChecklistItem!]!
 }
 
+input DayJourneyInput {
+  interactions: [InteractionInput]!
+  order: Int!
+  skipped: Boolean!
+}
+
+type DayJourneyType {
+  id: ID
+  interactions: [InteractionType]
+  order: Int!
+  skipped: Boolean!
+}
+
 enum DayStatus {
   EMPTY_DAY
   GOOD_DAY
@@ -1865,6 +1916,33 @@ enum EntryType {
 type ErrorType {
   field: String!
   messages: [String!]!
+}
+
+input EscalationInput {
+  alertCoach: Boolean
+  autoRespond: Boolean
+  autoRespondText: String
+  description: String!
+  flagMessage: Boolean
+  name: String!
+  redirectTo: RedirectTo!
+}
+
+enum EscalationRedirectTo {
+  CONCIERGE
+  NONE
+  SUPPORT
+}
+
+type EscalationType {
+  alertCoach: Boolean!
+  autoRespond: Boolean!
+  autoRespondText: String
+  description: String!
+  flagMessage: Boolean!
+  id: ID
+  name: String!
+  redirectTo: EscalationRedirectTo!
 }
 
 enum EventParticipationStatus {
@@ -2281,6 +2359,19 @@ type InteractionEdge {
   node: Interaction
 }
 
+input InteractionInput {
+  goal: String!
+  interaction: String!
+  order: Int!
+}
+
+type InteractionType {
+  goal: String!
+  id: ID
+  interaction: String!
+  order: Int!
+}
+
 input IntValueByMealTime {
   breakfast: Int
   dinner: Int
@@ -2299,12 +2390,21 @@ input ItemDirectionsOfUseInput {
   wednesday: Boolean
 }
 
+type JourneyAssistantType {
+  dayJourney: [DayJourneyType]
+  id: ID
+}
+
 type JourneyDialogType {
   dashboard: JourneyType!
   databaseId: String
   dialog: DialogType!
   id: ID!
   sortIndex: Int!
+}
+
+input JourneyInput {
+  dayJourney: [DayJourneyInput]!
 }
 
 type JourneyProfileType implements Node {
@@ -2350,6 +2450,21 @@ type JourneyType {
 }
 
 scalar JSONString
+
+input KnowledgeBaseInput {
+  name: String!
+  pdfFile: Upload
+  txt: String
+  url: String
+}
+
+type KnowledgeBaseType {
+  id: ID
+  name: String!
+  pdfFile: String
+  txt: String
+  url: String!
+}
 
 type LabTestReport {
   alert: Boolean
@@ -2916,6 +3031,7 @@ type Mutation {
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
+  createAssistant(input: CreateAssistantInput!): CreateAssistant
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
@@ -3868,6 +3984,7 @@ type ProfileType {
 }
 
 type Program implements Node {
+  assistantSet: [AssistantType!]!
   author: String
   authorAvatar: String
   authors: [UUID!]
@@ -4372,6 +4489,12 @@ type RecommendationCatalogType {
 type RecommendedSwaps {
   meals: [Recipe]
   recipes: [Recipe]
+}
+
+enum RedirectTo {
+  CONCIERGE
+  NONE
+  SUPPORT
 }
 
 type RelativeCalories {

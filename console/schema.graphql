@@ -1,3 +1,9 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
 type AcceptUserInvite {
   success: Boolean!
   message: String!
@@ -72,16 +78,19 @@ type ArticleRecommendedEdge {
 
 type Assistant {
   id: ID!
-  linkedProgram: ID!
-  name: String
-  mainGoal: String
-  journey: Journey
+  program: ID!
+  name: String!
+  mainGoal: String!
+  journey: [Journey!]
+  knowledgeBase: [KnowledgeBase]
+  constraints: [Constraint]
+  escalations: [Escalation]
 }
 
 type AssistantEntity {
   id: ID!
-  name: String
-  mainGoal: String
+  name: String!
+  mainGoal: String!
 }
 
 type AssistantResult {
@@ -138,6 +147,10 @@ type BiomarkerCategoryConnection {
 type BiomarkerCategoryEdge {
   cursor: String!
   node: BiomarkerCategory
+}
+
+input BiomarkerCategoryFilterInput {
+  isOwned: Boolean
 }
 
 input BiomarkerCategoryOrderBy {
@@ -255,6 +268,17 @@ type ConditionEdge {
   node: Condition
 }
 
+type Constraint {
+  id: ID!
+  name: String
+  description: String
+}
+
+input ConstraintInput {
+  name: String
+  description: String
+}
+
 type ContentCategory {
   id: ID!
   name: String!
@@ -365,8 +389,11 @@ type CreateAssistant {
 input CreateAssistantInput {
   name: String!
   mainGoal: String!
-  linkedProgram: ID!
+  program: ID!
   journey: JourneyInput!
+  knowledgeBase: [KnowledgeBaseInput]
+  constraints: [ConstraintInput]
+  escalations: [EscalationInput]
 }
 
 type CreateBiomarkerCategory {
@@ -681,6 +708,7 @@ enum DataType {
 scalar Datetime
 
 type DayJourney {
+  id: ID!
   order: Int
   skipped: Boolean
   interactions: [Interaction]
@@ -811,6 +839,27 @@ enum Equation {
   ONCOLOGY
 }
 
+type Escalation {
+  id: ID!
+  name: String!
+  redirectTo: String!
+  description: String!
+  flagMessage: Boolean!
+  alertCoach: Boolean!
+  autoRespond: Boolean!
+  autoRespondText: String
+}
+
+input EscalationInput {
+  name: String!
+  redirectTo: RedirectTo!
+  description: String!
+  flagMessage: Boolean!
+  alertCoach: Boolean!
+  autoRespond: Boolean!
+  autoRespondText: String
+}
+
 enum FeatureOption {
   MEAL_PLANNER
   RECIPE_FINDER
@@ -901,6 +950,7 @@ enum IngredientGroupType {
 }
 
 type Interaction {
+  id: ID!
   order: Int
   interaction: String
   goal: String
@@ -918,11 +968,27 @@ enum InvitationStatus {
 }
 
 type Journey {
+  id: ID!
   dayJourney: [DayJourney]
 }
 
 input JourneyInput {
   dayJourney: [DayJourneyInput!]
+}
+
+type KnowledgeBase {
+  id: ID!
+  name: String
+  url: String
+  pdfFile: String
+  txt: String
+}
+
+input KnowledgeBaseInput {
+  name: String!
+  url: String
+  txt: String
+  pdfFile: Upload
 }
 
 type Login {
@@ -1421,7 +1487,7 @@ type Query {
   biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
 
   """List biomarker categories"""
-  biomarkerCategories(id: ID, parentId: ID, before: String, after: String, first: Int, last: Int, orderBy: BiomarkerCategoryOrderBy): BiomarkerCategoryConnection
+  biomarkerCategories(id: ID, parentId: ID, filters: BiomarkerCategoryFilterInput, before: String, after: String, first: Int, last: Int, orderBy: BiomarkerCategoryOrderBy): BiomarkerCategoryConnection
 
   """List biomarker units"""
   biomarkerUnits(id: ID, before: String, after: String, first: Int, last: Int): BiomarkerUnitConnection
@@ -1450,6 +1516,12 @@ type RecipeTagConnection {
 type RecipeTagEdge {
   node: RecipeTag
   cursor: String!
+}
+
+enum RedirectTo {
+  NONE
+  SUPPORT
+  CONCIERGE
 }
 
 type RequestPasswordReset {
