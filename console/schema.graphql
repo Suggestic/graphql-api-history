@@ -80,11 +80,7 @@ type Assistant {
   id: ID!
   program: ID!
   name: String!
-  mainGoal: String!
-  journey: [Journey!]
-  knowledgeBase: [KnowledgeBase]
-  constraints: [Constraint]
-  escalations: [Escalation]
+  mainGoal: String
 }
 
 type AssistantEntity {
@@ -386,16 +382,6 @@ type CreateAssistant {
   assistant: Assistant
 }
 
-input CreateAssistantInput {
-  name: String!
-  mainGoal: String!
-  program: ID!
-  journey: JourneyInput!
-  knowledgeBase: [KnowledgeBaseInput]
-  constraints: [ConstraintInput]
-  escalations: [EscalationInput]
-}
-
 type CreateBiomarkerCategory {
   success: Boolean!
   message: String!
@@ -499,6 +485,12 @@ type CreateIngredientGroup {
 input CreateIngredientGroupInput {
   name: String!
   ingredients: [ID!]!
+}
+
+type CreateKnowledgeBase {
+  success: Boolean!
+  message: String!
+  knowledgeBase: KnowledgeBase
 }
 
 type CreateProgram {
@@ -978,7 +970,15 @@ input JourneyInput {
 
 type KnowledgeBase {
   id: ID!
-  name: String
+  name: String!
+  url: String
+  pdfFile: String
+  txt: String
+}
+
+type KnowledgeBaseEntity {
+  id: ID!
+  name: String!
   url: String
   pdfFile: String
   txt: String
@@ -988,7 +988,12 @@ input KnowledgeBaseInput {
   name: String!
   url: String
   txt: String
-  pdfFile: Upload
+}
+
+type KnowledgeBaseResult {
+  success: Boolean!
+  message: String!
+  knowledgeBase: KnowledgeBaseEntity
 }
 
 type Login {
@@ -1241,7 +1246,10 @@ type Mutation {
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(input: CreateAssistantInput!): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID!): CreateAssistant
+
+  """Create a new Knowledge Base belongs to a Assistant"""
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String): CreateKnowledgeBase
 }
 
 interface Node {
@@ -1496,10 +1504,16 @@ type Query {
   userLoginLogs(first: Int, last: Int, after: String, before: String, startDate: Datetime!, endDate: Datetime!, userId: ID): ActivityLogConnection!
 
   """List the assistant by the provided ID"""
-  assistant(id: ID): AssistantResult!
+  assistant(id: ID!): AssistantResult!
 
   """List all assistants belongs to the third party"""
   assistants: [AssistantEntity]
+
+  """List the Knowledge Base by the provided ID"""
+  knowledgeBase(id: ID!): KnowledgeBaseResult!
+
+  """List all assistants belongs to the assistantId"""
+  knowledgeBases(assistantId: ID!): [KnowledgeBaseEntity]
 }
 
 type RecipeTag implements Node {
