@@ -420,13 +420,6 @@ type AssistantIngredient {
   unit: String
 }
 
-input AssistantIngredientInput {
-  grams: Float
-  name: String
-  quantity: Int
-  unit: String
-}
-
 type AssistantType {
   id: ID!
   mainGoal: String!
@@ -2857,13 +2850,6 @@ input MergeUserInput {
   userTarget: ID!
 }
 
-input MessageGPTInput {
-  id: ID!
-  ingredients: [AssistantIngredientInput]
-  mealTime: MealTime
-  message: String
-}
-
 type Money {
   amount: Float!
   currencyCode: String!
@@ -3086,7 +3072,6 @@ type Mutation {
   updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
-  updateGPTMessage(input: MessageGPTInput!): UpdateGPTMessage
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
@@ -5460,11 +5445,6 @@ input UpdateDietPreferenceInput {
   operationOverRestrictions: Operation
   restrictions: [ID!]
   status: Status
-}
-
-type UpdateGPTMessage {
-  message: String!
-  success: Boolean!
 }
 
 type UpdateHydration {
