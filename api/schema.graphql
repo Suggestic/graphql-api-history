@@ -872,6 +872,7 @@ input ConfirmFoodLogAssistantInput {
   id: ID!
   mealTime: MealTime!
   recipeName: String
+  text: String
 }
 
 type ConnectedSource {
