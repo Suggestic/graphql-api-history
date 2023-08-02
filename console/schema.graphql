@@ -87,6 +87,7 @@ type AssistantEntity {
   id: ID!
   name: String!
   mainGoal: String!
+  program: ID!
 }
 
 type AssistantResult {
@@ -718,6 +719,11 @@ type DeleteArticleRecommended {
   articleRecommended: ArticleRecommended
 }
 
+type DeleteAssistant {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteBiomarker {
   success: Boolean!
   message: String!
@@ -776,6 +782,11 @@ type DeleteIngredientGroup {
   success: Boolean!
   message: String!
   deleted: IngredientGroup
+}
+
+type DeleteKnowledgeBase {
+  success: Boolean!
+  message: String!
 }
 
 type DeleteProgram {
@@ -976,12 +987,25 @@ type KnowledgeBase {
   txt: String
 }
 
+type KnowledgeBaseChat {
+  success: Boolean!
+  message: String!
+  response: KnowledgeBaseChatResponse
+}
+
+type KnowledgeBaseChatResponse {
+  id: ID!
+  userMessage: String!
+  response: String!
+}
+
 type KnowledgeBaseEntity {
   id: ID!
   name: String!
   url: String
   pdfFile: String
   txt: String
+  taskStatus: TaskStatus
 }
 
 input KnowledgeBaseInput {
@@ -1017,6 +1041,11 @@ input MakeCoachInput {
   email: String!
   name: String!
   isCoachAdmin: Boolean!
+}
+
+input MessageInput {
+  assistantId: ID!
+  userMessage: String!
 }
 
 type Mutation {
@@ -1242,6 +1271,12 @@ type Mutation {
   """Delete Third Party Biomarker"""
   deleteBiomarker(id: ID!): DeleteBiomarker!
 
+  """Delete Assistant"""
+  deleteAssistant(id: ID!): DeleteAssistant!
+
+  """Delete Knowledge Base"""
+  deleteKnowledgeBase(id: ID!, assistantId: ID!): DeleteKnowledgeBase!
+
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
@@ -1250,6 +1285,9 @@ type Mutation {
 
   """Create a new Knowledge Base belongs to a Assistant"""
   createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String): CreateKnowledgeBase
+
+  """Create a chat response from Knowledge Base"""
+  createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
 }
 
 interface Node {
@@ -1514,6 +1552,7 @@ type Query {
 
   """List all assistants belongs to the assistantId"""
   knowledgeBases(assistantId: ID!): [KnowledgeBaseEntity]
+  knowledgeBaseChatResponse(assistantId: ID!): [KnowledgeBaseChatResponse]
 }
 
 type RecipeTag implements Node {
@@ -1733,6 +1772,13 @@ type SupplementRecommendedConnection {
 type SupplementRecommendedEdge {
   node: SupplementRecommended
   cursor: String!
+}
+
+enum TaskStatus {
+  CREATED
+  PROCESSING
+  DONE
+  ERROR
 }
 
 type ThirdParty {

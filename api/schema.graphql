@@ -2358,10 +2358,18 @@ type JourneyType {
 
 scalar JSONString
 
+enum KnowledgeBaseTaskStatus {
+  CREATED
+  DONE
+  ERROR
+  PROCESSING
+}
+
 type KnowledgeBaseType {
   id: ID
   name: String!
   pdfFile: String
+  taskStatus: KnowledgeBaseTaskStatus!
   txt: String
   url: String!
 }
