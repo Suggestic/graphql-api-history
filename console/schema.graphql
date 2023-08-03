@@ -985,6 +985,7 @@ type KnowledgeBase {
   url: String
   pdfFile: String
   txt: String
+  taskStatus: TaskStatus
 }
 
 type KnowledgeBaseChat {
