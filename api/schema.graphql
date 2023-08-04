@@ -1196,6 +1196,12 @@ type CreateKnowledgeBase {
   success: Boolean!
 }
 
+type CreateKnowledgeBaseChat {
+  message: String!
+  response: KnowledgeBaseChatResponse
+  success: Boolean!
+}
+
 type CreateLabTestReport {
   message: String!
   report: LabTestReport
@@ -2351,6 +2357,12 @@ type JourneyType {
 
 scalar JSONString
 
+type KnowledgeBaseChatResponse {
+  id: ID!
+  response: String!
+  userMessage: String!
+}
+
 enum KnowledgeBaseTaskStatus {
   CREATED
   DONE
@@ -2842,6 +2854,11 @@ input MergeUserInput {
   userTarget: ID!
 }
 
+input MessageInput {
+  assistantId: ID!
+  userMessage: String!
+}
+
 type Money {
   amount: Float!
   currencyCode: String!
@@ -2937,6 +2954,7 @@ type Mutation {
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, txt: String, url: String): CreateKnowledgeBase
+  createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
