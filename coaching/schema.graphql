@@ -2201,6 +2201,25 @@ type ProfileBiomarkerConnection {
   edges: [ProfileBiomarkerEdge]!
 }
 
+type ProfileBiomarkerConnectionTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ProfileBiomarkerConnectionTypeEdge]!
+}
+
+"""
+A Relay edge containing a `ProfileBiomarkerConnectionType` and its cursor.
+"""
+type ProfileBiomarkerConnectionTypeEdge {
+  """The item at the end of the edge"""
+  node: ProfileBiomarker
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 """A Relay edge containing a `ProfileBiomarker` and its cursor."""
 type ProfileBiomarkerEdge {
   """The item at the end of the edge"""
@@ -2330,7 +2349,7 @@ type Query {
   biomarkerCategories(id: ID, parentId: ID, orderBy: BiomarkerCategoryOrderBy, offset: Int, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
   biomarkerUnits(offset: Int, before: String, after: String, first: Int, last: Int, id: Float): BiomarkerUnitConnection
   biomarkerResults(memberId: ID!, filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
-  historicalBiomarkerResults(memberId: ID!, filters: HistoricalBiomarkerResultsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
+  historicalBiomarkerResults(memberId: ID!, filters: HistoricalBiomarkerResultsFilterInput, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnectionTypeConnection
   historicalResultsByBiomarker(
     memberId: ID!
 
