@@ -472,6 +472,12 @@ input CreateDailyRecapQuestionInput {
   answers: [ID!]!
 }
 
+type CreateEscalation {
+  success: Boolean!
+  message: String!
+  escalation: Escalation
+}
+
 type CreateIngredient {
   success: Boolean!
   message: String!
@@ -772,6 +778,11 @@ type DeleteDailyRecapQuestion {
   dailyRecapQuestion: ThirdPartyDailyRecapQuestion
 }
 
+type DeleteEscalation {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteIngredient {
   success: Boolean!
   message: String!
@@ -861,6 +872,13 @@ input EscalationInput {
   alertCoach: Boolean!
   autoRespond: Boolean!
   autoRespondText: String
+  assistantId: ID!
+}
+
+type EscalationResult {
+  success: Boolean!
+  message: String!
+  escalation: Escalation
 }
 
 enum FeatureOption {
@@ -1278,6 +1296,9 @@ type Mutation {
   """Delete Knowledge Base"""
   deleteKnowledgeBase(id: ID!, assistantId: ID!): DeleteKnowledgeBase!
 
+  """Delete escalation"""
+  deleteEscalation(id: ID!, assistantId: ID!): DeleteEscalation!
+
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
@@ -1289,6 +1310,9 @@ type Mutation {
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
+
+  """Create a Escalation belongs to a Assistant"""
+  createEscalation(input: EscalationInput): CreateEscalation
 }
 
 interface Node {
@@ -1554,6 +1578,12 @@ type Query {
   """List all assistants belongs to the assistantId"""
   knowledgeBases(assistantId: ID!): [KnowledgeBaseEntity]
   knowledgeBaseChatResponse(assistantId: ID!): [KnowledgeBaseChatResponse]
+
+  """List Escalation"""
+  escalation(id: ID!): EscalationResult!
+
+  """List all Escalations  belongs to Assistant ID"""
+  escalations(assistantId: ID!): [Escalation]
 }
 
 type RecipeTag implements Node {

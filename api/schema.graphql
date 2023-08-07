@@ -322,6 +322,7 @@ type AssessmentAnswer implements Node {
   score: Int
   text: String!
   updatedAt: DateTime!
+  value: String
 }
 
 type AssessmentConnection {
@@ -999,6 +1000,7 @@ input CreateAnswerInput {
   nextQuestionId: ID
   score: Int
   text: String!
+  value: String
 }
 
 type CreateAppointment {
@@ -5238,6 +5240,7 @@ input UpdateAnswerInput {
   nextQuestionId: ID
   score: Int
   text: String
+  value: String
 }
 
 type UpdateAppointment {
