@@ -4238,6 +4238,7 @@ type Query {
   supplement(id: ID!): Supplement
   supplementParent(supplementId: ID!): SupplementParent
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
+  supplementRecommendations(assessmentId: ID!, top: Int = 3): [AssessmentAnswerSupplement!]
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   supplementsRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementRecommendedConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
