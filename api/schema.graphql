@@ -206,6 +206,11 @@ type AnswerCounter {
   total: Int!
 }
 
+input AnswerSupplementInput {
+  score: Float!
+  supplementId: ID!
+}
+
 type Appointment {
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
@@ -320,9 +325,38 @@ type AssessmentAnswer implements Node {
   isSelected: Boolean
   nextQuestion: AssessmentQuestion
   score: Int
+  supplements: [AssessmentAnswerSupplement]
   text: String!
   updatedAt: DateTime!
   value: String
+}
+
+type AssessmentAnswerConnection {
+  edges: [AssessmentAnswerEdge]!
+  pageInfo: PageInfo!
+}
+
+type AssessmentAnswerEdge {
+  cursor: String!
+  node: AssessmentAnswer
+}
+
+type AssessmentAnswerSupplement implements Node {
+  createdAt: DateTime!
+  id: ID!
+  score: Float!
+  supplement: Supplement!
+  updatedAt: DateTime!
+}
+
+type AssessmentAnswerSupplementConnection {
+  edges: [AssessmentAnswerSupplementEdge]!
+  pageInfo: PageInfo!
+}
+
+type AssessmentAnswerSupplementEdge {
+  cursor: String!
+  node: AssessmentAnswerSupplement
 }
 
 type AssessmentConnection {
@@ -869,7 +903,7 @@ type ConfirmFoodLogAssistant {
 }
 
 input ConfirmFoodLogAssistantInput {
-  date: Date = "2023-08-07"
+  date: Date = "2023-08-09"
   id: ID!
   mealTime: MealTime!
   recipeName: String
@@ -1192,6 +1226,18 @@ type CreateGooglePlayTransaction {
   success: Boolean
 }
 
+type CreateJourney {
+  journey: JourneyAssistantType
+  message: String!
+  success: Boolean!
+}
+
+type CreateJourneyChat {
+  message: String!
+  response: JourneyChatResponse
+  success: Boolean!
+}
+
 type CreateKnowledgeBase {
   knowledgeBase: KnowledgeBaseType
   message: String!
@@ -1497,6 +1543,19 @@ type Day {
 type DayChecklistItems {
   date: Date!
   items: [ChecklistItem!]!
+}
+
+input DayJourneyInput {
+  interactions: [InteractionInput]!
+  order: Int!
+  skipped: Boolean!
+}
+
+type DayJourneyType {
+  id: ID
+  interactions: [InteractionType]
+  order: Int!
+  skipped: Boolean!
 }
 
 enum DayStatus {
@@ -2289,6 +2348,19 @@ type InteractionEdge {
   node: Interaction
 }
 
+input InteractionInput {
+  goal: String!
+  interaction: String!
+  order: Int!
+}
+
+type InteractionType {
+  goal: String!
+  id: ID
+  interaction: String!
+  order: Int!
+}
+
 input IntValueByMealTime {
   breakfast: Int
   dinner: Int
@@ -2307,12 +2379,34 @@ input ItemDirectionsOfUseInput {
   wednesday: Boolean
 }
 
+type JourneyAssistantType {
+  dayJourney: [DayJourneyType]
+  id: ID
+}
+
+type JourneyAssistantTypeResponse {
+  journey: JourneyAssistantType
+  message: String!
+  success: Boolean!
+}
+
+type JourneyChatResponse {
+  id: ID!
+  response: String!
+  userMessage: String!
+}
+
 type JourneyDialogType {
   dashboard: JourneyType!
   databaseId: String
   dialog: DialogType!
   id: ID!
   sortIndex: Int!
+}
+
+input JourneyInput {
+  assistantId: ID!
+  dayJourney: [DayJourneyInput]!
 }
 
 type JourneyProfileType implements Node {
@@ -2955,6 +3049,8 @@ type Mutation {
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
+  createJourney(input: JourneyInput!): CreateJourney
+  createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
   createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String!, videoUrl: String): CreateLabTestReport
@@ -4049,6 +4145,7 @@ type Query {
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
+  journey(id: ID!): JourneyAssistantTypeResponse
   labTestReports(after: String, before: String, first: Int, id: ID, isVisible: Boolean, last: Int, profile: ID): LabTestReportConnection
   locationAutocomplete(lat: Float!, lon: Float!, query: String!): [LocationAutocomplete]
   log(id: ID!): Logger
@@ -4926,6 +5023,8 @@ type Suggestion {
 }
 
 type Supplement implements Node {
+  answerSet(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentAnswerConnection!
+  answersupplementSet(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentAnswerSupplementConnection!
   brand: String!
   category: String!
   createdAt: DateTime!
@@ -5239,6 +5338,7 @@ input UpdateAnswerInput {
   isCorrect: Boolean
   nextQuestionId: ID
   score: Int
+  supplements: [AnswerSupplementInput!]
   text: String
   value: String
 }
