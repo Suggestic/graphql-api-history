@@ -903,7 +903,7 @@ type ConfirmFoodLogAssistant {
 }
 
 input ConfirmFoodLogAssistantInput {
-  date: Date = "2023-08-14"
+  date: Date = "2023-08-15"
   id: ID!
   mealTime: MealTime!
   recipeName: String
