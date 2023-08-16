@@ -903,7 +903,7 @@ type ConfirmFoodLogAssistant {
 }
 
 input ConfirmFoodLogAssistantInput {
-  date: Date = "2023-08-15"
+  date: Date
   id: ID!
   mealTime: MealTime!
   recipeName: String
@@ -3876,6 +3876,7 @@ enum ProfileField {
   CUSTOM_ATTRIBUTES
   FAVORITE_CUISINES
   HEIGHT
+  IS_IMPERIAL
   MALNUTRITION_RISK
   PROGRAM
   RESTRICTIONS
@@ -4145,7 +4146,7 @@ type Query {
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
-  journey(id: ID!): JourneyAssistantTypeResponse
+  journey(assistantId: ID!): JourneyAssistantTypeResponse
   labTestReports(after: String, before: String, first: Int, id: ID, isVisible: Boolean, last: Int, profile: ID): LabTestReportConnection
   locationAutocomplete(lat: Float!, lon: Float!, query: String!): [LocationAutocomplete]
   log(id: ID!): Logger
@@ -4265,6 +4266,7 @@ enum QuestionProfileField {
   CUSTOM_ATTRIBUTES
   FAVORITE_CUISINES
   HEIGHT
+  IS_IMPERIAL
   MALNUTRITION_RISK
   PROGRAM
   RESTRICTIONS
