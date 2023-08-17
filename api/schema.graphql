@@ -2349,12 +2349,14 @@ type InteractionEdge {
 }
 
 input InteractionInput {
+  deliveryTime: Time
   goal: String!
   interaction: String!
   order: Int!
 }
 
 type InteractionType {
+  deliveryTime: Time
   goal: String!
   id: ID
   interaction: String!
