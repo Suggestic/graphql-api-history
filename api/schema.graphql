@@ -2526,6 +2526,7 @@ enum LabTestReportStatus {
 }
 
 enum Language {
+  AR
   EN
   ES
   NL
@@ -4113,7 +4114,7 @@ type Query {
   biomarkers(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
-  coachAvailability(appointmentType: ID!, end: DateTime!, start: DateTime!): [TimePeriod!]!
+  coachAvailability(appointmentType: ID!, coaches: [ID!], end: DateTime!, start: DateTime!): [TimePeriod!]!
   coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
