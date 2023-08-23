@@ -5044,6 +5044,7 @@ type Supplement implements Node {
   instructions: String
   mainImage: String!
   name: String!
+  productUrl: String
   protocolBundle(after: String, before: String, first: Int, last: Int, offset: Int): ProtocolConnection!
   servingName: String!
   shopifyParentId: String
