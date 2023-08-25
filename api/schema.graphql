@@ -121,6 +121,12 @@ type AddToShoppingList {
   success: Boolean
 }
 
+type AddUserToAssistantList {
+  assistantListUser: [AssistantListUser]
+  message: String!
+  success: Boolean!
+}
+
 type Adherence {
   color: AdherenceColor
   icon: Icon
@@ -324,7 +330,7 @@ type AssessmentAnswer implements Node {
   isCorrect: Boolean!
   isSelected: Boolean
   nextQuestion: AssessmentQuestion
-  score: Int
+  score: Float
   supplements: [AssessmentAnswerSupplement]
   text: String!
   updatedAt: DateTime!
@@ -442,6 +448,11 @@ type AssistantIngredient {
   name: String
   quantity: Float
   unit: String
+}
+
+type AssistantListUser {
+  id: ID!
+  profile: ID!
 }
 
 type AssistantType {
@@ -3023,6 +3034,7 @@ type Mutation {
   addSleepTime(date: Date, source: SourceType, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, source: SourceType, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
+  addUserToAssistantList(assistantListId: ID!, profileId: ID!): AddUserToAssistantList
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
   changeMealPlannerDayMeal(day: Int!, mealTime: MealTime!, recipeId: String!): ChangeMealPlannerDayMeal
