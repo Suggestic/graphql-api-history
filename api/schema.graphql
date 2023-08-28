@@ -2560,7 +2560,7 @@ input LinkUserAssessmentInput {
 }
 
 type ListItem implements Node {
-  aggregation(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): AggregateConnection!
+  aggregation(after: String, before: String, first: Int, last: Int, offset: Int): AggregateConnection!
   aisleName: String
   comment: String
   createdAt: DateTime!
@@ -4033,13 +4033,13 @@ type Program implements Node {
   isPremium: Boolean!
   name: String!
   order: Int!
-  productSet(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): ProductTypeConnection!
+  productSet(after: String, before: String, first: Int, last: Int, offset: Int): ProductTypeConnection!
   restrictions(encoded: Boolean): [String!]!
   showDefaultGoals: Boolean!
   slug: String
   tags: [String!]!
   thirdpartydailyrecapquestionSet(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
-  transactionSet(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTransactionConnection!
+  transactionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTransactionConnection!
   visibility: Boolean!
 }
 
