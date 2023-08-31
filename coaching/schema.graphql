@@ -1463,6 +1463,13 @@ type HrvLogsEdge {
   cursor: String!
 }
 
+type IngredientFoodFormat {
+  foodId: String!
+  name: String!
+  grams: Float
+  milliliters: Float
+}
+
 enum IntakeCategory {
   FOOD
   SUPPLEMENT
@@ -1736,6 +1743,7 @@ enum MealTime {
   LUNCH
   DINNER
   SNACK
+  TREAT_DESSERT
 }
 
 """This is a client linked to a coach"""
@@ -1792,6 +1800,7 @@ type Member implements Node {
   sleepQualityScores(start: Date!, end: Date!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
   hrvLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HrvLogsConnection
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
+  myRecipes(id: ID, before: String, after: String, first: Int, last: Int): UserRecipeConnection
   timezone: String!
   connectedSources: [ConnectedSource!]!
   appVersion: String
@@ -2100,6 +2109,172 @@ type NoteTemplateEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type Nutrient {
+  type: NutrientEnum!
+  amount: Float
+  unit: String
+  name: String
+}
+
+enum NutrientEnum {
+  DHA
+  EPA
+  DPA
+  PROTEIN
+  FAT
+  CARBS
+  ASH
+  ENERGY
+  STARCH
+  SUCROSE
+  GLUCOSE_DEXTROSE
+  FRUCTOSE
+  LACTOSE
+  MALTOSE
+  ALCOHOL_ETHYL
+  SPECIFIC_GRAVITY_SP
+  ACETIC_ACID
+  LACTIC_ACID
+  CARBOHYDRATE_BY_SUMMATION
+  WATER
+  SORBITOL
+  CAFFEINE
+  THEOBROMINE
+  SUGARS_TOTAL_NLEA
+  CARBOHYDRATE_OTHER
+  GALACTOSE
+  XYLITOL
+  FIBER_TOTAL_DIETARY
+  RIBOSE
+  FIBER_SOLUBLE
+  FIBER_INSOLUBLE
+  TOTAL_FAT_NLEA
+  TOTAL_SUGAR_ALCOHOLS
+  CALCIUM_CA
+  CHLORINE_CL
+  IRON_FE
+  MAGNESIUM
+  PHOSPHORUS_P
+  POTASSIUM_K
+  SODIUM_NA
+  SULFUR_S
+  ZINC_ZN
+  CHROMIUM_CR
+  COBALT_CO
+  COPPER_CU
+  FLUORIDE_F
+  IODINE_I
+  MANGANESE_MN
+  MOLYBDENUM_MO
+  SELENIUM_SE
+  VITAMIN_A_IU
+  RETINOL
+  VITAMIN_A_RAE
+  CAROTENE_BETA
+  CAROTENE_ALPHA
+  VITAMIN_E_ALPHA_TOCOPHEROL
+  VITAMIN_D_D2_D3_INTERNATIONAL_UNITS
+  VITAMIN_D2_ERGOCALCIFEROL
+  VITAMIN_D3_CHOLECALCIFEROL
+  O25_HYDROXYCHOLECALCIFEROL
+  VITAMIN_D_D2_D3
+  PHYTOENE
+  PHYTOFLUENE
+  ZEAXANTHIN
+  CRYPTOXANTHIN_BETA
+  LUTEIN
+  LYCOPENE
+  LUTEIN_ZEAXANTHIN
+  VITAMIN_E_LABEL_ENTRY_PRIMARILY
+  TOCOPHEROL_BETA
+  TOCOPHEROL_GAMMA
+  TOCOPHEROL_DELTA
+  TOCOTRIENOL_ALPHA
+  TOCOTRIENOL_BETA
+  TOCOTRIENOL_GAMMA
+  TOCOTRIENOL_DELTA
+  BORON_B
+  NICKEL_NI
+  VITAMIN_E
+  CIS_BETA_CAROTENE
+  CIS_LYCOPENE
+  CIS_LUTEIN_ZEAXANTHIN
+  VITAMIN_C_TOTAL_ASCORBIC_ACID
+  THIAMIN
+  RIBOFLAVIN
+  NIACIN
+  PANTOTHENIC_ACID
+  VITAMIN_B_6
+  BIOTIN
+  FOLATE_TOTAL
+  VITAMIN_B_12
+  CHOLINE_TOTAL
+  INOSITOL
+  VITAMIN_K_MENAQUINONE_4
+  VITAMIN_K_DIHYDROPHYLLOQUINONE
+  VITAMIN_K_PHYLLOQUINONE
+  FOLIC_ACID
+  FOLATE_FOOD
+  O5_METHYL_TETRAHYDROFOLATE_5_MTHF
+  FOLATE_DFE
+  O10_FORMYL_FOLIC_ACID_10HCOFA
+  O5_FORMYLTETRAHYDROFOLIC_ACID_5_HCOH4
+  CHOLINE_FREE
+  CHOLINE_FROM_PHOSPHOCHOLINE
+  CHOLINE_FROM_PHOSPHOTIDYL_CHOLINE
+  CHOLINE_FROM_GLYCEROPHOSPHOCHOLINE
+  BETAINE
+  CHOLINE_FROM_SPHINGOMYELIN
+  TRYPTOPHAN
+  THREONINE
+  ISOLEUCINE
+  LEUCINE
+  LYSINE
+  METHIONINE
+  CYSTINE
+  PHENYLALANINE
+  TYROSINE
+  VALINE
+  ARGININE
+  HISTIDINE
+  ALANINE
+  ASPARTIC_ACID
+  GLUTAMIC_ACID
+  GLYCINE
+  PROLINE
+  SERINE
+  HYDROXYPROLINE
+  CYSTEINE
+  GLUTAMINE
+  TAURINE
+  SUGARS_ADDED
+  VITAMIN_E_ADDED
+  VITAMIN_B_12_ADDED
+  CHOLESTEROL
+  FATTY_ACIDS_TOTAL_TRANS
+  FATTY_ACIDS_TOTAL_SATURATED
+  PHYTOSTEROLS
+  STIGMASTEROL
+  CAMPESTEROL
+  BRASSICASTEROL
+  BETA_SITOSTEROL
+  CAMPESTANOL
+  FATTY_ACIDS_TOTAL_MONOUNSATURATED
+  FATTY_ACIDS_TOTAL_POLYUNSATURATED
+  BETA_SITOSTANOL
+  DELTA_5_AVENASTEROL
+  PHYTOSTEROLS_OTHER
+  FATTY_ACIDS_TOTAL_TRANS_MONOENOIC
+  FATTY_ACIDS_TOTAL_TRANS_DIENOIC
+  FATTY_ACIDS_TOTAL_TRANS_POLYENOIC
+  EPIGALLOCATECHIN_3_GALLATE
+  INULIN
+  SUGARS_TOTAL_INCLUDING_NLEA
+  TRANS_BETA_CAROTENE
+  TRANS_LYCOPENE
+  CRYPTOXANTHIN_ALPHA
 }
 
 type Nutrients {
@@ -3346,6 +3521,39 @@ input UserMealPlanSettings {
   carbs: Float!
   protein: Float!
   fat: Float!
+}
+
+type UserRecipe implements Node {
+  id: ID!
+  name: String!
+  ingredientLines: [String!]!
+  numberOfServings: Int!
+  instructions: String
+  mealTimes: [MealTime!]!
+  courses: [String!]!
+  cuisines: [String!]!
+  servingWeight: Float!
+  weightInGrams: Float!
+  ingredients: [IngredientFoodFormat!]!
+  nutrients: [Nutrient!]
+  nutrientsPerServing: [Nutrient!]
+}
+
+type UserRecipeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserRecipeEdge]!
+}
+
+"""A Relay edge containing a `UserRecipe` and its cursor."""
+type UserRecipeEdge {
+  """The item at the end of the edge"""
+  node: UserRecipe
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type Verify2faCode {
