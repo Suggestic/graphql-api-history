@@ -443,6 +443,19 @@ enum AssessmentType {
   ON_BOARDING
 }
 
+input AssistantConversationInput {
+  hasConstraints: Boolean!
+  hasEscalations: Boolean!
+  interactionId: ID
+  userProfile: ProfileTest!
+}
+
+type AssistantConversationResponse {
+  id: ID!
+  response: String!
+  userMessage: String!
+}
+
 type AssistantIngredient {
   grams: Float
   name: String
@@ -1104,6 +1117,12 @@ type CreateAssistant {
   success: Boolean!
 }
 
+type CreateAssistantConversationMessage {
+  message: String!
+  response: AssistantConversationResponse
+  success: Boolean!
+}
+
 type CreateBiomarkerCategory {
   biomarkerCategory: BiomarkerCategory
   errors: [FormError!]
@@ -1463,6 +1482,17 @@ input CreateSupplementRecommendedInput {
   supplementId: ID!
 }
 
+type CreateThirdPartyGoal {
+  goal: ThirdPartyGoal
+  message: String!
+  success: Boolean!
+}
+
+input CreateThirdPartyGoalInput {
+  goal: TrackerComponent!
+  value: Float!
+}
+
 type CreateUser {
   message: String!
   success: Boolean!
@@ -1774,6 +1804,11 @@ type DeleteSupplementRecommended {
   message: String!
   success: Boolean!
   supplementRecommended: SupplementRecommended
+}
+
+type DeleteThirdPartyGoal {
+  message: String!
+  success: Boolean!
 }
 
 type DeleteWeightEntry {
@@ -3053,6 +3088,7 @@ type Mutation {
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
   createAssistant(mainGoal: String!, name: String!, program: ID!): CreateAssistant
+  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, userMessage: String!): CreateAssistantConversationMessage
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
@@ -3091,6 +3127,7 @@ type Mutation {
   createSupplement(input: CreateSupplementInput!): CreateSupplement
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
   createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended
+  createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
@@ -3136,6 +3173,7 @@ type Mutation {
   deleteSleepTime(id: ID!): DeleteSleepTime!
   deleteStepsCount(id: ID!): DeleteStepsCount!
   deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended
+  deleteThirdPartyGoal(id: ID!): DeleteThirdPartyGoal
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
@@ -3216,6 +3254,7 @@ type Mutation {
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
   updateSupplementPlan(input: UpdateSPInput!): UpdateSupplementPlan
   updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended
+  updateThirdPartyGoal(input: UpdateThirdPartyGoalInput!): UpdateThirdPartyGoal
   updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent
   updateUserAssessmentScore(input: UpdateUserAssessmentScoreInput!): UpdateUserAssessmentScore
   updateUserProgram(programId: String!): UpdateUserProgram
@@ -3936,6 +3975,16 @@ type ProfileRestrictionsUpdate {
   success: Boolean!
 }
 
+input ProfileTest {
+  activityLevel: ActivityLevel
+  age: Int!
+  biologicalSex: BiologicalSex!
+  height: Float
+  name: String!
+  steps: Int
+  weight: Float
+}
+
 type ProfileType {
   activityLevel: ActivityLevel
   adherenceScore: Float!
@@ -4260,6 +4309,7 @@ type Query {
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
   thirdPartyDailyRecapQuestions(after: String, answers: [ID!], before: String, first: Int, last: Int, offset: Int, question: String): ThirdPartyDailyRecapQuestionConnection
+  thirdPartyGoals(goal: TrackerComponent, id: ID): [ThirdPartyGoal!]
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   trackingDailyGoals: TrackingDailyGoals!
@@ -4269,7 +4319,7 @@ type Query {
   userAnswersByAssessment(id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
-  users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userUUIDs: [String!]): UserConnection
+  users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
 }
@@ -5258,6 +5308,33 @@ type ThirdPartyDailyRecapQuestionEdge {
   node: ThirdPartyDailyRecapQuestion
 }
 
+type ThirdPartyGoal implements Node {
+  goal: ThirdPartyGoalGoal!
+  id: ID!
+  value: Float!
+}
+
+enum ThirdPartyGoalGoal {
+  DAILY_MOOD
+  DAILY_RECAP
+  EXERCISE_TRACKER
+  FOOD_LOGS
+  FOOD_LOG_MEAL_TRACKER
+  HEART_RATE_TRACKER
+  HRV_TRACKER
+  HYDRATION_TRACKER
+  MP_MEAL_TRACKER
+  MY_CHECKLIST_TRACKER
+  PLAN_SUPPLEMENT
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  SLEEP_QUALITY_SCORE_TRACKER
+  SLEEP_TIME_TRACKER
+  STEPS_TRACKER
+  TODAY_FOOD
+  TODAY_SUPPLEMENT
+  WEIGHT_TRACKER
+}
+
 scalar Time
 
 enum TimeOfDay {
@@ -5808,6 +5885,17 @@ input UpdateSupplementRecommendedInput {
   normalValues: [GenericScalar!]
   range: BiomarkerRangeInput
   supplementId: ID
+}
+
+type UpdateThirdPartyGoal {
+  goal: ThirdPartyGoal
+  message: String!
+  success: Boolean!
+}
+
+input UpdateThirdPartyGoalInput {
+  id: ID!
+  value: Float!
 }
 
 type UpdateThirdPartyTrackerComponent {
