@@ -9,6 +9,14 @@ type AcceptUserInvite {
   message: String!
 }
 
+enum ActivityLevel {
+  NOT_ACTIVE
+  EXERCISE_1_2
+  EXERCISE_3_MORE
+  EXERCISE_1
+  EXERCISE_2
+}
+
 type ActivityLog implements Node {
   id: ID!
   user: User!
@@ -49,10 +57,37 @@ input AddBiomarkerInput {
   normalValues: [Generic!]
 }
 
+type AddUserToAssistantList {
+  success: Boolean!
+  message: String
+  assistantListUser: [AssistantListUser]
+}
+
 type appCustomizationFeature {
   key: String!
   name: String!
   description: String!
+}
+
+type AppUser implements Node {
+  id: ID!
+  profileId: String
+  email: String!
+  name: String!
+  phone: String
+  isActive: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type AppUserConnection {
+  edges: [AppUserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AppUserEdge {
+  cursor: String!
+  node: AppUser
 }
 
 type ArticleRecommended implements Node {
@@ -83,6 +118,19 @@ type Assistant {
   mainGoal: String
 }
 
+type AssistantConversationChat {
+  success: Boolean!
+  message: String!
+  response: AssistantTesterChatResponse
+}
+
+input AssistantConversationInput {
+  interactionId: ID
+  hasConstraints: Boolean!
+  hasEscalations: Boolean!
+  userProfile: ProfileTest
+}
+
 type AssistantEntity {
   id: ID!
   name: String!
@@ -90,10 +138,33 @@ type AssistantEntity {
   program: ID!
 }
 
+type AssistantList {
+  id: ID!
+  name: String
+  assistantId: ID!
+}
+
+type AssistantListResult {
+  success: Boolean!
+  message: String!
+  assistantList: AssistantList
+}
+
+type AssistantListUser {
+  id: ID!
+  profile: ID!
+}
+
 type AssistantResult {
   success: Boolean!
   message: String!
   assistant: Assistant
+}
+
+type AssistantTesterChatResponse {
+  id: ID!
+  userMessage: String!
+  response: String!
 }
 
 enum BiologicalSex {
@@ -274,6 +345,13 @@ type Constraint {
 input ConstraintInput {
   name: String
   description: String
+  assistantId: ID!
+}
+
+type ConstraintResult {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
 }
 
 type ContentCategory {
@@ -383,6 +461,12 @@ type CreateAssistant {
   assistant: Assistant
 }
 
+type CreateAssistantList {
+  success: Boolean!
+  message: String!
+  assistantList: AssistantList
+}
+
 type CreateBiomarkerCategory {
   success: Boolean!
   message: String!
@@ -394,6 +478,12 @@ input CreateBiomarkerCategoryInput {
   name: String!
   parent: ID
   order: Int
+}
+
+type CreateConstraint {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
 }
 
 type CreateContentCategory {
@@ -492,6 +582,12 @@ type CreateIngredientGroup {
 input CreateIngredientGroupInput {
   name: String!
   ingredients: [ID!]!
+}
+
+type CreateJourney {
+  success: Boolean!
+  message: String!
+  journey: Journey
 }
 
 type CreateKnowledgeBase {
@@ -730,6 +826,11 @@ type DeleteAssistant {
   message: String!
 }
 
+type DeleteAssistantList {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteBiomarker {
   success: Boolean!
   message: String!
@@ -740,6 +841,11 @@ type DeleteBiomarkerCategory {
   success: Boolean!
   message: String!
   biomarkerCategory: BiomarkerCategory
+}
+
+type DeleteConstraint {
+  success: Boolean!
+  message: String!
 }
 
 type DeleteContentCategory {
@@ -975,12 +1081,14 @@ type Interaction {
   order: Int
   interaction: String
   goal: String
+  deliveryTime: Time
 }
 
 input InteractionInput {
   order: Int!
   interaction: String!
   goal: String!
+  deliveryTime: Time
 }
 
 enum InvitationStatus {
@@ -993,8 +1101,27 @@ type Journey {
   dayJourney: [DayJourney]
 }
 
+type JourneyChat {
+  success: Boolean!
+  message: String!
+  response: JourneyChatResponse
+}
+
+type JourneyChatResponse {
+  id: ID!
+  userMessage: String!
+  response: String!
+}
+
 input JourneyInput {
+  assistantId: ID!
   dayJourney: [DayJourneyInput!]
+}
+
+type JourneyResult {
+  success: Boolean!
+  message: String!
+  journey: Journey
 }
 
 type KnowledgeBase {
@@ -1299,20 +1426,44 @@ type Mutation {
   """Delete escalation"""
   deleteEscalation(id: ID!, assistantId: ID!): DeleteEscalation!
 
+  """Delete escalation"""
+  deleteConstraint(id: ID!, assistantId: ID!): DeleteConstraint!
+
+  """Delete Assistant list"""
+  deleteAssistantList(id: ID!, assistantId: ID!): DeleteAssistantList!
+
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
   createAssistant(name: String!, mainGoal: String!, program: ID!): CreateAssistant
 
-  """Create a new Knowledge Base belongs to a Assistant"""
+  """Create a Journey"""
+  createJourney(input: JourneyInput): CreateJourney
+
+  """Create a new Knowledge Base belongs to an Assistant"""
   createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String): CreateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
 
-  """Create a Escalation belongs to a Assistant"""
+  """Create a Escalation belongs to an Assistant"""
   createEscalation(input: EscalationInput): CreateEscalation
+
+  """Create a Constraint belongs to an Assistant"""
+  createConstraint(input: ConstraintInput): CreateConstraint
+
+  """Create a chat response from Journey"""
+  createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
+
+  """Creates a chat for assistant tester"""
+  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!): AssistantConversationChat
+
+  """Create a List to belongs to an Assistant"""
+  createAssistantList(assistantId: ID!, name: String): CreateAssistantList
+
+  """Add a user to a List"""
+  addUserToAssistantList(profileId: ID!, assistantListId: ID!): AddUserToAssistantList!
 }
 
 interface Node {
@@ -1410,6 +1561,16 @@ type Profile {
   active: Boolean
   invitationExpireAt: Datetime
   thirdParty: ThirdParty
+}
+
+input ProfileTest {
+  name: String!
+  age: Int!
+  biologicalSex: BiologicalSex
+  height: Float
+  weight: Float
+  activityLevel: ActivityLevel
+  steps: Int
 }
 
 """Diet Program that an app user can be subscribed to"""
@@ -1572,6 +1733,9 @@ type Query {
   """List all assistants belongs to the third party"""
   assistants: [AssistantEntity]
 
+  """List the journey by the provided ID"""
+  journey(assistantId: ID!): JourneyResult
+
   """List the Knowledge Base by the provided ID"""
   knowledgeBase(id: ID!): KnowledgeBaseResult!
 
@@ -1584,6 +1748,21 @@ type Query {
 
   """List all Escalations  belongs to Assistant ID"""
   escalations(assistantId: ID!): [Escalation]
+
+  """List Constraint"""
+  constraint(id: ID!): ConstraintResult!
+
+  """List all constraints belongs to Assistant ID"""
+  constraints(assistantId: ID!): [Constraint]
+
+  """List Constraint"""
+  assistantList(id: ID!): AssistantListResult!
+
+  """List all constraints belongs to Assistant ID"""
+  assistantLists(assistantId: ID!): [AssistantList]
+
+  """List end-users (from the app)"""
+  appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!]): AppUserConnection!
 }
 
 type RecipeTag implements Node {
@@ -1847,6 +2026,9 @@ type ThirdPartyDailyRecapQuestionEdge {
   cursor: String!
   node: ThirdPartyDailyRecapQuestion
 }
+
+"""An ISO-8601 encoded UTC Time 15:29:03Z string."""
+scalar Time
 
 enum TimeOfDay {
   AT_WAKING
