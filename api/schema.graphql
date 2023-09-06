@@ -2153,6 +2153,17 @@ type GenerateMealPlan {
   success: Boolean
 }
 
+type GenerateShopifyMultipassUrl {
+  message: String!
+  success: Boolean!
+  url: String
+}
+
+input GenerateShopifyMultipassUrlInput {
+  remoteIp: String
+  returnTo: String
+}
+
 type GenerateSimpleMealPlan {
   message: String
   success: Boolean
@@ -2213,6 +2224,12 @@ enum HabitAnswerType {
   NEGATIVE
   NEUTRAL
   POSITIVE
+}
+
+type HardDeleteAppUserProfile {
+  email: String
+  message: String
+  success: Boolean
 }
 
 type HardDeleteMyProfileMutation {
@@ -3130,6 +3147,7 @@ type Mutation {
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
+  deleteAppUserProfile(id: ID!): HardDeleteAppUserProfile
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
   deleteBiomarker(id: ID!): DeleteBiomarker
@@ -3178,6 +3196,7 @@ type Mutation {
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
   generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
+  generateShopifyMultipassUrl(input: GenerateShopifyMultipassUrlInput): GenerateShopifyMultipassUrl
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   linkUserAssessment(input: LinkUserAssessmentInput!): LinkUserAssessment
