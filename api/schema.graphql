@@ -1256,6 +1256,12 @@ type CreateGooglePlayTransaction {
   success: Boolean
 }
 
+type CreateInteraction {
+  interaction: InteractionType
+  message: String!
+  success: Boolean!
+}
+
 type CreateJourney {
   journey: JourneyAssistantType
   message: String!
@@ -2419,6 +2425,7 @@ input InteractionInput {
 }
 
 type InteractionType {
+  dayJourneyId: ID
   deliveryTime: Time
   goal: String!
   id: ID
@@ -3117,6 +3124,7 @@ type Mutation {
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
+  createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
   createJourney(input: JourneyInput!): CreateJourney
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
   createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, txt: String, url: String): CreateKnowledgeBase

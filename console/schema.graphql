@@ -324,6 +324,7 @@ type Condition {
   lte: Float
   gte: Float
   dataType: DataType
+  biomarkerId: ID
 }
 
 type ConditionConnection {
@@ -584,6 +585,12 @@ input CreateIngredientGroupInput {
   ingredients: [ID!]!
 }
 
+type CreateInteraction {
+  success: Boolean!
+  message: String!
+  interaction: Interaction
+}
+
 type CreateJourney {
   success: Boolean!
   message: String!
@@ -672,6 +679,7 @@ type CreateSegmentCondition {
 }
 
 input CreateSegmentConditionInput {
+  biomarkerId: ID
   dataType: DataType
   attrName: String!
   term: String
@@ -813,6 +821,12 @@ input DayJourneyInput {
   order: Int!
   skipped: Boolean!
   interactions: [InteractionInput]
+}
+
+type DeleteAppUserProfile {
+  success: Boolean!
+  message: String!
+  email: String
 }
 
 type DeleteArticleRecommended {
@@ -1078,6 +1092,7 @@ enum IngredientGroupType {
 
 type Interaction {
   id: ID!
+  dayJourneyId: ID!
   order: Int
   interaction: String
   goal: String
@@ -1462,8 +1477,14 @@ type Mutation {
   """Create a List to belongs to an Assistant"""
   createAssistantList(assistantId: ID!, name: String): CreateAssistantList
 
+  """Create an individual interaction"""
+  createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
+
   """Add a user to a List"""
   addUserToAssistantList(profileId: ID!, assistantListId: ID!): AddUserToAssistantList!
+
+  """Hard Delete an End-User (from the app)"""
+  deleteAppUserProfile(id: ID!): DeleteAppUserProfile!
 }
 
 interface Node {
@@ -2300,6 +2321,7 @@ type UpdateSegmentCondition {
 
 input UpdateSegmentConditionInput {
   id: ID!
+  biomarkerId: ID
   dataType: DataType
   attrName: String
   term: String
