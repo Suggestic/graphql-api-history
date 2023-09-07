@@ -99,7 +99,7 @@ input AddBiomarkerResultsInput {
 }
 
 enum AlertAction {
-  ATTEMPTED
+  ATTEMPTED_FAILED
   CONTACTED
 }
 
