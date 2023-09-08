@@ -446,11 +446,13 @@ enum AssessmentType {
 input AssistantConversationInput {
   hasConstraints: Boolean!
   hasEscalations: Boolean!
+  hasKnowledgeBase: Boolean!
   interactionId: ID
   userProfile: ProfileTest!
 }
 
 type AssistantConversationResponse {
+  escalations: [EscalationConversationResponse]
   id: ID!
   response: String!
   userMessage: String!
@@ -1984,6 +1986,11 @@ enum EntryType {
 type ErrorType {
   field: String!
   messages: [String!]!
+}
+
+type EscalationConversationResponse {
+  flagged: Boolean
+  name: String
 }
 
 enum EventParticipationStatus {
