@@ -128,6 +128,7 @@ input AssistantConversationInput {
   interactionId: ID
   hasConstraints: Boolean!
   hasEscalations: Boolean!
+  hasKnowledgeBase: Boolean!
   userProfile: ProfileTest
 }
 
@@ -163,8 +164,8 @@ type AssistantResult {
 
 type AssistantTesterChatResponse {
   id: ID!
-  userMessage: String!
-  response: String!
+  chat: [ChatResponse]!
+  escalations: [EscalationConversationResponse]
 }
 
 enum BiologicalSex {
@@ -314,6 +315,13 @@ type BiomarkerUnitEdge {
 type ChangePassword {
   success: Boolean!
   message: String!
+}
+
+type ChatResponse {
+  id: ID!
+  sender: String!
+  content: String!
+  createdAt: Datetime!
 }
 
 type Condition {
@@ -688,6 +696,33 @@ input CreateSegmentConditionInput {
   gte: Float
 }
 
+type CreateSupplement {
+  success: Boolean!
+  message: String!
+  supplement: Supplement
+}
+
+input CreateSupplementInput {
+  name: String!
+  category: String!
+  mainImage: String!
+  brand: String!
+  servingName: String!
+  directionsOfUse: [DirectionsOfUseInput!]
+  description: String
+  images: [String!]
+  directionsOfUseText: String
+  sizeCount: Int
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
+}
+
 type CreateSupplementRecommended {
   success: Boolean!
   message: String!
@@ -966,6 +1001,11 @@ type DeleteUserSegment {
   deleted: UserSegment
 }
 
+input DirectionsOfUseInput {
+  quantity: Float!
+  timeOfDay: TimeOfDay!
+}
+
 scalar Email
 
 enum Equation {
@@ -982,6 +1022,11 @@ type Escalation {
   alertCoach: Boolean!
   autoRespond: Boolean!
   autoRespondText: String
+}
+
+type EscalationConversationResponse {
+  name: String!
+  flagged: Boolean!
 }
 
 input EscalationInput {
@@ -1472,7 +1517,7 @@ type Mutation {
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
 
   """Creates a chat for assistant tester"""
-  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!): AssistantConversationChat
+  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, profileId: ID!): AssistantConversationChat
 
   """Create a List to belongs to an Assistant"""
   createAssistantList(assistantId: ID!, name: String): CreateAssistantList
@@ -1485,6 +1530,9 @@ type Mutation {
 
   """Hard Delete an End-User (from the app)"""
   deleteAppUserProfile(id: ID!): DeleteAppUserProfile!
+
+  """Create a Supplement"""
+  createSupplement(input: CreateSupplementInput!): CreateSupplement!
 }
 
 interface Node {
