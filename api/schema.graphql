@@ -2173,7 +2173,6 @@ type GenerateShopifyMultipassUrl {
 }
 
 input GenerateShopifyMultipassUrlInput {
-  remoteIp: String
   returnTo: String
 }
 
