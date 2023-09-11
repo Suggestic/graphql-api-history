@@ -666,6 +666,7 @@ input CreateRuleSetInput {
   actionType: RuleSetActionType!
   ruleType: RuleType
   recipeTags: [ID!]
+  contentTags: [ID!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
@@ -1832,6 +1833,9 @@ type Query {
 
   """List end-users (from the app)"""
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!]): AppUserConnection!
+
+  """List all Supplements"""
+  supplements(id: ID, name: String, first: Int, last: Int, after: String, before: String): SupplementConnection!
 }
 
 type RecipeTag implements Node {
@@ -1912,6 +1916,7 @@ type RuleSet implements Node {
   ingredientGroups: [IngredientGroup!]
   ruleType: String!
   recipeTags: [RecipeTag!]
+  contentTags: [ContentTag!]
   userSegments: [UserSegment!]!
   program: Program
   comment: String
@@ -1945,6 +1950,7 @@ type RuleSetEdge {
 enum RuleType {
   INGREDIENT_GROUPS
   RECIPE_TAGS
+  CONTENT_TAGS
 }
 
 type SendUserInvite {
@@ -2000,7 +2006,7 @@ enum SortOrder {
   DESC
 }
 
-type Supplement {
+type Supplement implements Node {
   id: ID!
   name: String!
   description: String
@@ -2024,12 +2030,22 @@ type Supplement {
   updatedAt: Datetime!
 }
 
+type SupplementConnection {
+  pageInfo: PageInfo!
+  edges: [SupplementEdge]!
+}
+
 type SupplementDirection {
   quantity: Float!
   createdAt: Datetime!
   updatedAt: Datetime!
   id: ID!
   timeOfDay: TimeOfDay!
+}
+
+type SupplementEdge {
+  node: Supplement
+  cursor: String!
 }
 
 type SupplementRecommended implements Node {
@@ -2347,6 +2363,7 @@ input UpdateRuleSetInput {
   actionType: RuleSetActionType
   ruleType: RuleType
   recipeTags: [ID!]
+  contentTags: [ID!]
   userSegments: [ID!]
   ingredientGroups: [ID!]
   program: ID
