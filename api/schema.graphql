@@ -452,10 +452,9 @@ input AssistantConversationInput {
 }
 
 type AssistantConversationResponse {
+  chat: [ChatResponse]
   escalations: [EscalationConversationResponse]
   id: ID!
-  response: String!
-  userMessage: String!
 }
 
 type AssistantIngredient {
@@ -753,6 +752,13 @@ type CancelAppointment {
 type ChangeMealPlannerDayMeal {
   recipe: Recipe
   success: Boolean
+}
+
+type ChatResponse {
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  sender: String!
 }
 
 type CheckIntake {
@@ -3118,7 +3124,7 @@ type Mutation {
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
   createAssistant(mainGoal: String!, name: String!, program: ID!): CreateAssistant
-  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, userMessage: String!): CreateAssistantConversationMessage
+  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, profileId: ID!, userMessage: String!): CreateAssistantConversationMessage
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
