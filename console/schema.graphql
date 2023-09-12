@@ -1534,6 +1534,9 @@ type Mutation {
 
   """Create a Supplement"""
   createSupplement(input: CreateSupplementInput!): CreateSupplement!
+
+  """Update a Supplement"""
+  updateSupplement(input: UpdateSupplementInput!): UpdateSupplement!
 }
 
 interface Node {
@@ -1756,7 +1759,7 @@ type Query {
   contentCategories(first: Int, last: Int, after: String, before: String, id: ID, tags: [String!]): ContentCategoryConnection!
 
   """List Content Libraries"""
-  contentLibraries(first: Int, last: Int, after: String, before: String, id: ID, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy): ContentLibraryConnection!
+  contentLibraries(first: Int, last: Int, after: String, before: String, id: ID, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy, enablePersonalizedContent: Boolean): ContentLibraryConnection!
 
   """List Supplement Recommended"""
   supplementsRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementRecommendedConnection
@@ -2393,6 +2396,34 @@ input UpdateSegmentConditionInput {
   bool: Boolean
   lte: Float
   gte: Float
+}
+
+type UpdateSupplement {
+  success: Boolean!
+  message: String!
+  supplement: Supplement
+}
+
+input UpdateSupplementInput {
+  id: ID!
+  name: String
+  category: String
+  mainImage: String
+  brand: String
+  servingName: String
+  directionsOfUse: [DirectionsOfUseInput!]
+  description: String
+  images: [String!]
+  directionsOfUseText: String
+  sizeCount: Int
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
 }
 
 type UpdateSupplementRecommended {
