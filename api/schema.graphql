@@ -4128,6 +4128,7 @@ type Program implements Node {
   tags: [String!]!
   thirdpartydailyrecapquestionSet(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
   transactionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTransactionConnection!
+  videoUrl: String
   visibility: Boolean!
 }
 
