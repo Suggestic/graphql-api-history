@@ -1518,7 +1518,7 @@ type Mutation {
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
 
   """Creates a chat for assistant tester"""
-  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, profileId: ID!): AssistantConversationChat
+  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, useLongTermMemory: Boolean, profileId: ID!): AssistantConversationChat
 
   """Create a List to belongs to an Assistant"""
   createAssistantList(assistantId: ID!, name: String): CreateAssistantList

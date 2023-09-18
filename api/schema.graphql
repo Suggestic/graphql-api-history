@@ -3124,7 +3124,7 @@ type Mutation {
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
   createAssistant(mainGoal: String!, name: String!, program: ID!): CreateAssistant
-  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, profileId: ID!, userMessage: String!): CreateAssistantConversationMessage
+  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, profileId: ID!, useLongTermMemory: Boolean, userMessage: String!): CreateAssistantConversationMessage
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
@@ -4362,6 +4362,8 @@ type Query {
   users(after: String, before: String, first: Int, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
+  zoomAccountRecordings(after: String, before: String, end: Date!, first: Int, jwtToken: String!, last: Int, start: Date!): ZoomRecordingConnection
+  zoomSessionRecordings(jwtToken: String!, sessionId: String!): ZoomRecording
 }
 
 enum QuestionProfileField {
@@ -6186,5 +6188,67 @@ type WeightTracker {
   start: Float
   tendency: Tendency
   today: Float
+}
+
+type ZoomParticipantAudioFile {
+  downloadUrl: String!
+  fileExtension: String!
+  fileName: String!
+  fileSize: Int!
+  fileType: String!
+  id: String!
+  recordingEnd: String!
+  recordingStart: String!
+  status: String!
+}
+
+type ZoomParticipantVideoFile {
+  downloadUrl: String!
+  fileExtension: String!
+  fileName: String!
+  fileSize: Int!
+  fileType: String!
+  id: String!
+  recordingEnd: String!
+  recordingStart: String!
+  recordingType: String!
+  status: String!
+}
+
+type ZoomRecodingFile {
+  deletedTime: String
+  downloadUrl: String!
+  fileExtension: String!
+  fileSize: Float!
+  fileType: String!
+  id: String!
+  recordingEnd: String!
+  recordingStart: String!
+  recordingType: String!
+  status: String!
+}
+
+type ZoomRecording {
+  downloadAccessToken: String
+  duration: Int!
+  participantAudioFiles: [ZoomParticipantAudioFile!]
+  participantVideoFiles: [ZoomParticipantVideoFile!]
+  recordingCount: Int!
+  recordingFiles: [ZoomRecodingFile!]
+  sessionId: String!
+  sessionName: String!
+  startTime: String!
+  timezone: String
+  totalSize: Int!
+}
+
+type ZoomRecordingConnection {
+  edges: [ZoomRecordingEdge]!
+  pageInfo: PageInfo!
+}
+
+type ZoomRecordingEdge {
+  cursor: String!
+  node: ZoomRecording
 }
 
