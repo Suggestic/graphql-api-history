@@ -951,6 +951,11 @@ type DeleteIngredientGroup {
   deleted: IngredientGroup
 }
 
+type DeleteInteraction {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteKnowledgeBase {
   success: Boolean!
   message: String!
@@ -1526,6 +1531,9 @@ type Mutation {
   """Create an individual interaction"""
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
 
+  """Delete an interaction by ID"""
+  deleteInteraction(interactionId: ID!): DeleteInteraction
+
   """Add a user to a List"""
   addUserToAssistantList(profileId: ID!, assistantListId: ID!): AddUserToAssistantList!
 
@@ -1835,7 +1843,7 @@ type Query {
   assistantLists(assistantId: ID!): [AssistantList]
 
   """List end-users (from the app)"""
-  appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!]): AppUserConnection!
+  appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
 
   """List all Supplements"""
   supplements(id: ID, name: String, first: Int, last: Int, after: String, before: String): SupplementConnection!

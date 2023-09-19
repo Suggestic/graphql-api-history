@@ -1749,6 +1749,12 @@ type DeleteHRVLog {
   success: Boolean!
 }
 
+type DeleteInteraction {
+  interaction: InteractionType
+  message: String!
+  success: Boolean!
+}
+
 type DeleteLabTestReport {
   message: String!
   report: LabTestReport
@@ -3191,6 +3197,7 @@ type Mutation {
 
   """deleteHeartRateLog delete Heart Rate Log"""
   deleteHeartRateLog(id: ID!): DeleteHeartRateLog!
+  deleteInteraction(interactionId: ID!): DeleteInteraction
   deleteLabTestReport(id: ID!): DeleteLabTestReport
   deleteMealPlanTemplate(coach: ID, id: ID!): DeleteMealPlanTemplate
   deleteMyBrandedFood(id: String!): DeleteMyBrandedFood
