@@ -3250,6 +3250,7 @@ type Mutation {
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
   setActiveSource(source: SourceType!): SetActiveSource
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
+  setThirdPartyAppUserAsTest(input: SetThirdPartyAppUserAsTestInput!): SetThirdPartyAppUserAsTest
   setUserAnswers(input: SetUserAnswersInput!): SetUserAnswers
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
@@ -4796,6 +4797,18 @@ type SetMealPlanToTemplate {
   success: Boolean!
 }
 
+type SetThirdPartyAppUserAsTest {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+  user: User
+}
+
+input SetThirdPartyAppUserAsTestInput {
+  isTest: Boolean!
+  user: ID!
+}
+
 type SetUserAnswers {
   errors: [FormError!]
   message: String!
@@ -6010,6 +6023,7 @@ type User implements Node {
   id: ID!
   isActive: Boolean!
   isArUser: Boolean!
+  isTest: Boolean!
   name: String
   organizationId: UUID
   phone: String!
