@@ -993,6 +993,7 @@ type ContentLibraryType implements Node {
   isBlocked: Boolean!
   isFavorite: Boolean!
   isFeatured: Boolean!
+  isRead: Boolean
   lang: JSONString!
   order: Int!
   programs: [Program!]
@@ -1245,6 +1246,12 @@ input CreateDailyRecapQuestionInput {
   lang: GenericScalar
   program: ID
   question: String!
+}
+
+type CreateDayJourney {
+  dayJourney: DayJourneyType
+  message: String!
+  success: Boolean!
 }
 
 type CreateDietPreference {
@@ -1602,6 +1609,7 @@ type DayChecklistItems {
 
 input DayJourneyInput {
   interactions: [InteractionInput]!
+  journeyId: ID
   order: Int!
   skipped: Boolean!
 }
@@ -1719,6 +1727,11 @@ type DeleteDailyRecapEntry {
 
 type DeleteDailyRecapQuestion {
   dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+  message: String!
+  success: Boolean!
+}
+
+type DeleteDayJourney {
   message: String!
   success: Boolean!
 }
@@ -2789,6 +2802,17 @@ input MacroNutrientsRangeInput {
   vitaminE: Range
 }
 
+type MarkContentAsReadOrUnread {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input MarkContentAsReadOrUnreadInput {
+  contentLibraryId: ID!
+  markAsRead: Boolean!
+}
+
 type Meal {
   calories: Float
   id: String
@@ -3140,6 +3164,7 @@ type Mutation {
   createDailyRecapAnswer(input: CreateDailyRecapAnswerInput!): CreateDailyRecapAnswer
   createDailyRecapEntry(answerId: String!, date: Date!, questionId: String!): CreateDailyRecapEntry
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
+  createDayJourney(input: DayJourneyInput!): CreateDayJourney
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
@@ -3186,6 +3211,7 @@ type Mutation {
   deleteDailyRecapAnswer(id: ID!): DeleteDailyRecapAnswer
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
   deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion
+  deleteDayJourney(id: ID!): DeleteDayJourney
   deleteDietPreference(id: ID!): DeleteDietPreference
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
 
@@ -3228,6 +3254,7 @@ type Mutation {
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   linkUserAssessment(input: LinkUserAssessmentInput!): LinkUserAssessment
   login(userId: String!): LoginUser
+  markContentAsReadOrUnread(input: MarkContentAsReadOrUnreadInput!): MarkContentAsReadOrUnread
   mergeUser(input: MergeUserInput!): MergeUser
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
@@ -3280,6 +3307,7 @@ type Mutation {
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
+  updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
@@ -5716,6 +5744,12 @@ input UpdateDietPreferenceInput {
 type UpdateHydration {
   message: String
   success: Boolean
+}
+
+type UpdateInteraction {
+  interaction: InteractionType
+  message: String!
+  success: Boolean!
 }
 
 type UpdateJourneyStatus {

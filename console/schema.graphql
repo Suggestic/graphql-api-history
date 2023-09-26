@@ -349,6 +349,7 @@ type Constraint {
   id: ID!
   name: String
   description: String
+  assistantId: ID!
 }
 
 input ConstraintInput {
@@ -569,6 +570,12 @@ input CreateDailyRecapQuestionInput {
   imageUrl: String
   program: ID
   answers: [ID!]!
+}
+
+type CreateDayJourney {
+  success: Boolean!
+  message: String!
+  dayJourney: DayJourney
 }
 
 type CreateEscalation {
@@ -854,6 +861,7 @@ type DayJourney {
 }
 
 input DayJourneyInput {
+  journeyId: ID
   order: Int!
   skipped: Boolean!
   interactions: [InteractionInput]
@@ -932,6 +940,11 @@ type DeleteDailyRecapQuestion {
   success: Boolean!
   message: String!
   dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+type DeleteDayJourney {
+  success: Boolean!
+  message: String!
 }
 
 type DeleteEscalation {
@@ -1507,6 +1520,9 @@ type Mutation {
   """Create a Journey"""
   createJourney(input: JourneyInput): CreateJourney
 
+  """Create a Day in a Journey"""
+  createDayJourney(input: DayJourneyInput): CreateDayJourney
+
   """Create a new Knowledge Base belongs to an Assistant"""
   createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String): CreateKnowledgeBase
 
@@ -1519,6 +1535,9 @@ type Mutation {
   """Create a Constraint belongs to an Assistant"""
   createConstraint(input: ConstraintInput): CreateConstraint
 
+  """Updates a Constraint"""
+  updateConstraint(constraintId: ID!, name: String!, description: String!): UpdateConstraint
+
   """Create a chat response from Journey"""
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
 
@@ -1530,6 +1549,12 @@ type Mutation {
 
   """Create an individual interaction"""
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
+
+  """Update an individual interaction"""
+  updateInteraction(id: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): UpdateInteraction
+
+  """Delete a Day Journey"""
+  deleteDayJourney(id: ID!): DeleteDayJourney
 
   """Delete an interaction by ID"""
   deleteInteraction(interactionId: ID!): DeleteInteraction
@@ -1545,6 +1570,9 @@ type Mutation {
 
   """Update a Supplement"""
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement!
+
+  """Set App User as Test User"""
+  setThirdPartyAppUserAsTest(input: SetThirdPartyAppUserAsTestInput!): SetThirdPartyAppUserAsTest!
 }
 
 interface Node {
@@ -2000,6 +2028,18 @@ type SetRoles {
   message: String!
 }
 
+type SetThirdPartyAppUserAsTest {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  user: AppUser
+}
+
+input SetThirdPartyAppUserAsTestInput {
+  user: ID!
+  isTest: Boolean!
+}
+
 type SignUpDeveloper {
   success: Boolean!
   message: String!
@@ -2207,6 +2247,12 @@ input UpdateBiomarkerInput {
   normalValues: [Generic!]
 }
 
+type UpdateConstraint {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
+}
+
 type UpdateContentCategory {
   success: Boolean!
   message: String!
@@ -2314,6 +2360,12 @@ input UpdateIngredientInput {
   id: ID!
   name: String
   alias: [String!]
+}
+
+type UpdateInteraction {
+  success: Boolean!
+  message: String!
+  interaction: Interaction
 }
 
 type UpdateProgram {
