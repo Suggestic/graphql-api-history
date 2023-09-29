@@ -974,6 +974,12 @@ type DeleteKnowledgeBase {
   message: String!
 }
 
+type DeleteProfileFromAssistantList {
+  success: Boolean!
+  message: String!
+  assistantListUser: [AssistantListUser]
+}
+
 type DeleteProgram {
   success: Boolean!
   message: String!
@@ -1509,7 +1515,10 @@ type Mutation {
   deleteConstraint(id: ID!, assistantId: ID!): DeleteConstraint!
 
   """Delete Assistant list"""
-  deleteAssistantList(id: ID!, assistantId: ID!): DeleteAssistantList!
+  deleteAssistantList(id: ID!, assistantId: ID!): DeleteAssistantList
+
+  """Delete a user from Assistant List"""
+  deleteProfileFromAssistantList(profileId: ID!, assistantListId: ID!): DeleteProfileFromAssistantList
 
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!

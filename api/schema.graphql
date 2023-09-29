@@ -1672,6 +1672,11 @@ type DeleteAssessment {
   success: Boolean!
 }
 
+type DeleteAssistant {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteBiomarker {
   biomarker: Biomarker
   message: String!
@@ -1809,6 +1814,12 @@ type DeleteMyRecipe {
 type DeleteNote {
   message: String!
   note: Note
+  success: Boolean!
+}
+
+type DeleteProfileFromAssistantList {
+  assistantListUser: [AssistantListUser]
+  message: String!
   success: Boolean!
 }
 
@@ -3201,6 +3212,7 @@ type Mutation {
   deleteAppUserProfile(id: ID!): HardDeleteAppUserProfile
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
+  deleteAssistant(id: ID!): DeleteAssistant
   deleteBiomarker(id: ID!): DeleteBiomarker
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
@@ -3235,6 +3247,7 @@ type Mutation {
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
   deleteNote(noteId: ID!): DeleteNote
+  deleteProfileFromAssistantList(assistantListId: ID!, profileId: ID!): DeleteProfileFromAssistantList
   deleteQuestion(id: ID!): DeleteQuestion
 
   """deleteSleepQualityScore delete sleep quality score entry"""
