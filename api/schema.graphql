@@ -5771,6 +5771,7 @@ type UpdateJourneyStatus {
 }
 
 type UpdateLabTestReport {
+  errors: [FormError!]
   message: String!
   report: LabTestReport
   success: Boolean!

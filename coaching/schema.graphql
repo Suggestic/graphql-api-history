@@ -513,6 +513,15 @@ input BiomarkerValueInput {
   value: GenericScalar!
 }
 
+type BrandedFood {
+  name: String
+  dataType: String
+}
+
+type BrandedFoodNodeProxy {
+  brandedFood: BrandedFood
+}
+
 enum CalendarContactType {
   VIDEO_CALL
   GOOGLE_MEET
@@ -775,6 +784,16 @@ type CoachUpdatePayload {
   message: String!
   coach: Coach
   clientMutationId: String
+}
+
+type CommonFood {
+  name: String
+  dataType: String
+  description: String
+}
+
+type CommonFoodNodeProxy {
+  commonFood: CommonFood
 }
 
 enum ConferenceProviderName {
@@ -1313,6 +1332,32 @@ type ExternalCalendarEvent {
 type ExternalCalendarEventsInDate {
   date: Date!
   events: [ExternalCalendarEvent!]!
+}
+
+union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | UserRecipeProxy
+
+type FoodLog implements Node {
+  id: ID!
+  date: Date
+  food: Food
+  grams: Int
+}
+
+type FoodLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FoodLogEdge]!
+}
+
+"""A Relay edge containing a `FoodLog` and its cursor."""
+type FoodLogEdge {
+  """The item at the end of the edge"""
+  node: FoodLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type FormError {
@@ -2545,6 +2590,7 @@ type Query {
   ): MemberSearchConnection
   userAnswersByAssessment(memberId: ID!, assessmentId: ID): Assessment
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
+  memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
 }
 
 type QuestionConnection {
@@ -3554,6 +3600,10 @@ type UserRecipeEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type UserRecipeProxy {
+  userRecipe: UserRecipe
 }
 
 type Verify2faCode {

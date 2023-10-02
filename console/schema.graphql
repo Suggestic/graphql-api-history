@@ -1515,7 +1515,7 @@ type Mutation {
   deleteConstraint(id: ID!, assistantId: ID!): DeleteConstraint!
 
   """Delete Assistant list"""
-  deleteAssistantList(id: ID!, assistantId: ID!): DeleteAssistantList
+  deleteAssistantList(id: ID!): DeleteAssistantList
 
   """Delete a user from Assistant List"""
   deleteProfileFromAssistantList(profileId: ID!, assistantListId: ID!): DeleteProfileFromAssistantList
