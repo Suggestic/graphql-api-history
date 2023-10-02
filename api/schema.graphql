@@ -1677,6 +1677,11 @@ type DeleteAssistant {
   success: Boolean!
 }
 
+type DeleteAssistantList {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteBiomarker {
   biomarker: Biomarker
   message: String!
@@ -3213,6 +3218,7 @@ type Mutation {
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
   deleteAssistant(id: ID!): DeleteAssistant
+  deleteAssistantList(id: ID!): DeleteAssistantList
   deleteBiomarker(id: ID!): DeleteBiomarker
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
