@@ -2424,6 +2424,22 @@ type IngredientSearchResultEdge {
   node: IngredientSearchResult
 }
 
+type insightFields {
+  description: String!
+  highlight: String!
+  text: String!
+}
+
+type InsightsByCategory {
+  category: InsightsCategory!
+  fields: insightFields
+}
+
+enum InsightsCategory {
+  SLEEP
+  STEPS
+}
+
 enum IntakeCategory {
   FOOD
   MY_CHECKLIST_ITEM
@@ -4303,6 +4319,7 @@ type Query {
   hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, source: SourceType, startDate: Date!, toMl: Boolean): [Hydration!]!
   ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
+  insights(category: InsightsCategory, date: Date!): [InsightsByCategory!]!
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
   journey(assistantId: ID!): JourneyAssistantTypeResponse
