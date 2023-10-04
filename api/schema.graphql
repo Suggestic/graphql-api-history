@@ -1580,6 +1580,11 @@ type DailyRecapAnswer implements Node {
   type: String!
 }
 
+type DailyStreakScore {
+  date: Date!
+  score: Float!
+}
+
 type Dashboard {
   components: [EntryType!]!
   goals: [ComponentGoal!]!
@@ -4434,6 +4439,7 @@ type Query {
   users(after: String, before: String, first: Int, isTestUser: Boolean, last: Int, offset: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
+  wellnessScoreLastSevenDays(date: Date!, source: SourceType): WellnessScoreLastSevenDays!
   zoomAccountRecordings(after: String, before: String, end: Date!, first: Int, jwtToken: String!, last: Int, start: Date!): ZoomRecordingConnection
   zoomSessionRecordings(jwtToken: String!, sessionId: String!): ZoomRecording
 }
@@ -6280,6 +6286,11 @@ type WeightTracker {
   start: Float
   tendency: Tendency
   today: Float
+}
+
+type WellnessScoreLastSevenDays {
+  dailyStreakScore: [DailyStreakScore!]
+  wellnessScore: Float!
 }
 
 type ZoomParticipantAudioFile {
