@@ -465,6 +465,7 @@ input BiomarkerResultInput {
   date: String!
   alert: Boolean
   alertText: String
+  displayValue: String
 }
 
 input BiomarkerResultsFilterInput {
@@ -1610,7 +1611,7 @@ type LabTestReport {
   testDate: DateTime
   labName: String!
   reportPdf: String
-  title: String!
+  title: String
   isVisible: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2402,6 +2403,7 @@ type ProfileBiomarker implements Node {
   date: DateTime!
   alert: Boolean
   alertText: String
+  displayValue: String
   createdAt: DateTime!
   updatedAt: DateTime!
 

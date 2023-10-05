@@ -449,6 +449,7 @@ input AssistantConversationInput {
   hasKnowledgeBase: Boolean!
   interactionId: ID
   userProfile: ProfileTest!
+  usingInteractionGoal: Boolean!
 }
 
 type AssistantConversationResponse {
@@ -640,6 +641,7 @@ input BiomarkerResultInput {
   biomarkerId: ID!
   biomarkerUnitId: ID!
   date: DateTime!
+  displayValue: String
   result: BiomarkerValueInput!
 }
 
@@ -2637,7 +2639,7 @@ type LabTestReport {
   status: LabTestReportStatus
   testDate: DateTime
   testName: String!
-  title: String!
+  title: String
   updatedAt: DateTime!
   videoUrl: String
 }
@@ -3993,6 +3995,7 @@ type ProfileBiomarker implements Node {
   biomarkerUnit: BiomarkerUnit
   createdAt: DateTime!
   date: DateTime!
+  displayValue: String
   id: ID!
   labTestReport: LabTestReport!
   stringValue: JSONString! @deprecated(reason: "Use value instead")
