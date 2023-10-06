@@ -129,6 +129,7 @@ input AssistantConversationInput {
   hasConstraints: Boolean!
   hasEscalations: Boolean!
   hasKnowledgeBase: Boolean!
+  usingInteractionGoal: Boolean!
   userProfile: ProfileTest
 }
 
