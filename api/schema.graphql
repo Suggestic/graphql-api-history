@@ -998,6 +998,7 @@ type ContentLibraryType implements Node {
   isRead: Boolean
   lang: JSONString!
   order: Int!
+  personalizedContent: Boolean
   programs: [Program!]
   sourceUrl: String
   subTitle: String
@@ -1292,6 +1293,7 @@ type CreateJourneyChat {
 }
 
 type CreateKnowledgeBase {
+  errors: [FormError!]
   knowledgeBase: KnowledgeBaseType
   message: String!
   success: Boolean!
@@ -2612,6 +2614,8 @@ type KnowledgeBaseType {
   id: ID
   name: String!
   pdfFile: String
+  pdfUrl: String
+  sitemapUrl: String
   taskStatus: KnowledgeBaseTaskStatus!
   txt: String
   url: String!
@@ -3209,7 +3213,7 @@ type Mutation {
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
   createJourney(input: JourneyInput!): CreateJourney
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
-  createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, txt: String, url: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
