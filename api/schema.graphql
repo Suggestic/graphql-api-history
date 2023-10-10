@@ -3197,7 +3197,7 @@ type Mutation {
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
   createAssistant(mainGoal: String!, name: String!, program: ID!): CreateAssistant
-  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, profileId: ID!, useLongTermMemory: Boolean, userMessage: String!): CreateAssistantConversationMessage
+  createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, language: String, profileId: ID!, toneOfVoice: String, useLongTermMemory: Boolean, userMessage: String!): CreateAssistantConversationMessage
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
   createCoachType(input: CreateCoachTypeInput!): CreateCoachType
@@ -4719,6 +4719,7 @@ type RemoveFavoriteArticle {
 }
 
 type RemoveFromShoppingList {
+  message: String
   success: Boolean
 }
 
