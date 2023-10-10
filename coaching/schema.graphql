@@ -1329,7 +1329,7 @@ type ExternalCalendarEventsInDate {
   events: [ExternalCalendarEvent!]!
 }
 
-union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | UserRecipeProxy
+union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | UserRecipeProxy | RecipeProxy
 
 type FoodLog implements Node {
   id: ID!
@@ -2638,6 +2638,10 @@ type RecipeEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type RecipeProxy {
+  recipe: Recipe
 }
 
 type RecommendedSwaps {
