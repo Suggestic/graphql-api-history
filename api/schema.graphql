@@ -4342,7 +4342,7 @@ type Query {
   macroGoals(date: Date!): MacroGoals
   mealLog(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!): MealLogConnection
   mealLogMacroAggs(fromDate: Date!, toDate: Date!): MealLogMacroAggs
-  mealPlan(fromDate: Date): [MealPlanDay]
+  mealPlan(fillDays: Boolean = false, fromDate: Date): [MealPlanDay]
   mealPlanTemplate(id: ID!): MealPlanTemplate
   mealPlanTemplates(after: String, before: String, byCoach: ID, coachTypes: [ID!], excludeCoach: ID, first: Int, isPublic: Boolean, last: Int, newerFirst: Boolean, offset: Int, search: String): MealPlanTemplateConnection
   mealPlannerByCustomFormat(format: [MealTime]!): MealCustomPlannerDays
