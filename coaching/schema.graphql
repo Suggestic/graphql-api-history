@@ -785,6 +785,8 @@ type CommonFood {
   name: String
   dataType: String
   description: String
+  nutrients: [Nutrient!]
+  portions: [Portion!]
 }
 
 type CommonFoodNodeProxy {
@@ -1336,6 +1338,11 @@ type FoodLog implements Node {
   date: Date
   food: Food
   grams: Int
+  mealTime: MealTime
+  serving: Int
+  time: String
+  type: String
+  portionModifier: String
 }
 
 type FoodLogConnection {
@@ -2383,6 +2390,13 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+type Portion {
+  amount: Float
+  gramWeight: Float
+  modifier: String
+  seqNum: Int
 }
 
 type ProfileBiomarker implements Node {
