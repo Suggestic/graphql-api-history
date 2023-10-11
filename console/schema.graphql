@@ -616,6 +616,7 @@ type CreateJourney {
 type CreateKnowledgeBase {
   success: Boolean!
   message: String!
+  errors: [FormError!]
   knowledgeBase: KnowledgeBase
 }
 
@@ -1216,7 +1217,9 @@ type KnowledgeBase {
   url: String
   pdfFile: String
   txt: String
+  sitemapUrl: String
   taskStatus: TaskStatus
+  pdfUrl: String
 }
 
 type KnowledgeBaseChat {
@@ -1534,7 +1537,7 @@ type Mutation {
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
   """Create a new Knowledge Base belongs to an Assistant"""
-  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String): CreateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
@@ -1552,7 +1555,7 @@ type Mutation {
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
 
   """Creates a chat for assistant tester"""
-  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, useLongTermMemory: Boolean, profileId: ID!): AssistantConversationChat
+  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, useLongTermMemory: Boolean, profileId: ID!, language: String, toneOfVoice: String): AssistantConversationChat
 
   """Create a List to belongs to an Assistant"""
   createAssistantList(assistantId: ID!, name: String): CreateAssistantList
