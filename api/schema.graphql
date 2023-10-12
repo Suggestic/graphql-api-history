@@ -2526,6 +2526,8 @@ input ItemDirectionsOfUseInput {
 type JourneyAssistantType {
   dayJourney: [DayJourneyType]
   id: ID
+  sendWelcomeMessage: Boolean!
+  welcomeMessage: String
 }
 
 type JourneyAssistantTypeResponse {
