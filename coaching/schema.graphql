@@ -3575,8 +3575,8 @@ type UserRecipe implements Node {
   numberOfServings: Int!
   instructions: String
   mealTimes: [MealTime!]!
-  courses: [String!]!
-  cuisines: [String!]!
+  courses: [String!]
+  cuisines: [String!]
   servingWeight: Float!
   weightInGrams: Float!
   ingredients: [IngredientFoodFormat!]!

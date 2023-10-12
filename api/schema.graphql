@@ -6218,8 +6218,8 @@ type UserPurchases {
 }
 
 type UserRecipe implements Node {
-  courses: [String!]!
-  cuisines: [String!]!
+  courses: [String!]
+  cuisines: [String!]
   id: ID!
   ingredientLines: [String!]!
   ingredients: [IngredientFoodFormat!]!
