@@ -1186,6 +1186,8 @@ enum InvitationStatus {
 type Journey {
   id: ID!
   dayJourney: [DayJourney]
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
 }
 
 type JourneyChat {
@@ -1203,6 +1205,8 @@ type JourneyChatResponse {
 input JourneyInput {
   assistantId: ID!
   dayJourney: [DayJourneyInput!]
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
 }
 
 type JourneyResult {
