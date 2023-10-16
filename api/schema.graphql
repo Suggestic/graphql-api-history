@@ -3358,6 +3358,7 @@ type Mutation {
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
+  updateJourney(input: UpdateJourneyInput!): UpdateJourney
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
   updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
@@ -5804,6 +5805,18 @@ type UpdateInteraction {
   interaction: InteractionType
   message: String!
   success: Boolean!
+}
+
+type UpdateJourney {
+  journey: JourneyAssistantType
+  message: String!
+  success: Boolean!
+}
+
+input UpdateJourneyInput {
+  id: ID!
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
 }
 
 type UpdateJourneyStatus {
