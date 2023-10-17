@@ -1537,6 +1537,9 @@ type Mutation {
   """Create a Journey"""
   createJourney(input: JourneyInput): CreateJourney
 
+  """Update a Journey"""
+  updateJourney(input: UpdateJourneyInput!): UpdateJourney
+
   """Create a Day in a Journey"""
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
@@ -2383,6 +2386,18 @@ type UpdateInteraction {
   success: Boolean!
   message: String!
   interaction: Interaction
+}
+
+type UpdateJourney {
+  success: Boolean!
+  message: String!
+  journey: Journey
+}
+
+input UpdateJourneyInput {
+  id: ID!
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
 }
 
 type UpdateProgram {
