@@ -3178,7 +3178,9 @@ type Mutation {
   """addSleepQualityScore add sleep quality score log"""
   addSleepQualityScore(date: Date, source: SourceType, value: Int!): AddSleepQualityScore!
 
-  """addSleepTime add sleep time log"""
+  """
+  addSleepTime add sleep time log | Args: value: Sleep duration in minutes
+  """
   addSleepTime(date: Date, source: SourceType, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, source: SourceType, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
@@ -4441,6 +4443,10 @@ type Query {
   thirdPartyGoals(goal: TrackerComponent, id: ID): [ThirdPartyGoal!]
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
+
+  """
+  Returns the goals for each enabled third party's components. By Example: SLEEP_TIME_TRACKER: default is 480 minutes (8h)
+  """
   trackingDailyGoals: TrackingDailyGoals!
   trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
@@ -4944,6 +4950,11 @@ type SleepQualityScore {
   date: Date!
   id: ID!
   source: SourceType!
+
+  """
+  sleep quality index scaling from 0 to 100, where the values above 77 signify
+  good sleep quality, while those below 77 signify poor sleep quality.
+  """
   value: Int!
 }
 
@@ -4963,6 +4974,8 @@ type SleepTime {
   date: Date!
   id: ID!
   source: SourceType!
+
+  """Sleep duration in minutes"""
   value: Int!
 }
 
@@ -5092,6 +5105,7 @@ type Streak {
   expectedActivities: [EntryType]
   hasPreviousStreak: Boolean
   isToday: Boolean
+  longestPerfectDayStreakEver: Int
   longestStreakEver: Int! @deprecated
   totalPerfectDays: Int! @deprecated
 }
