@@ -1802,6 +1802,11 @@ type DeleteInteraction {
   success: Boolean!
 }
 
+type DeleteKnowledgeBase {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteLabTestReport {
   message: String!
   report: LabTestReport
@@ -3291,6 +3296,7 @@ type Mutation {
   """deleteHeartRateLog delete Heart Rate Log"""
   deleteHeartRateLog(id: ID!): DeleteHeartRateLog!
   deleteInteraction(interactionId: ID!): DeleteInteraction
+  deleteKnowledgeBase(assistantId: ID!, id: ID!): DeleteKnowledgeBase
   deleteLabTestReport(id: ID!): DeleteLabTestReport
   deleteMealPlanTemplate(coach: ID, id: ID!): DeleteMealPlanTemplate
   deleteMyBrandedFood(id: String!): DeleteMyBrandedFood
@@ -4325,6 +4331,7 @@ type Query {
   coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
+  consentTypes(name: String): [ConsentType!]
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], enablePersonalizedContent: Boolean = false, first: Int, id: ID, isRead: Boolean, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
