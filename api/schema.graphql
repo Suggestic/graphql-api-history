@@ -121,6 +121,16 @@ type AddToShoppingList {
   success: Boolean
 }
 
+type AddUserConsent {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input AddUserConsentInput {
+  consentTypeId: ID!
+}
+
 type AddUserToAssistantList {
   assistantListUser: [AssistantListUser]
   message: String!
@@ -950,6 +960,11 @@ type ConnectedSource {
   id: ID!
   sourceId: Int!
   sourceName: SourceType!
+}
+
+type ConsentType implements Node {
+  id: ID!
+  name: String!
 }
 
 type ContentCategoryType implements Node {
@@ -3184,6 +3199,7 @@ type Mutation {
   addSleepTime(date: Date, source: SourceType, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, source: SourceType, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
+  addUserConsent(input: AddUserConsentInput!): AddUserConsent
   addUserToAssistantList(assistantListId: ID!, profileId: ID!): AddUserToAssistantList
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
@@ -4454,6 +4470,7 @@ type Query {
   userAnswersByAssessment(id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
+  userConsent(consentTypeId: ID, profileId: ID): [UserConsentType!]
   users(after: String, before: String, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
@@ -6199,6 +6216,13 @@ input UserAssessmentsFilterInput {
 type UserConnection {
   edges: [UserEdge]!
   pageInfo: PageInfo!
+}
+
+type UserConsentType implements Node {
+  consentType: ConsentType!
+  consentedAt: DateTime!
+  id: ID!
+  profile: ProfileType!
 }
 
 type UserEdge {
