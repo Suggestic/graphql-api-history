@@ -1559,6 +1559,7 @@ input InviteMemberInput {
   recommendedProgram: ID
   phone: String
   message: String
+  coach: ID
   clientMutationId: String
 }
 
