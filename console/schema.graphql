@@ -1558,6 +1558,9 @@ type Mutation {
   """Updates a Constraint"""
   updateConstraint(constraintId: ID!, name: String!, description: String!): UpdateConstraint
 
+  """Updated a Day journey"""
+  updateDayJourney(dayJourneyId: ID!, order: Int!, skipped: Boolean!): UpdateDayJourney
+
   """Create a chat response from Journey"""
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
 
@@ -2356,6 +2359,12 @@ input UpdateDailyRecapQuestionInput {
   imageUrl: String
   program: ID
   answers: [ID!]
+}
+
+type UpdateDayJourney {
+  success: Boolean!
+  message: String!
+  dayJourney: DayJourney
 }
 
 type UpdateIngredient {

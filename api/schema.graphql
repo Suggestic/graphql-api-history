@@ -3342,6 +3342,7 @@ type Mutation {
   removeMealPlan: RemoveMealPlan
   removeMealPlanRecipe(mealId: ID!): RemoveMealPlanRecipe
   removeOwnMeal(databaseId: String!): RemoveOwnMeal
+  removeUserConsent(consentType: ID!): RemoveUserConsent
   requestAccountDeletion: RequestAccountDeletion
   requestResetPassword(email: String!): RequestResetPassword
   resendAppointmentConfirmationEmail(appointment: ID!, profile: ID): ResendAppointmentConfirmationEmail
@@ -4774,6 +4775,11 @@ type RemoveMealPlanRecipe {
 
 type RemoveOwnMeal {
   success: Boolean
+}
+
+type RemoveUserConsent {
+  message: String!
+  success: Boolean!
 }
 
 type RequestAccountDeletion {
