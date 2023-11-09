@@ -3004,6 +3004,7 @@ enum MealPlannerQueryType {
 
 type MealPlanTemplate implements Node {
   coachId: ID
+  coachName: String
   coachTypes(after: String, before: String, first: Int, last: Int, offset: Int): CoachTypeConnection
   createdAt: DateTime!
   days: [MealPlanDay!]!
