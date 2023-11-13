@@ -1701,6 +1701,7 @@ input ProfileTest {
   biologicalSex: BiologicalSex
   height: Float
   weight: Float
+  goalWeight: Float
   activityLevel: ActivityLevel
   steps: Int
 }
