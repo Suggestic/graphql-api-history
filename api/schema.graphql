@@ -4132,6 +4132,7 @@ input ProfileTest {
   activityLevel: ActivityLevel
   age: Int!
   biologicalSex: BiologicalSex!
+  goalWeight: Float
   height: Float
   name: String!
   steps: Int
