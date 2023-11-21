@@ -228,12 +228,14 @@ input AnswerSupplementInput {
 }
 
 type Appointment {
+  appointmentCredits: [AppointmentCredit]
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
   contactType: CalendarContactType!
   description: String
   end: DateTime!
   id: ID!
+  labTestReports(after: String, before: String, first: Int, last: Int): LabTestReportConnection
   meetingUrl: String
   sendbirdRoomId: String @deprecated(reason: "Soon it will be removed")
   start: DateTime!
@@ -2669,6 +2671,7 @@ type LabTestReport {
   testName: String!
   title: String
   updatedAt: DateTime!
+  userEmail: String
   videoUrl: String
 }
 
@@ -3243,7 +3246,7 @@ type Mutation {
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
   createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
-  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, videoUrl: String): CreateLabTestReport
+  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
   createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
   createMealPlanTemplate(coach: ID, customOptions: MPTCustomOptionsInput, description: String!, fromDays: MPTFromDaysInput, fromScratch: MPTFromScratchInput, isPublic: Boolean, name: String!): CreateMealPlanTemplate
@@ -3386,7 +3389,7 @@ type Mutation {
   updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
   updateJourney(input: UpdateJourneyInput!): UpdateJourney
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
-  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
+  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, userEmail: String, videoUrl: String): UpdateLabTestReport
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   updateMealPlanTemplate(coach: ID, coachTypes: [ID!], description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate

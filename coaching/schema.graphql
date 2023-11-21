@@ -1,3 +1,9 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
 enum ActivityLevel {
   NOT_ACTIVE
   EXERCISE_1_2
@@ -136,6 +142,8 @@ type Appointment {
   availabilityTimezone: String!
   zoomSessionName: String
   zoomSessionPassword: String
+  appointmentCredits: [AppointmentCredit]
+  labTestReports(before: String, after: String, first: Int, last: Int): LabTestReportConnection
 }
 
 type AppointmentCredit {
@@ -346,7 +354,7 @@ type BiomarkerCategory implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 }
 
@@ -369,7 +377,7 @@ type BiomarkerCategoryEdge {
 
 input BiomarkerCategoryOrderBy {
   field: BiomarkerCategoryOrderByField!
-  order: SortOrder
+  order: SortOrder = ASC
 }
 
 enum BiomarkerCategoryOrderByField {
@@ -466,7 +474,7 @@ input BiomarkerResultsFilterInput {
   categoryId: ID
   biomarkerId: ID
   biomarkerName: String
-  intervalRange: BiomarkerIntervalRange
+  intervalRange: BiomarkerIntervalRange = null
 }
 
 type BiomarkerUnit implements Node {
@@ -476,7 +484,7 @@ type BiomarkerUnit implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 }
 
@@ -533,7 +541,7 @@ type ChecklistItem {
 }
 
 type Coach implements Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
   name: String
   email: String!
@@ -765,7 +773,6 @@ input CoachUpdateInput {
   disabled: Boolean
   makeAdmin: Boolean
   allowSeeAll: Boolean
-  members: [ID]
   enable2fa: Boolean
   affiliateId: String
   coachTypes: [ID!]
@@ -867,7 +874,6 @@ type CreateAppointmentEvent {
 
 input CreateAppointmentEventInput {
   appointmentTypeId: ID!
-  timezone: String
   start: DateTime!
   description: String
   url: String
@@ -875,7 +881,7 @@ input CreateAppointmentEventInput {
   attendees: [ID!]
   allowFree: Boolean
   allowNotRegistered: Boolean
-  contactType: CalendarContactType
+  contactType: CalendarContactType = VIDEO_CALL
   recurring: AppointmentFrequencyInput
   byCoach: ID
 }
@@ -1029,7 +1035,7 @@ input CreateProtocolInput {
   isPublic: Boolean
   isActive: Boolean
   supplements: [SupplementProtocolInput!]
-  group: ProtocolGroup
+  group: ProtocolGroup = PROTOCOL
   bundle: ID
 }
 
@@ -1423,7 +1429,7 @@ type GroupChannel implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 }
 
@@ -1482,7 +1488,7 @@ input HistoricalBiomarkerResultsFilterInput {
   categoryId: ID
   biomarkerId: ID
   biomarkerName: String
-  intervalRange: BiomarkerIntervalRange
+  intervalRange: BiomarkerIntervalRange = null
   labTestReportId: ID
 }
 
@@ -1796,7 +1802,7 @@ enum MealTime {
 
 """This is a client linked to a coach"""
 type Member implements Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
   email: String!
   name: String!
@@ -1918,7 +1924,7 @@ input MemberSearchFilters {
   birthdate: Date
   hasSendbirdId: Boolean
   sendBirdIds: [String!]
-  isClient: Boolean
+  isClient: Boolean = null
   tagIds: [ID!]
 }
 
@@ -2049,7 +2055,7 @@ type Mutation {
   cronofyAuthToken(code: String!, redirectUri: String!): CronofyAuthToken
   cronofyElementToken(permissions: [String]!): CronofyElementToken
   cronofyConferencingServiceAuth(providerName: ConferenceProviderName, redirectUri: String!): CronofyConferencingServiceAuth
-  createAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int!, refundableBeforeHours: Int, title: String!): CreateAppointmentType
+  createAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType = INDIVIDUAL, numberOfMember: Int!, refundableBeforeHours: Int, title: String!): CreateAppointmentType
   updateAppointmentType(coaches: [ID!], contactType: [CalendarContactType!], durationMin: Int, id: ID!, initialBuffer: Int, multiCoachType: AppointmentMultiCoachType, numberOfMember: Int, refundableBeforeHours: Int, title: String): UpdateAppointmentType
   deleteAppointmentType(id: ID!, replaceWith: ID): DeleteAppointmentType
   createAppointmentEvent(input: CreateAppointmentEventInput!): CreateAppointmentEvent
@@ -2093,7 +2099,7 @@ type Mutation {
 
 """An object with an ID"""
 interface Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
 }
 
@@ -2408,7 +2414,7 @@ type ProfileBiomarker implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
 
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
   value: GenericScalar!
   biomarker: Biomarker!
@@ -2539,21 +2545,24 @@ enum ProtocolGroup {
 type Query {
   me: Coach
   sectionsConfig: UISections!
-
-  """The ID of the object"""
-  coach(id: ID!): Coach
+  coach(
+    """The ID of the object"""
+    id: ID!
+  ): Coach
   coaches(sendbirdHasEverLoggedIn: Boolean, ids: [ID!], filters: CoachFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
   programs(before: String, after: String, first: Int, last: Int): ProgramConnection
-
-  """The ID of the object"""
-  member(id: ID!): Member
+  member(
+    """The ID of the object"""
+    id: ID!
+  ): Member
   members(filters: MemberSearchFilters, before: String, after: String, first: Int, last: Int): MemberConnection
   restrictions(before: String, after: String, first: Int, last: Int): RestrictionConnection
   recipeSearch(query: String, before: String, after: String, first: Int, last: Int): RecipeConnection
   recommendedSwaps(mealTime: MealTime!, memberId: ID): RecommendedSwaps
-
-  """The ID of the object"""
-  mealPlanTemplate(id: ID!): MealPlanTemplate
+  mealPlanTemplate(
+    """The ID of the object"""
+    id: ID!
+  ): MealPlanTemplate
   mealPlanTemplates(newerFirst: Boolean, isOwned: Boolean, search: String, coachTypes: [ID!], before: String, after: String, first: Int, last: Int): MPTConnection
   appointmentTypes: AppointmentTypes!
   noteTemplates(before: String, after: String, first: Int, last: Int): NoteTemplateConnection
@@ -2569,7 +2578,7 @@ type Query {
   biomarkerCatalog(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
   biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
   biomarkerCategories(id: ID, parentId: ID, orderBy: BiomarkerCategoryOrderBy, offset: Int, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
-  biomarkerUnits(offset: Int, before: String, after: String, first: Int, last: Int, id: Float): BiomarkerUnitConnection
+  biomarkerUnits(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BiomarkerUnitConnection
   biomarkerResults(memberId: ID!, filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
   historicalBiomarkerResults(memberId: ID!, filters: HistoricalBiomarkerResultsFilterInput, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnectionTypeConnection
   historicalResultsByBiomarker(
@@ -3289,14 +3298,13 @@ type UpdateAppointmentEvent {
 input UpdateAppointmentEventInput {
   id: ID!
   appointmentTypeId: ID
-  timezone: String
   start: DateTime
   description: String
   url: String
   location: Location
   attendees: [ID!]
   allowFree: Boolean
-  contactType: CalendarContactType
+  contactType: CalendarContactType = null
   recurring: AppointmentFrequencyInput
 }
 
@@ -3357,9 +3365,9 @@ type UpdateMealPlanTemplate {
 
 input UpdateMemberFieldsInput {
   memberId: ID!
-  goals: UserGoals
-  userInfo: UserInfo
-  mealPlanSettings: UserMealPlanSettings
+  goals: UserGoals = null
+  userInfo: UserInfo = null
+  mealPlanSettings: UserMealPlanSettings = null
   phone: String
   timezone: String
   clientMutationId: String
@@ -3469,7 +3477,7 @@ input UpdateProtocolInput {
 }
 
 input UpdateSettingsInput {
-  unitSystem: UnitSystem
+  unitSystem: UnitSystem = null
   name: String
   password: UpdatePasswordInput
   availabilitySettings: AvailabilitySettingsInput
@@ -3638,7 +3646,7 @@ input WeeklyPeriodInput {
 }
 
 type WeeklyRules implements Node {
-  """The ID of the object."""
+  """The ID of the object"""
   id: ID!
   weekday: Weekday!
   period: AvailabilityWeekdayPeriod!
