@@ -210,7 +210,7 @@ type Assessment {
   isPublic: Boolean
   order: Int
   progressBar: Boolean
-  score: Int
+  score: Float
   status: AssessmentStatus
   updatedAt: String
   weight: Int
