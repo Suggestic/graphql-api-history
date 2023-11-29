@@ -3334,6 +3334,7 @@ type Mutation {
   login(userId: String!): LoginUser
   markContentAsReadOrUnread(input: MarkContentAsReadOrUnreadInput!): MarkContentAsReadOrUnread
   mergeUser(input: MergeUserInput!): MergeUser
+  newUserAssessments(input: NewUserAssessmentsInput!): NewUserAssessments
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
@@ -3526,6 +3527,20 @@ type MyCommonFoodEdge {
 
 type MyCommonFoodProxy {
   myCommonFoodProxy: MyCommonFood!
+}
+
+type NewUserAssessments {
+  assessments(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentConnection
+  externalId: String
+  message: String!
+  success: Boolean!
+  userId: ID
+}
+
+input NewUserAssessmentsInput {
+  assessment: ID
+  email: String!
+  externalId: String
 }
 
 interface Node {
@@ -4164,6 +4179,7 @@ type ProfileType {
   dietPreferences: [DietPreference!]!
   email: String!
   encodedAttributes: String
+  externalId: String
   extraData: JSONString
   favoriteCuisines: [String!]
   gender: String
