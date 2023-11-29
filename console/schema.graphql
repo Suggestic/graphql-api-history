@@ -1224,6 +1224,7 @@ type KnowledgeBase {
   sitemapUrl: String
   taskStatus: TaskStatus
   pdfUrl: String
+  sitemapUrls: [SitemapUrl]
 }
 
 type KnowledgeBaseChat {
@@ -1244,7 +1245,10 @@ type KnowledgeBaseEntity {
   url: String
   pdfFile: String
   txt: String
+  sitemapUrl: String
   taskStatus: TaskStatus
+  pdfUrl: String
+  sitemapUrls: [SitemapUrl]
 }
 
 input KnowledgeBaseInput {
@@ -2074,6 +2078,14 @@ input SignUpDeveloperInput {
   firstName: String!
   lastName: String!
   companyName: String
+}
+
+type SitemapUrl {
+  id: ID!
+  knowledgeBase: ID
+  url: String
+  sitemapUrl: String
+  taskStatus: TaskStatus
 }
 
 enum SortOrder {
