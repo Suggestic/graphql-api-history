@@ -237,6 +237,7 @@ type Appointment {
   id: ID!
   labTestReports(after: String, before: String, first: Int, last: Int): LabTestReportConnection
   meetingUrl: String
+  postEventStatus: PostEventStatus
   sendbirdRoomId: String @deprecated(reason: "Soon it will be removed")
   start: DateTime!
   status: EventStatus!
@@ -1102,6 +1103,7 @@ input CreateAppointmentInput {
   contactType: CalendarContactType
   datetime: DateTime!
   note: String
+  postEventStatus: PostEventStatus
   timezone: String
 }
 
@@ -3999,6 +4001,19 @@ scalar PositiveFloat
 
 scalar PositiveInt
 
+enum PostEventStatus {
+  CANCELED_BY_ADMIN
+  CANCELED_BY_COACH
+  CANCELED_BY_MEMBER
+  COACH_NO_SHOW
+  COMPLETED
+  MEMBER_NO_SHOW
+  RESCHEDULED_BY_ADMIN
+  RESCHEDULED_BY_COACH
+  RESCHEDULED_BY_MEMBER
+  SCHEDULED
+}
+
 enum PriceRate {
   RATE_0
   RATE_1
@@ -4415,7 +4430,7 @@ type Query {
   menuitemTags: [String]
   menuitems(restaurantId: String!): [MenuItem]
   menuitemsByProgram(programId: String!, restaurantId: String!): [MenuItem]
-  myAppointments(end: DateTime, start: DateTime, timezone: String): [Appointment!]!
+  myAppointments(end: DateTime, labTestReportIds: [ID!], start: DateTime, timezone: String): [Appointment!]!
   myBrandedFoods(after: String, before: String, first: Int, id: String, last: Int): MyBrandedFoodConnection
   myChecklistItems(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): MyChecklistItemConnection
   myChecklistLogs(end: Date!, start: Date!): MyChecklistLogs!
@@ -5690,6 +5705,7 @@ input UpdateAppointmentInput {
   appointmentType: ID
   contactType: CalendarContactType
   datetime: DateTime
+  postEventStatus: PostEventStatus
   timezone: String
 }
 

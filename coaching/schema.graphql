@@ -144,6 +144,7 @@ type Appointment {
   zoomSessionPassword: String
   appointmentCredits: [AppointmentCredit]
   labTestReports(before: String, after: String, first: Int, last: Int): LabTestReportConnection
+  postEventStatus: PostEventStatus
 }
 
 type AppointmentCredit {
@@ -564,7 +565,7 @@ type Coach implements Node {
   isCalendarAuth: Boolean!
   conferencingProfiles: [ConferenceProviderName!]!
   externalCalendarEvents(start: Date, end: Date, timezone: String): [ExternalCalendarEventsInDate!]!
-  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String): [AppointmentsInDate!]!
+  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, labTestReportIds: [ID!]): [AppointmentsInDate!]!
   recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
   affiliateId: String
@@ -884,6 +885,7 @@ input CreateAppointmentEventInput {
   contactType: CalendarContactType = VIDEO_CALL
   recurring: AppointmentFrequencyInput
   byCoach: ID
+  postEventStatus: PostEventStatus
 }
 
 type CreateAppointmentType {
@@ -905,6 +907,12 @@ type CreateCoachTeamPayload {
   errors: [FormError!]
   coachTeam: CoachTeam
   clientMutationId: String
+}
+
+type CreateCoachTwilioAccessToken {
+  success: Boolean!
+  message: String!
+  jwt: String
 }
 
 input CreateCoachTypeInput {
@@ -1843,7 +1851,7 @@ type Member implements Node {
   labTestReports(id: ID, isVisible: Boolean, before: String, after: String, first: Int, last: Int): LabTestReportConnection!
   credits: [AppointmentCredit]!
   hasEverLoggedIn: Boolean
-  appointmentsByDate(timezone: String!, fromDate: Date, toDate: Date): [AppointmentsInDate!]
+  appointmentsByDate(timezone: String!, fromDate: Date, toDate: Date, labTestReportIds: [ID!]): [AppointmentsInDate!]
   subscription: Subscription
   quizAnswers: [QuizAnswer!]!
   customAttributes: JSONString!
@@ -2095,6 +2103,7 @@ type Mutation {
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeamPayload
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeamPayload
   deleteCoachTeam(id: ID!): DeleteCoachTeam
+  createCoachTwilioAccessToken: CreateCoachTwilioAccessToken
 }
 
 """An object with an ID"""
@@ -2406,6 +2415,19 @@ type Portion {
   seqNum: Int
 }
 
+enum PostEventStatus {
+  SCHEDULED
+  COMPLETED
+  MEMBER_NO_SHOW
+  COACH_NO_SHOW
+  RESCHEDULED_BY_MEMBER
+  RESCHEDULED_BY_COACH
+  RESCHEDULED_BY_ADMIN
+  CANCELED_BY_MEMBER
+  CANCELED_BY_COACH
+  CANCELED_BY_ADMIN
+}
+
 type ProfileBiomarker implements Node {
   date: DateTime!
   alert: Boolean
@@ -2566,7 +2588,7 @@ type Query {
   mealPlanTemplates(newerFirst: Boolean, isOwned: Boolean, search: String, coachTypes: [ID!], before: String, after: String, first: Int, last: Int): MPTConnection
   appointmentTypes: AppointmentTypes!
   noteTemplates(before: String, after: String, first: Int, last: Int): NoteTemplateConnection
-  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, coachIds: [ID!]): [AppointmentsInDate!]!
+  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, coachIds: [ID!], labTestReportIds: [ID!]): [AppointmentsInDate!]!
   subscriptions(before: String, after: String, first: Int, last: Int): SubscriptionConnection
   protocols: AvailableProtocols
   supplementPlanTemplates: AvailableSupplementPlanTemplates
@@ -3306,6 +3328,7 @@ input UpdateAppointmentEventInput {
   allowFree: Boolean
   contactType: CalendarContactType = null
   recurring: AppointmentFrequencyInput
+  postEventStatus: PostEventStatus
 }
 
 type UpdateAppointmentType {
