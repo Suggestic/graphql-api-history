@@ -574,6 +574,7 @@ type Coach implements Node {
   showAllMembers: Boolean!
   coachTypes(before: String, after: String, first: Int, last: Int): CoachTypeConnection
   coachTeams(before: String, after: String, first: Int, last: Int): CoachTeamConnection
+  sendbirdAppId: String!
 }
 
 input CoachActivityLogFiltersInput {
