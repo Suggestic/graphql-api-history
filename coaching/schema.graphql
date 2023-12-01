@@ -520,6 +520,8 @@ input BiomarkerValueInput {
 type BrandedFood {
   name: String
   dataType: String
+  description: String
+  nutrients: [Nutrient!]
 }
 
 type BrandedFoodNodeProxy {
