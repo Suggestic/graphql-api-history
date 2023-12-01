@@ -333,6 +333,7 @@ type Assessment implements Node {
   status: AssessmentStatus
   title: String!
   updatedAt: DateTime!
+  url: String
   weight: Int
 }
 
@@ -3359,6 +3360,7 @@ type Mutation {
   removeUserConsent(consentType: ID!): RemoveUserConsent
   requestAccountDeletion: RequestAccountDeletion
   requestResetPassword(email: String!): RequestResetPassword
+  requestUserDataDownload: RequestUserDataDownload
   resendAppointmentConfirmationEmail(appointment: ID!, profile: ID): ResendAppointmentConfirmationEmail
   resetPassword(code: String!, newPassword: String!): ResetPassword
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
@@ -3543,7 +3545,7 @@ type NewUserAssessments {
   externalId: String
   message: String!
   success: Boolean!
-  userId: ID
+  userId: String
 }
 
 input NewUserAssessmentsInput {
@@ -4834,6 +4836,11 @@ type RequestAccountDeletion {
 type RequestResetPassword {
   message: String!
   resetPasswordCode: String
+  success: Boolean!
+}
+
+type RequestUserDataDownload {
+  message: String!
   success: Boolean!
 }
 
