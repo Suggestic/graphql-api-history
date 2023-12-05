@@ -4521,6 +4521,7 @@ type Query {
   trackingDailyGoals: TrackingDailyGoals!
   trackingSources: [ConnectedSource!]!
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
+  upcomingAppointments: [Appointment!]!
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   userAnswersByAssessment(id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
