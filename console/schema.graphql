@@ -1903,6 +1903,9 @@ type Query {
 
   """List all Supplements"""
   supplements(id: ID, name: String, first: Int, last: Int, after: String, before: String): SupplementConnection!
+
+  """ List all profiles"""
+  wellnessProfile(id: ID!): WellnessProfileResult!
 }
 
 type RecipeTag implements Node {
@@ -2690,5 +2693,20 @@ type VerifyDeveloperEmail {
   accessToken: String
   refreshToken: String
   profile: Profile
+}
+
+type WellnessProfile {
+  id: ID!
+  age: Int
+  biologicalSex: String
+  height: Int
+  weight: Int
+  activityLevel: String
+}
+
+type WellnessProfileResult {
+  success: Boolean!
+  message: String!
+  profile: WellnessProfile
 }
 
