@@ -457,6 +457,14 @@ enum AssessmentType {
   ON_BOARDING
 }
 
+type Assistant {
+  id: ID!
+  mainGoal: String!
+  mode: AssistantMode!
+  name: String!
+  program: ID!
+}
+
 input AssistantConversationInput {
   hasConstraints: Boolean!
   hasEscalations: Boolean!
@@ -484,11 +492,9 @@ type AssistantListUser {
   profile: ID!
 }
 
-type AssistantType {
-  id: ID!
-  mainGoal: String!
-  name: String!
-  program: ID!
+enum AssistantMode {
+  AUTO
+  MANUAL
 }
 
 type Attendee {
@@ -1144,7 +1150,8 @@ input CreateAssessmentInput {
 }
 
 type CreateAssistant {
-  assistant: AssistantType
+  assistant: Assistant
+  errors: [FormError!]
   message: String!
   success: Boolean!
 }
@@ -1153,6 +1160,13 @@ type CreateAssistantConversationMessage {
   message: String!
   response: AssistantConversationResponse
   success: Boolean!
+}
+
+input CreateAssistantInput {
+  mainGoal: String!
+  mode: AssistantMode = MANUAL
+  name: String!
+  programId: ID!
 }
 
 type CreateBiomarkerCategory {
@@ -3237,7 +3251,7 @@ type Mutation {
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
-  createAssistant(mainGoal: String!, name: String!, program: ID!): CreateAssistant
+  createAssistant(input: CreateAssistantInput!): CreateAssistant
   createAssistantConversationMessage(assistantConversationInput: AssistantConversationInput!, assistantId: ID!, isInitial: Boolean!, language: String, profileId: ID!, toneOfVoice: String, useLongTermMemory: Boolean, userMessage: String!): CreateAssistantConversationMessage
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeam
@@ -3387,6 +3401,7 @@ type Mutation {
   updateAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, labTestReports: [ID], profile: ID!, value: Int): UpdateAppointmentCredits
   updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended
   updateAssessment(input: UpdateAssessmentInput!): UpdateAssessment
+  updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
@@ -4256,7 +4271,7 @@ type ProfileType {
 }
 
 type Program implements Node {
-  assistantSet: [AssistantType!]!
+  assistantSet: [Assistant!]!
   author: String
   authorAvatar: String
   authors: [UUID!]
@@ -5753,6 +5768,21 @@ input UpdateAssessmentInput {
   progressBar: Boolean
   title: String
   weight: Int
+}
+
+type UpdateAssistant {
+  assistant: Assistant
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateAssistantInput {
+  id: ID!
+  mainGoal: String
+  mode: AssistantMode
+  name: String
+  programId: ID
 }
 
 type UpdateBiomarker {
