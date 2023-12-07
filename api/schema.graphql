@@ -516,6 +516,20 @@ input AttributeInput {
   value: GenericScalar
 }
 
+type AutoGenerateConversationMessage {
+  message: String!
+  response: String
+  success: Boolean!
+}
+
+input AutoGenerateConversationMessageInput {
+  assistantId: ID
+  conversationId: ID
+  isInitial: Boolean = false
+  message: String!
+  toneOfVoice: String
+}
+
 union AvailableChecklistItems = ChecklistItem | MyChecklistItemOnPlan | SupplementOnPlan
 
 enum BiologicalSex {
@@ -3234,6 +3248,7 @@ type Mutation {
   addToShoppingList(recipeId: String!): AddToShoppingList
   addUserConsent(input: AddUserConsentInput!): AddUserConsent
   addUserToAssistantList(assistantListId: ID!, profileId: ID!): AddUserToAssistantList
+  autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
   changeMealPlannerDayMeal(day: Int!, mealTime: MealTime!, recipeId: String!): ChangeMealPlannerDayMeal
@@ -4545,6 +4560,7 @@ type Query {
   users(after: String, before: String, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
+  wellnessProfile(id: ID!): WellnessProfileResponse
   wellnessScoreLastSevenDays(date: Date!, source: SourceType): WellnessScoreLastSevenDays!
   zoomAccountRecordings(after: String, before: String, end: Date!, first: Int, jwtToken: String!, last: Int, start: Date!): ZoomRecordingConnection
   zoomSessionRecordings(jwtToken: String!, sessionId: String!): ZoomRecording
@@ -6462,6 +6478,21 @@ type WeightTracker {
   start: Float
   tendency: Tendency
   today: Float
+}
+
+type WellnessProfileResponse {
+  message: String!
+  profile: WellnessProfileType
+  success: Boolean!
+}
+
+type WellnessProfileType {
+  activityLevel: String
+  age: Int
+  biologicalSex: String
+  height: Float
+  id: ID
+  weight: Float
 }
 
 type WellnessScoreLastSevenDays {
