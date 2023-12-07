@@ -116,6 +116,7 @@ type Assistant {
   program: ID!
   name: String!
   mainGoal: String
+  mode: AssistantMode!
 }
 
 type AssistantConversationChat {
@@ -155,6 +156,11 @@ type AssistantListResult {
 type AssistantListUser {
   id: ID!
   profile: ID!
+}
+
+enum AssistantMode {
+  MANUAL
+  AUTO
 }
 
 type AssistantResult {
@@ -1538,6 +1544,9 @@ type Mutation {
   """Create a new Assistant with its data"""
   createAssistant(name: String!, mainGoal: String!, program: ID!): CreateAssistant
 
+  """Update a Assistant"""
+  updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
+
   """Create a Journey"""
   createJourney(input: JourneyInput): CreateJourney
 
@@ -2249,6 +2258,20 @@ input UpdateArticleRecommendedInput {
   articleId: ID
 }
 
+type UpdateAssistant {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
+input UpdateAssistantInput {
+  id: ID!
+  name: String
+  mainGoal: String
+  programId: ID
+  mode: AssistantMode
+}
+
 type UpdateBiomarker {
   success: Boolean!
   message: String!
@@ -2699,8 +2722,8 @@ type WellnessProfile {
   id: ID!
   age: Int
   biologicalSex: String
-  height: Int
-  weight: Int
+  height: Float
+  weight: Float
   activityLevel: String
 }
 
