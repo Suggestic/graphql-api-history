@@ -280,6 +280,16 @@ type Attendee {
   member: Member
 }
 
+type AutoGenerateConversationMessage {
+  success: Boolean!
+  message: String!
+  generatedMessage: String
+}
+
+input AutoGenerateConversationMessageInput {
+  assistantId: ID
+}
+
 type AvailabilitySettings {
   bufferMinutes: Int
   startInterval: Int
@@ -2108,6 +2118,7 @@ type Mutation {
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   createCoachTwilioAccessToken: CreateCoachTwilioAccessToken
   startConversation(input: StartConversationInput!): StartConversationPayload
+  autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput): AutoGenerateConversationMessage
 }
 
 """An object with an ID"""
