@@ -1178,7 +1178,7 @@ input CreateAssistantInput {
   mainGoal: String!
   mode: AssistantMode = MANUAL
   name: String!
-  programId: ID!
+  program: ID!
 }
 
 type CreateBiomarkerCategory {
