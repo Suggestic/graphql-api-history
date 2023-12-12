@@ -4,6 +4,16 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+type AcknowledgeConversationMessage {
+  success: Boolean!
+  message: String!
+}
+
+input AcknowledgeConversationMessageInput {
+  conversationSid: String!
+  messageSid: String!
+}
+
 enum ActivityLevel {
   NOT_ACTIVE
   EXERCISE_1_2
@@ -2120,6 +2130,7 @@ type Mutation {
   createCoachTwilioAccessToken: CreateCoachTwilioAccessToken
   startConversation(input: StartConversationInput!): StartConversationPayload
   autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
+  acknowledgeConversationMessage(input: AcknowledgeConversationMessageInput!): AcknowledgeConversationMessage
 }
 
 """An object with an ID"""
