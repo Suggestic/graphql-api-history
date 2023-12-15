@@ -114,6 +114,16 @@ input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
 }
 
+type AddUserToJourney {
+  success: Boolean!
+  message: String!
+}
+
+input AddUserToJourneyInput {
+  profile: ID!
+  journey: ID!
+}
+
 enum AlertAction {
   ATTEMPTED_FAILED
   CONTACTED
@@ -2131,6 +2141,8 @@ type Mutation {
   startConversation(input: StartConversationInput!): StartConversationPayload
   autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
   acknowledgeConversationMessage(input: AcknowledgeConversationMessageInput!): AcknowledgeConversationMessage
+  addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
+  removeUserFromJourney(input: RemoveUserFromJourneyInput!): RemoveUserFromJourney
 }
 
 """An object with an ID"""
@@ -2720,6 +2732,16 @@ type RecipeProxy {
 type RecommendedSwaps {
   meals: [Recipe]
   recipes: [Recipe]
+}
+
+type RemoveUserFromJourney {
+  success: Boolean!
+  message: String!
+}
+
+input RemoveUserFromJourneyInput {
+  profile: ID!
+  journey: ID!
 }
 
 input RequestCoachResetPasswordInput {
