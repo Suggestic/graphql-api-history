@@ -141,10 +141,14 @@ input AddUserConsentInput {
   consentTypeId: ID!
 }
 
-type AddUserToAssistantList {
-  assistantListUser: [AssistantListUser]
+type AddUserToJourney {
   message: String!
   success: Boolean!
+}
+
+input AddUserToJourneyInput {
+  journey: ID!
+  profile: ID!
 }
 
 type Adherence {
@@ -241,6 +245,7 @@ type Appointment {
   appointmentCredits: [AppointmentCredit]
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
+  coach: Coach
   contactType: CalendarContactType!
   description: String
   end: DateTime!
@@ -256,6 +261,11 @@ type Appointment {
   zoomSessionPassword: String
 }
 
+type AppointmentConnection {
+  edges: [AppointmentEdge]!
+  pageInfo: PageInfo!
+}
+
 type AppointmentCredit {
   appointmentType: AppointmentType!
   id: ID!
@@ -265,6 +275,11 @@ type AppointmentCredit {
 
 type AppointmentCredits {
   credits: [AppointmentCredit!]!
+}
+
+type AppointmentEdge {
+  cursor: String!
+  node: Appointment
 }
 
 enum AppointmentMultiCoachType {
@@ -495,11 +510,6 @@ type AssistantIngredient {
   name: String
   quantity: Float
   unit: String
-}
-
-type AssistantListUser {
-  id: ID!
-  profile: ID!
 }
 
 enum AssistantMode {
@@ -1742,11 +1752,6 @@ type DeleteAssistant {
   success: Boolean!
 }
 
-type DeleteAssistantList {
-  message: String!
-  success: Boolean!
-}
-
 type DeleteBiomarker {
   biomarker: Biomarker
   message: String!
@@ -1889,12 +1894,6 @@ type DeleteMyRecipe {
 type DeleteNote {
   message: String!
   note: Note
-  success: Boolean!
-}
-
-type DeleteProfileFromAssistantList {
-  assistantListUser: [AssistantListUser]
-  message: String!
   success: Boolean!
 }
 
@@ -3256,7 +3255,7 @@ type Mutation {
   addStepsCount(datetime: DateTime!, source: SourceType, steps: Int!): AddStepsCount!
   addToShoppingList(recipeId: String!): AddToShoppingList
   addUserConsent(input: AddUserConsentInput!): AddUserConsent
-  addUserToAssistantList(assistantListId: ID!, profileId: ID!): AddUserToAssistantList
+  addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
   autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
   bulkCreateEntries(exerciseEntries: [ExerciseEntryInput!], heartRateEntries: [HeartRateEntryInput!], hrvEntries: [HRVEntryInput!], hydrationEntries: [HydrationEntryInput!], sleepQualityScoreEntries: [SleepQualityEntryInput!], sleepTimeEntries: [SleepTimeEntryInput!], stepsCountEntries: [StepCountEntryInput!], weightEntries: [WeightEntryInput!]): BulkCreateEntries!
   cancelAppointment(appointment: ID!): CancelAppointment
@@ -3324,7 +3323,6 @@ type Mutation {
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
   deleteAssistant(id: ID!): DeleteAssistant
-  deleteAssistantList(id: ID!): DeleteAssistantList
   deleteBiomarker(id: ID!): DeleteBiomarker
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
   deleteCoachTeam(id: ID!): DeleteCoachTeam
@@ -3360,7 +3358,6 @@ type Mutation {
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
   deleteNote(noteId: ID!): DeleteNote
-  deleteProfileFromAssistantList(assistantListId: ID!, profileId: ID!): DeleteProfileFromAssistantList
   deleteQuestion(id: ID!): DeleteQuestion
 
   """deleteSleepQualityScore delete sleep quality score entry"""
@@ -3396,6 +3393,7 @@ type Mutation {
   removeMealPlanRecipe(mealId: ID!): RemoveMealPlanRecipe
   removeOwnMeal(databaseId: String!): RemoveOwnMeal
   removeUserConsent(consentType: ID!): RemoveUserConsent
+  removeUserFromJourney(input: RemoveUserFromJourneyInput!): RemoveUserFromJourney
   requestAccountDeletion: RequestAccountDeletion
   requestResetPassword(email: String!): RequestResetPassword
   requestUserDataDownload: RequestUserDataDownload
@@ -4403,6 +4401,7 @@ type Query {
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
   assessment(id: ID!): Assessment
   assessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
+  assistants: [Assistant!]
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
@@ -4495,6 +4494,7 @@ type Query {
   ownMealLogs: [MealLog]
   ownRecipe(id: ID!): MealLog
   ownRecipes(after: String, before: String, first: Int, fromDate: Date, last: Int, toDate: Date): MealLogConnection
+  pastAppointments(after: String, before: String, end: DateTime, first: Int, last: Int, start: DateTime): AppointmentConnection
   popularRecipes(after: String, before: String, cuisines: [String!], first: Int, hidePurchasable: Boolean = true, last: Int, tags: [String!]): RecipeConnection
   premiumProgramRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   profileRecommendations: [ProfileRecommendationType]
@@ -4868,6 +4868,16 @@ type RemoveOwnMeal {
 type RemoveUserConsent {
   message: String!
   success: Boolean!
+}
+
+type RemoveUserFromJourney {
+  message: String!
+  success: Boolean!
+}
+
+input RemoveUserFromJourneyInput {
+  journey: ID!
+  profile: ID!
 }
 
 type RequestAccountDeletion {
