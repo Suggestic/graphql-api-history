@@ -284,6 +284,9 @@ type AssessmentQuestion {
   questionType: String
   text: String
   updatedAt: String
+  finalText: String
+  helpTitle: String
+  informationTitle: String
 }
 
 enum AssessmentStatus {
@@ -291,6 +294,19 @@ enum AssessmentStatus {
   DONE
   NEEDS_UPDATE
   IN_PROGRESS
+}
+
+type Assistant {
+  id: ID!
+  mainGoal: String!
+  mode: AssistantMode!
+  name: String!
+  program: ID!
+}
+
+enum AssistantMode {
+  AUTO
+  MANUAL
 }
 
 type Attendee {
@@ -1220,6 +1236,17 @@ type DeleteCoachType {
   coachType: CoachType
 }
 
+input DeleteConversationInput {
+  conversationSid: String
+  clientMutationId: String
+}
+
+type DeleteConversationPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
+}
+
 type DeleteLabTestReport {
   success: Boolean!
   message: String!
@@ -2139,6 +2166,7 @@ type Mutation {
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   createCoachTwilioAccessToken: CreateCoachTwilioAccessToken
   startConversation(input: StartConversationInput!): StartConversationPayload
+  deleteConversation(input: DeleteConversationInput!): DeleteConversationPayload
   autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
   acknowledgeConversationMessage(input: AcknowledgeConversationMessageInput!): AcknowledgeConversationMessage
   addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
@@ -2663,6 +2691,7 @@ type Query {
   userAnswersByAssessment(memberId: ID!, assessmentId: ID): Assessment
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
+  assistants: [Assistant!]
 }
 
 type QuestionConnection {

@@ -421,10 +421,13 @@ type AssessmentQuestion implements Node {
   attributes: [AssessmentQuestionAttribute!]
   canSkip: Boolean!
   createdAt: DateTime!
+  finalText: String
   helpText: String
+  helpTitle: String
   htmlElement: FormHtmlElement
   id: ID!
   information: String
+  informationTitle: String
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   nextQuestion: AssessmentQuestion
@@ -1496,9 +1499,12 @@ input CreateQuestionInput {
   assessmentId: ID!
   attributes: [ID!]
   canSkip: Boolean = false
+  finalText: String
   helpText: String
+  helpTitle: String
   htmlElement: FormHtmlElement
   information: String
+  informationTitle: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
@@ -6144,10 +6150,13 @@ input UpdateQuestionInput {
   assessmentId: ID
   attributes: [ID!]
   canSkip: Boolean
+  finalText: String
   helpText: String
+  helpTitle: String
   htmlElement: FormHtmlElement
   id: ID!
   information: String
+  informationTitle: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   nextQuestionId: ID
