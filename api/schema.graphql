@@ -356,6 +356,7 @@ type Assessment implements Node {
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   score: Float
   status: AssessmentStatus
+  style: GenericScalar
   title: String!
   updatedAt: DateTime!
   url: String
