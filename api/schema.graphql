@@ -4440,6 +4440,7 @@ type Query {
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
+  flags: GenericScalar
   foodLog(id: ID!): MealLog
   foodLogAssistant(userInput: String!): FoodLogAssistant
   foodLogs(after: String, end: Date!, first: Int, id: ID, start: Date!): FoodLogConnection!
