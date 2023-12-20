@@ -2692,6 +2692,7 @@ type Query {
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
   assistants: [Assistant!]
+  flags: GenericScalar
 }
 
 type QuestionConnection {
