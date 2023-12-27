@@ -488,6 +488,7 @@ enum AssessmentType {
 
 type Assistant {
   id: ID!
+  journey: JourneyAssistantType
   mainGoal: String!
   mode: AssistantMode!
   name: String!
