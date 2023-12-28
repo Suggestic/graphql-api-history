@@ -302,6 +302,14 @@ type Assistant {
   mode: AssistantMode!
   name: String!
   program: ID!
+  journey: AssistantJourney
+}
+
+type AssistantJourney {
+  id: ID!
+  sendWelcomeMessage: Boolean
+  assistant: Assistant
+  welcomeMessage: String
 }
 
 enum AssistantMode {
@@ -1928,6 +1936,7 @@ type Member implements Node {
   connectedSources: [ConnectedSource!]!
   appVersion: String
   language: String
+  currentJourney: AssistantJourney
 }
 
 type MemberConnection {
