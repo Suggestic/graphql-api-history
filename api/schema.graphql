@@ -2066,13 +2066,6 @@ type DuplicateMealPlanTemplate {
   success: Boolean!
 }
 
-type EdamamFoodResult implements Node {
-  databaseId: String
-  id: ID!
-  label: String
-  servings: [Servings]
-}
-
 type Entry {
   createdAt: DateTime
   date: Date
@@ -2487,18 +2480,6 @@ type IngredientLine {
   other: String
   quantity: String
   unit: String
-}
-
-union IngredientSearchResult = EdamamFoodResult
-
-type IngredientSearchResultConnection {
-  edges: [IngredientSearchResultEdge]!
-  pageInfo: PageInfo!
-}
-
-type IngredientSearchResultEdge {
-  cursor: String!
-  node: IngredientSearchResult
 }
 
 type insightFields {
@@ -4453,7 +4434,6 @@ type Query {
   historicalResultsByBiomarker(id: ID!): ProfileBiomarkerResult
   hrvLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HrvLogsConnnection!
   hydration(endDate: Date!, source: SourceType, startDate: Date!, toMl: Boolean): [Hydration!]!
-  ingredientSearch(after: String, before: String, first: Int, last: Int, query: String = "Query search term"): IngredientSearchResultConnection
   insights(category: InsightsCategory, date: Date!): [InsightsByCategory!]!
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
