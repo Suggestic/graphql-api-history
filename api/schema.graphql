@@ -10,6 +10,7 @@ type AcknowledgeConversationMessage {
 }
 
 input AcknowledgeConversationMessageInput {
+  coachId: ID!
   conversationSid: String!
   messageSid: String!
 }
@@ -2547,7 +2548,7 @@ input InteractionInput {
 
 type InteractionType {
   dayJourneyId: ID
-  deliveryTime: Time
+  deliveryTime: Time!
   goal: String!
   id: ID
   interaction: String!
