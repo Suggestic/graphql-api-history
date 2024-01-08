@@ -432,6 +432,7 @@ type AssessmentQuestion implements Node {
   informationTitle: String
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
+  maxOptionsSelected: Int
   nextQuestion: AssessmentQuestion
   profileField: QuestionProfileField
   questionType: QuestionType!
@@ -1510,6 +1511,7 @@ input CreateQuestionInput {
   informationTitle: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
+  maxOptionsSelected: Int
   nextQuestionId: ID
   profileField: ProfileField
   questionType: QuestionType = SINGLE_SELECT
@@ -6143,6 +6145,7 @@ input UpdateQuestionInput {
   informationTitle: String
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
+  maxOptionsSelected: Int
   nextQuestionId: ID
   profileField: ProfileField
   questionType: QuestionType
