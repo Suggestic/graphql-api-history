@@ -342,10 +342,11 @@ type ArticleRecommendedEdge {
 
 type Assessment implements Node {
   assessmentType: AssessmentType!
+  bottomProgressBar: Boolean!
   createdAt: DateTime!
   description: String
   finalQuestion: AssessmentQuestion
-  hasScore: Boolean
+  hasScore: Boolean!
   icon: String
   id: ID!
   initialQuestion: AssessmentQuestion
@@ -422,8 +423,11 @@ type AssessmentQuestion implements Node {
   assessment: Assessment
   attributes: [AssessmentQuestionAttribute!]
   canSkip: Boolean!
+  collapsibleHelpText: Boolean!
   createdAt: DateTime!
+  finalButton: String
   finalText: String
+  finalTitle: String
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
@@ -1176,6 +1180,7 @@ type CreateAssessment {
 
 input CreateAssessmentInput {
   assessmentType: AssessmentType = COMMON
+  bottomProgressBar: Boolean = false
   description: String
   hasScore: Boolean = true
   icon: Upload
@@ -1503,7 +1508,10 @@ input CreateQuestionInput {
   assessmentId: ID!
   attributes: [ID!]
   canSkip: Boolean = false
+  collapsibleHelpText: Boolean = false
+  finalButton: String
   finalText: String
+  finalTitle: String
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
@@ -5784,6 +5792,7 @@ type UpdateAssessment {
 
 input UpdateAssessmentInput {
   assessmentType: AssessmentType
+  bottomProgressBar: Boolean
   description: String
   hasScore: Boolean
   icon: Upload
@@ -6136,7 +6145,10 @@ input UpdateQuestionInput {
   assessmentId: ID
   attributes: [ID!]
   canSkip: Boolean
+  collapsibleHelpText: Boolean
+  finalButton: String
   finalText: String
+  finalTitle: String
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
