@@ -353,6 +353,7 @@ type Assessment implements Node {
   interval: Int
   isDraft: Boolean!
   isPublic: Boolean!
+  lastAnsweredQuestion: AssessmentQuestion
   order: Int!
   progressBar: Boolean!
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
