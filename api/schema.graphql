@@ -438,7 +438,7 @@ type AssessmentQuestion implements Node {
   id: ID!
   information: String
   informationTitle: String
-  isExist: Boolean!
+  isExit: Boolean!
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   maxOptionsSelected: Int
