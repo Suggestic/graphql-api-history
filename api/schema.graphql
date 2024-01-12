@@ -345,6 +345,7 @@ type Assessment implements Node {
   bottomProgressBar: Boolean!
   createdAt: DateTime!
   description: String
+  disableLoader: Boolean!
   finalQuestion: AssessmentQuestion
   hasScore: Boolean!
   icon: String
@@ -357,6 +358,8 @@ type Assessment implements Node {
   order: Int!
   progressBar: Boolean!
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
+  relativeButtonPosition: Boolean!
+  resultsImageUrl: String
   score: Float
   status: AssessmentStatus
   style: GenericScalar
@@ -435,6 +438,7 @@ type AssessmentQuestion implements Node {
   id: ID!
   information: String
   informationTitle: String
+  isExist: Boolean!
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   maxOptionsSelected: Int
@@ -1032,6 +1036,7 @@ type ContentCategoryType implements Node {
   order: Int!
   slug: String!
   subcategories: [ContentCategoryType!]
+  subtitle: String
   tags: [ContentTagType!]
 }
 
@@ -1266,6 +1271,7 @@ input CreateContentCategoryInput {
   name: String!
   order: Int!
   subcategories: [ID]
+  subtitle: String
   tags: [ID]
 }
 
@@ -5901,6 +5907,7 @@ input UpdateContentCategoryInput {
   name: String
   order: Int
   subcategories: [ID]
+  subtitle: String
   tags: [ID]
 }
 
