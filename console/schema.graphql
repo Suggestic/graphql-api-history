@@ -373,6 +373,7 @@ type ContentCategory {
   subcategories: [ContentCategory]
   image: String
   lang: Generic
+  subtitle: String
 }
 
 type ContentCategoryConnection {
@@ -510,6 +511,7 @@ input CreateContentCategoryInput {
   image: Upload
   tags: [ID!]
   lang: Generic
+  subtitle: String
 }
 
 type CreateContentLibrary {
@@ -2326,6 +2328,7 @@ input UpdateContentCategoryInput {
   image: Upload
   tags: [ID!]
   lang: Generic
+  subtitle: String
 }
 
 type UpdateContentLibrary {
