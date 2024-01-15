@@ -134,13 +134,6 @@ input AssistantConversationInput {
   userProfile: ProfileTest
 }
 
-type AssistantEntity {
-  id: ID!
-  name: String!
-  mainGoal: String!
-  program: ID!
-}
-
 type AssistantList {
   id: ID!
   name: String
@@ -1880,7 +1873,7 @@ type Query {
   assistant(id: ID!): AssistantResult!
 
   """List all assistants belongs to the third party"""
-  assistants: [AssistantEntity]
+  assistants: [Assistant!]
 
   """List the journey by the provided ID"""
   journey(assistantId: ID!): JourneyResult
