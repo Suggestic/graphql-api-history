@@ -884,6 +884,7 @@ type ContentCategory {
   lang: JSONString
   subcategories: [ContentCategory!]
   tags: [ContentTag!]
+  subtitle: String
 }
 
 type ContentLibrary {
