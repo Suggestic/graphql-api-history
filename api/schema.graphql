@@ -243,6 +243,7 @@ input AnswerSupplementInput {
 }
 
 type Appointment {
+  appointmentCredits: [AppointmentCredit]
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
   coach: Coach
@@ -5630,6 +5631,7 @@ type ThirdPartyGoal implements Node {
 }
 
 enum ThirdPartyGoalGoal {
+  BLOOD_PRESSURE_TRACKER
   DAILY_MOOD
   DAILY_RECAP
   EXERCISE_TRACKER
@@ -5682,6 +5684,7 @@ type ToggleTaskCompleted {
 }
 
 enum TrackerComponent {
+  BLOOD_PRESSURE_TRACKER
   DAILY_MOOD
   DAILY_RECAP
   EXERCISE_TRACKER
