@@ -243,7 +243,6 @@ input AnswerSupplementInput {
 }
 
 type Appointment {
-  appointmentCredits: [AppointmentCredit]
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
   coach: Coach
@@ -4491,6 +4490,7 @@ type Query {
   myProfile: ProfileType
   myRecipes(after: String, before: String, first: Int, id: ID, last: Int): UserRecipeConnection
   nextIntakes(category: IntakeCategory!): IntakesChecklistDay
+  nextQuestion(questionId: ID!): AssessmentQuestion
   notes(after: String, before: String, eventId: ID, first: Int, id: ID, last: Int, offset: Int): NoteConnection
   nutrientAggregationsByFoodLog(fromDate: Date!, toDate: Date!): NutrientAggregationsByFoodLog
   onProgramPopularRestaurants(lat: Float!, lon: Float!): [Restaurant]
