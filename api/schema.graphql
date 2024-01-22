@@ -357,6 +357,7 @@ type Assessment implements Node {
   lastAnsweredQuestion: AssessmentQuestion
   order: Int!
   progressBar: Boolean!
+  progressMaxCount: Int!
   questions(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionConnection
   relativeButtonPosition: Boolean!
   resultsImageUrl: String
@@ -1195,6 +1196,7 @@ input CreateAssessmentInput {
   isPublic: Boolean = true
   order: Int = 0
   progressBar: Boolean = true
+  progressMaxCount: Int = 0
   title: String!
   weight: Int
 }
@@ -5042,6 +5044,7 @@ input SetThirdPartyAppUserAsTestInput {
 type SetUserAnswers {
   errors: [FormError!]
   message: String!
+  nextQuestion: AssessmentQuestion
   success: Boolean!
   userAnswers: [UserAnswer!]
 }
@@ -5812,6 +5815,7 @@ input UpdateAssessmentInput {
   isPublic: Boolean
   order: Int
   progressBar: Boolean
+  progressMaxCount: Int
   title: String
   weight: Int
 }
