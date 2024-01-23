@@ -81,6 +81,11 @@ input AddBiomarkerResultsInput {
   labTestReportId: ID!
 }
 
+type AddBloodPressureLog {
+  message: String!
+  success: Boolean!
+}
+
 type AddExerciseEntry {
   message: String!
   success: Boolean!
@@ -749,6 +754,25 @@ enum BiomarkerValueDatatype {
 input BiomarkerValueInput {
   type: BiomarkerValueDatatype!
   value: GenericScalar!
+}
+
+type BloodPressureLog {
+  createdAt: DateTime!
+  datetime: DateTime!
+  diastolicValue: Int!
+  id: ID!
+  source: SourceType!
+  systolicValue: Int!
+}
+
+type BloodPressureLogs {
+  cursor: String!
+  node: BloodPressureLog
+}
+
+type BloodPressureLogsConnnection {
+  edges: [BloodPressureLogs]!
+  pageInfo: PageInfo!
 }
 
 type BrandedFoodConnection {
@@ -1792,6 +1816,11 @@ type DeleteBiomarkerCategory {
   success: Boolean!
 }
 
+type DeleteBloodPressureLog {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteCoachTeam {
   coachTeam: CoachTeam
   message: String!
@@ -2094,6 +2123,7 @@ type Entry {
 }
 
 enum EntryType {
+  BLOOD_PRESSURE_TRACKER
   DAILY_MOOD
   DAILY_RECAP
   EXERCISE_TRACKER
@@ -3239,6 +3269,7 @@ type Mutation {
   acknowledgeConversationMessage(input: AcknowledgeConversationMessageInput!): AcknowledgeConversationMessage
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
+  addBloodPressureLog(datetime: DateTime!, diastolicValue: PositiveInt!, source: SourceType, systolicValue: PositiveInt!): AddBloodPressureLog!
   addExerciseEntry(calories: Int, datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
@@ -3334,6 +3365,7 @@ type Mutation {
   deleteAssistant(id: ID!): DeleteAssistant
   deleteBiomarker(id: ID!): DeleteBiomarker
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
+  deleteBloodPressureLog(id: ID!): DeleteBloodPressureLog!
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   deleteCoachType(id: ID!): DeleteCoachType
   deleteContentCategory(id: ID!): DeleteContentCategory
@@ -3435,6 +3467,7 @@ type Mutation {
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
   updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory
+  updateBloodPressureLog(diastolicValue: PositiveInt, id: ID!, systolicValue: PositiveInt): UpdateBloodPressureLog!
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachType
   updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory
@@ -4418,6 +4451,7 @@ type Query {
   biomarkerResults(filters: BiomarkerResultsFilterInput): [ProfileBiomarker!]
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
+  bloodPressureLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): BloodPressureLogsConnnection!
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, coaches: [ID!], end: DateTime!, start: DateTime!): [TimePeriod!]!
@@ -5870,6 +5904,11 @@ input UpdateBiomarkerInput {
   order: Int = 0
   range: BiomarkerRangeInput
   units: [ID!]
+}
+
+type UpdateBloodPressureLog {
+  message: String!
+  success: Boolean!
 }
 
 type UpdateCoachTeam {
