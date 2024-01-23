@@ -572,6 +572,31 @@ input BiomarkerValueInput {
   value: GenericScalar!
 }
 
+type BloodPressureLog {
+  id: ID!
+  systolicValue: Int!
+  diastolicValue: Int!
+  source: String!
+  datetime: DateTime!
+}
+
+type BloodPressureLogsConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [BloodPressureLogsEdge]!
+}
+
+"""A Relay edge containing a `BloodPressureLogs` and its cursor."""
+type BloodPressureLogsEdge {
+  """The item at the end of the edge"""
+  node: BloodPressureLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type BrandedFood {
   name: String
   dataType: String
@@ -1932,6 +1957,7 @@ type Member implements Node {
   sleepQualityScores(start: Date!, end: Date!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): SleepQualityScoresConnection!
   hrvLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HrvLogsConnection
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
+  bloodPressureLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): BloodPressureLogsConnection
   myRecipes(id: ID, before: String, after: String, first: Int, last: Int): UserRecipeConnection
   timezone: String!
   connectedSources: [ConnectedSource!]!
