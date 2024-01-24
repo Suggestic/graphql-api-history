@@ -348,6 +348,7 @@ type ArticleRecommendedEdge {
 type Assessment implements Node {
   assessmentType: AssessmentType!
   bottomProgressBar: Boolean!
+  closeButton: Boolean!
   createdAt: DateTime!
   description: String
   disableLoader: Boolean!
@@ -448,6 +449,7 @@ type AssessmentQuestion implements Node {
   isFinalQuestion: Boolean!
   isInitialQuestion: Boolean!
   maxOptionsSelected: Int
+  minOptionsSelected: Int
   nextQuestion: AssessmentQuestion
   profileField: QuestionProfileField
   questionType: QuestionType!
@@ -1212,6 +1214,7 @@ type CreateAssessment {
 input CreateAssessmentInput {
   assessmentType: AssessmentType = COMMON
   bottomProgressBar: Boolean = false
+  closeButton: Boolean = true
   description: String
   hasScore: Boolean = true
   icon: Upload
@@ -1553,6 +1556,7 @@ input CreateQuestionInput {
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   maxOptionsSelected: Int
+  minOptionsSelected: Int
   nextQuestionId: ID
   profileField: ProfileField
   questionType: QuestionType = SINGLE_SELECT
@@ -5840,6 +5844,7 @@ type UpdateAssessment {
 input UpdateAssessmentInput {
   assessmentType: AssessmentType
   bottomProgressBar: Boolean
+  closeButton: Boolean
   description: String
   hasScore: Boolean
   icon: Upload
@@ -6212,6 +6217,7 @@ input UpdateQuestionInput {
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   maxOptionsSelected: Int
+  minOptionsSelected: Int
   nextQuestionId: ID
   profileField: ProfileField
   questionType: QuestionType
