@@ -3394,12 +3394,12 @@ type Mutation {
   deleteKnowledgeBase(assistantId: ID!, id: ID!): DeleteKnowledgeBase
   deleteLabTestReport(id: ID!): DeleteLabTestReport
   deleteMealPlanTemplate(coach: ID, id: ID!): DeleteMealPlanTemplate
-  deleteMyBrandedFood(id: String!): DeleteMyBrandedFood
+  deleteMyBrandedFood(id: ID!): DeleteMyBrandedFood
   deleteMyChecklistItem(id: ID!): DeleteMyChecklistItem
 
   """deleteMyChecklistItemLog deletes a MyChecklistItem log by ID"""
   deleteMyChecklistItemLog(date: Date!, itemId: ID!, timeOfDay: TimeOfDay!): DeleteMyChecklistItemLog!
-  deleteMyCommonFood(id: String!): DeleteMyCommonFood
+  deleteMyCommonFood(id: ID!): DeleteMyCommonFood
   deleteMyProfile: HardDeleteMyProfileMutation
   deleteMyRecipe(id: ID!): DeleteMyRecipe
   deleteNote(noteId: ID!): DeleteNote
@@ -3488,9 +3488,9 @@ type Mutation {
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   updateMealPlanTemplate(coach: ID, coachTypes: [ID!], description: String, id: ID!, isPublic: Boolean, mealPlanDays: MPTFromScratchInput, name: String): UpdateMealPlanTemplate
-  updateMyBrandedFood(id: String!, input: UpdateMyBrandedFoodInput!): UpdateMyBrandedFood
+  updateMyBrandedFood(id: ID!, input: UpdateMyBrandedFoodInput!): UpdateMyBrandedFood
   updateMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String, id: ID!, tags: [String!], text: String): UpdateMyChecklistItem
-  updateMyCommonFood(id: String!, input: UpdateMyCommonFoodInput!): UpdateMyCommonFood
+  updateMyCommonFood(id: ID!, input: UpdateMyCommonFoodInput!): UpdateMyCommonFood
   updateMyRecipe(id: ID!, input: UpdateMyRecipeInput!): UpdateMyRecipe
   updateNote(coach: ID, noteId: ID!, text: String, title: String): UpdateNote
   updateOwnMeal(barcode: String, brand: String, databaseId: String!, date: Date, mealTime: MealTime, mealType: MealType, name: String, ownNutrients: OwnNutrients!, ownServing: OwnServing!): UpdateOwnMealMutation
