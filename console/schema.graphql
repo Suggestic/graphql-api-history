@@ -1799,7 +1799,7 @@ type Query {
   ingredientGroups(first: Int, last: Int, after: String, before: String, readOnly: Boolean, search: String, onlyRestrictions: Boolean, onlyBuildingGroups: Boolean): IngredientGroupConnection!
 
   """List all read-only and owned `RuleSet` ordered by name"""
-  ruleSets(first: Int, after: String, program: ID, readOnly: Boolean): RuleSetConnection!
+  ruleSets(first: Int, after: String, program: ID, readOnly: Boolean, search: String): RuleSetConnection!
 
   """Retrieve a `RuleSet` by ID, or null if it doesn't exist"""
   ruleSet(id: ID!): RuleSet
@@ -2239,6 +2239,7 @@ enum TrackerComponent {
   HEART_RATE_TRACKER
   PLAN_SUPPLEMENTS_MY_CHECKLIST
   FOOD_LOG_MEAL_TRACKER
+  BLOOD_PRESSURE_TRACKER
 }
 
 type UpdateArticleRecommended {
