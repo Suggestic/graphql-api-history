@@ -5147,6 +5147,7 @@ input SleepQualityEntryInput {
 
 type SleepQualityScore {
   date: Date!
+  floatValue: Float!
   id: ID!
   source: SourceType!
 
@@ -5154,7 +5155,7 @@ type SleepQualityScore {
   sleep quality index scaling from 0 to 100, where the values above 77 signify
   good sleep quality, while those below 77 signify poor sleep quality.
   """
-  value: Int!
+  value: Int! @deprecated
 }
 
 type SleepQualityScoreEdge {
@@ -5163,19 +5164,21 @@ type SleepQualityScoreEdge {
 }
 
 type SleepQualityScoresConnnection {
-  average: Int!
+  average: Int! @deprecated
   edges: [SleepQualityScoreEdge]!
+  floatAverage: Float!
   pageInfo: PageInfo!
 }
 
 type SleepTime {
   createdAt: DateTime!
   date: Date!
+  floatValue: Float!
   id: ID!
   source: SourceType!
 
   """Sleep duration in minutes"""
-  value: Int!
+  value: Int! @deprecated
 }
 
 type SleepTimeEdge {
