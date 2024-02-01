@@ -3495,7 +3495,7 @@ type Mutation {
   updateNote(coach: ID, noteId: ID!, text: String, title: String): UpdateNote
   updateOwnMeal(barcode: String, brand: String, databaseId: String!, date: Date, mealTime: MealTime, mealType: MealType, name: String, ownNutrients: OwnNutrients!, ownServing: OwnServing!): UpdateOwnMealMutation
   updateOwnRecipe(databaseId: String!, ingredients: [OwnRecipeIngredient], quantity: Float, recipeName: String): UpdateOwnRecipe
-  updateProfile(birthdate: Date, country: String, dietPreferences: [ID!], email: String, favoriteCuisines: [String!], isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, timezone: String): UpdateProfile
+  updateProfile(birthdate: Date, country: String, dietPreferences: [ID!], email: String, favoriteCuisines: [String!], isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, thryveAuthenticationToken: String, timezone: String): UpdateProfile
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
   updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
@@ -4910,6 +4910,7 @@ type RemoveMealPlanRecipe {
 }
 
 type RemoveOwnMeal {
+  message: String
   success: Boolean
 }
 
