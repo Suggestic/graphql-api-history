@@ -1673,7 +1673,8 @@ type DailyChecklist {
 }
 
 type DailyExerciseTime {
-  totalTime: Int!
+  floatTotalTime: Float!
+  totalTime: Int! @deprecated
   type: String
 }
 
@@ -2180,9 +2181,10 @@ enum EventType {
 type ExerciseEntriesConnection {
   dailyGoal: Int!
   edges: [ExerciseEntryEdge]!
+  floatTotalTime: Float!
   latestEntry: DateTime
   pageInfo: PageInfo!
-  totalTime: Int!
+  totalTime: Int! @deprecated
   totalTimePerType: [DailyExerciseTime!]!
 }
 
@@ -2190,7 +2192,8 @@ type ExerciseEntry {
   calories: Int
   createdAt: DateTime!
   datetime: DateTime!
-  durationMinutes: Int!
+  durationMinutes: Int! @deprecated
+  floatDurationMinutes: Float!
   id: ID!
   intensity: ExerciseIntensity
   source: SourceType
@@ -2217,6 +2220,7 @@ enum ExerciseIntensity {
 }
 
 enum ExerciseType {
+  ACTIVE
   BREATHWORK
   CARDIO
   CYCLE
@@ -2425,6 +2429,9 @@ type HeartRateLog {
   id: ID!
   source: SourceType!
   timestamp: DateTime!
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
   value: Float!
 }
 
@@ -2471,6 +2478,9 @@ type HrvLog {
   id: ID!
   source: SourceType!
   timestamp: DateTime!
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
   value: Float!
 }
 
@@ -2492,6 +2502,9 @@ type Hydration {
   isToday: Boolean
   quantity: Int
   source: SourceType
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
 }
 
 input HydrationEntryInput {
@@ -5151,6 +5164,9 @@ type SleepQualityScore {
   id: ID!
   source: SourceType!
 
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
+
   """
   sleep quality index scaling from 0 to 100, where the values above 77 signify
   good sleep quality, while those below 77 signify poor sleep quality.
@@ -5176,6 +5192,9 @@ type SleepTime {
   floatValue: Float!
   id: ID!
   source: SourceType!
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
 
   """Sleep duration in minutes"""
   value: Int! @deprecated
@@ -5277,6 +5296,9 @@ type StepCount {
   id: ID!
   source: SourceType!
   steps: Int!
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
 }
 
 input StepCountEntryInput {
