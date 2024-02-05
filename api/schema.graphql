@@ -2197,6 +2197,9 @@ type ExerciseEntry {
   id: ID!
   intensity: ExerciseIntensity
   source: SourceType
+
+  """field only relevant for sources other than Suggestic"""
+  timezoneOffset: Int
   type: ExerciseType
 }
 
