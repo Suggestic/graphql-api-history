@@ -1426,6 +1426,7 @@ enum ExerciseType {
   YARD_WORK
   PHYSICAL_THERAPY_EXERCISES
   IN_BED_EXERCIES
+  ACTIVE
 }
 
 type ExternalCalendarEvent {
@@ -1964,6 +1965,7 @@ type Member implements Node {
   appVersion: String
   language: String
   currentJourney: AssistantJourney
+  currentSource: SourceType
 }
 
 type MemberConnection {
