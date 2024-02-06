@@ -383,6 +383,7 @@ type AssessmentAnswer implements Node {
   isCorrect: Boolean!
   isSelected: Boolean
   nextQuestion: AssessmentQuestion
+  rankingOrder: Int
   score: Float
   supplements: [AssessmentAnswerSupplement]
   text: String!
@@ -4627,7 +4628,7 @@ type Query {
   trendingRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   upcomingAppointments(after: String, before: String, first: Int, last: Int): AppointmentConnection
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
-  userAnswersByAssessment(id: ID!): Assessment
+  userAnswersByAssessment(filters: UserAnswersByAssessmentInput, id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   userConsent(consentTypeId: ID, profileId: ID): [UserConsentType!]
@@ -6419,6 +6420,7 @@ type UserAnswer implements Node {
   id: ID!
   profile: ProfileType!
   question: AssessmentQuestion!
+  rankingOrder: Int
   updatedAt: DateTime!
 }
 
@@ -6436,6 +6438,7 @@ input UserAnswerInput {
   answerId: ID
   answerText: String
   questionId: ID!
+  rankingOrder: Int
 }
 
 enum UserAnswerOrderByField {
@@ -6451,6 +6454,10 @@ enum UserAnswerOrderByField {
 input UserAnswerOrderByInput {
   field: UserAnswerOrderByField = profile
   order: SortOrder = ASC
+}
+
+input UserAnswersByAssessmentInput {
+  questionIds: [ID!]
 }
 
 input UserAssessmentsFilterInput {
