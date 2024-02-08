@@ -6534,7 +6534,7 @@ type UserRecipe implements Node {
   instructions: String
   language: Language!
   mainImage: String
-  mealTimes: [RecipeMealTime!]!
+  mealTimes: [RecipeMealTime!]
   name: String!
   numberOfServings: Int!
   nutrients: [Nutrient!]
