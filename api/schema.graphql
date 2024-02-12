@@ -3433,7 +3433,7 @@ type Mutation {
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
-  generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
+  generateMealPlan(addDays: Boolean, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isAppend: Boolean = false, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
   generateShopifyMultipassUrl(input: GenerateShopifyMultipassUrlInput): GenerateShopifyMultipassUrl
   generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
