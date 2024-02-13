@@ -2726,7 +2726,7 @@ type Query {
     first: Int
     last: Int
   ): MemberSearchConnection
-  userAnswersByAssessment(memberId: ID!, assessmentId: ID): Assessment
+  userAnswersByAssessment(memberId: ID!, assessmentId: ID!, filters: UserAnswersByAssessmentInput): Assessment
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
   assistants: [Assistant!]
@@ -3697,6 +3697,10 @@ that will be handled by the multipart request spec
 https://github.com/lmcgartland/graphene-file-upload/blob/master/graphene_file_upload/scalars.py
 """
 scalar Upload
+
+input UserAnswersByAssessmentInput {
+  questionIds: [ID!]
+}
 
 input UserAssessmentsFilterInput {
   title: String
