@@ -4536,7 +4536,7 @@ type Query {
   menuitemTags: [String]
   menuitems(restaurantId: String!): [MenuItem]
   menuitemsByProgram(programId: String!, restaurantId: String!): [MenuItem]
-  myAppointments(end: DateTime, labTestReportIds: [ID!], start: DateTime, timezone: String): [Appointment!]!
+  myAppointments(end: DateTime, excludeAppointmentsCanceled: Boolean = true, labTestReportIds: [ID!], start: DateTime, timezone: String): [Appointment!]!
   myBrandedFoods(after: String, before: String, first: Int, id: String, last: Int): MyBrandedFoodConnection
   myChecklistItems(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): MyChecklistItemConnection
   myChecklistLogs(end: Date!, start: Date!): MyChecklistLogs!
