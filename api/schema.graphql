@@ -1342,7 +1342,7 @@ type CreateDailyRecapAnswer {
 
 input CreateDailyRecapAnswerInput {
   answer: String!
-  lang: GenericScalar
+  lang: GenericScalar = "{}"
   type: String!
 }
 
