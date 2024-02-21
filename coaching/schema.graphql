@@ -647,7 +647,7 @@ type Coach implements Node {
   isCalendarAuth: Boolean!
   conferencingProfiles: [ConferenceProviderName!]!
   externalCalendarEvents(start: Date, end: Date, timezone: String): [ExternalCalendarEventsInDate!]!
-  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, labTestReportIds: [ID!]): [AppointmentsInDate!]!
+  appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, labTestReportIds: [ID!], excludeAppointmentsCanceled: Boolean = true): [AppointmentsInDate!]!
   recentlyCreatedAppointments(before: DateTime): [Appointment!]!
   stripeCustomerId: String
   affiliateId: String
@@ -1947,7 +1947,7 @@ type Member implements Node {
   labTestReports(id: ID, isVisible: Boolean, before: String, after: String, first: Int, last: Int): LabTestReportConnection!
   credits: [AppointmentCredit]!
   hasEverLoggedIn: Boolean
-  appointmentsByDate(timezone: String!, fromDate: Date, toDate: Date, labTestReportIds: [ID!]): [AppointmentsInDate!]
+  appointmentsByDate(timezone: String!, fromDate: Date, toDate: Date, labTestReportIds: [ID!], excludeAppointmentsCanceled: Boolean = true): [AppointmentsInDate!]
   subscription: Subscription
   quizAnswers: [QuizAnswer!]!
   customAttributes: JSONString!
