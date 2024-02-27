@@ -1366,6 +1366,11 @@ input CreateDailyRecapQuestionInput {
   question: String!
 }
 
+input CreatedAtRangeInput {
+  end: Date!
+  start: Date!
+}
+
 type CreateDayJourney {
   dayJourney: DayJourneyType
   message: String!
@@ -4632,7 +4637,7 @@ type Query {
   userAssessment(assessmentId: ID!): Assessment
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   userConsent(consentTypeId: ID, profileId: ID): [UserConsentType!]
-  users(after: String, before: String, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
+  users(after: String, before: String, filters: UsersFiltersInput, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
   wellnessProfile(id: ID!): WellnessProfileResponse
@@ -6561,6 +6566,10 @@ type UserRecipeEdge {
 
 type UserRecipeProxy {
   userRecipe: UserRecipe!
+}
+
+input UsersFiltersInput {
+  createdAt: CreatedAtRangeInput
 }
 
 input UsersProgressFilterInput {

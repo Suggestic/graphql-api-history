@@ -2209,6 +2209,7 @@ type Mutation {
   acknowledgeConversationMessage(input: AcknowledgeConversationMessageInput!): AcknowledgeConversationMessage
   addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
   removeUserFromJourney(input: RemoveUserFromJourneyInput!): RemoveUserFromJourney
+  unlockUserAccount(input: UnlockUserAccountInput!): UnlockUserAccount
 }
 
 """An object with an ID"""
@@ -3439,6 +3440,15 @@ type UnlinkMemberTagPayload {
   success: Boolean!
   message: String!
   clientMutationId: String
+}
+
+type UnlockUserAccount {
+  success: Boolean!
+  message: String!
+}
+
+input UnlockUserAccountInput {
+  email: String!
 }
 
 type UpdateAppointmentEvent {
