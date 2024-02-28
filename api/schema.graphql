@@ -5128,6 +5128,7 @@ input SimpleMPFiltersInput {
 
 input SingleSupplementActivableProtocolInput {
   directionsOfUse: [DirectionsOfUseInput!]
+  frequency: SPFrequencyInput
   friday: Boolean
   isActive: Boolean
   length: Int!
@@ -5264,8 +5265,26 @@ enum SourceType {
   WITHINGS
 }
 
+type SPFrequency {
+  periodicity: SPPeriodicity!
+  times: Int!
+}
+
+input SPFrequencyInput {
+  periodicity: SPPeriodicity!
+  times: Int!
+}
+
+enum SPPeriodicity {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
+}
+
 input SPProtocolInput {
   directionsOfUse: [DirectionsOfUseInput!]!
+  frequency: SPFrequencyInput
   friday: Boolean
   isActive: Boolean
   monday: Boolean
@@ -5279,6 +5298,7 @@ input SPProtocolInput {
 
 input SPUpdateProtocolInput {
   directionsOfUse: [DirectionsOfUseInput!]
+  frequency: SPFrequencyInput
   friday: Boolean
   isActive: Boolean
   monday: Boolean
@@ -5582,6 +5602,7 @@ type SupplementPlanProtocol {
   createdAt: DateTime!
   directionsOfUse: [SupplementDirection!]!
   endsAt: DateTime
+  frequency: SPFrequency
   friday: Boolean!
   id: ID!
   isActive: Boolean!
