@@ -2939,6 +2939,7 @@ input SingleSupplementActivableProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  frequency: SPFrequencyInput
   directionsOfUse: [DirectionsOfUseInput!]
   length: Int!
   isActive: Boolean
@@ -2953,6 +2954,7 @@ input SingleSupplementProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  frequency: SPFrequencyInput
   directionsOfUse: [DirectionsOfUseInput!]
   length: Int!
 }
@@ -3033,6 +3035,23 @@ enum SourceType {
   HUAWEIHEALTH
 }
 
+type SPFrequency {
+  times: Int!
+  periodicity: SPPeriodicity!
+}
+
+input SPFrequencyInput {
+  times: Int!
+  periodicity: SPPeriodicity!
+}
+
+enum SPPeriodicity {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
 input SPProtocolInput {
   protocolId: ID!
   isActive: Boolean
@@ -3043,12 +3062,14 @@ input SPProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  frequency: SPFrequencyInput
   directionsOfUse: [DirectionsOfUseInput!]!
 }
 
 input SPTProtocolInput {
   protocolId: ID!
   directionsOfUse: [DirectionsOfUseInput!]
+  frequency: SPFrequencyInput
   monday: Boolean
   tuesday: Boolean
   wednesday: Boolean
@@ -3068,6 +3089,7 @@ input SPUpdateProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  frequency: SPFrequencyInput
   directionsOfUse: [DirectionsOfUseInput!]
 }
 
@@ -3259,6 +3281,7 @@ type SupplementPlanProtocol {
   directionsOfUse: [SupplementDirection!]!
   startsAt: DateTime
   endsAt: DateTime
+  frequency: SPFrequency
 }
 
 type SupplementPlanTemplate implements Node {
@@ -3307,6 +3330,7 @@ type SupplementPlanTemplateProtocol {
   updatedAt: DateTime!
   protocol: Protocol!
   directionsOfUse: [SupplementDirection!]!
+  frequency: SPFrequency
 }
 
 type SupplementProtocol {
@@ -3331,6 +3355,7 @@ input SupplementProtocolInput {
   friday: Boolean
   saturday: Boolean
   sunday: Boolean
+  frequency: SPFrequencyInput
   directionsOfUse: [DirectionsOfUseInput!]
 }
 
