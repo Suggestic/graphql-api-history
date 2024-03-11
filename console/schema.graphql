@@ -326,7 +326,7 @@ type ChatResponse {
 
 type Condition {
   id: ID!
-  attrName: String!
+  attrName: String
   term: String
   bool: Boolean
   lte: Float
@@ -700,7 +700,7 @@ type CreateSegmentCondition {
 input CreateSegmentConditionInput {
   biomarkerId: ID
   dataType: DataType
-  attrName: String!
+  attrName: String
   term: String
   bool: Boolean
   lte: Float
