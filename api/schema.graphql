@@ -248,7 +248,6 @@ input AnswerSupplementInput {
 }
 
 type Appointment {
-  appointmentCredits: [AppointmentCredit]
   appointmentType: AppointmentType!
   attendees: [Attendee!]!
   coach: Coach
@@ -378,6 +377,7 @@ type Assessment implements Node {
 
 type AssessmentAnswer implements Node {
   attribute: GenericScalar
+  blockOtherAnswers: Boolean!
   createdAt: DateTime!
   id: ID!
   isCorrect: Boolean!
@@ -993,18 +993,18 @@ input CoachTypesFilterInput {
   name: String
 }
 
-type CommonFoodConnection {
+type CommonFoodAPIConnection {
   count: Int
-  edges: [CommonFoodEdge]!
+  edges: [CommonFoodAPIEdge]!
   pageInfo: PageInfo!
 }
 
-type CommonFoodEdge {
+type CommonFoodAPIEdge {
   cursor: String!
-  node: CommonFoodNode
+  node: CommonFoodAPINode
 }
 
-type CommonFoodNode implements Node {
+type CommonFoodAPINode implements Node {
   dataType: String
   description: String
   foodDataId: String
@@ -1019,7 +1019,7 @@ type CommonFoodNode implements Node {
 }
 
 type CommonFoodNodeProxy {
-  commonFood: CommonFoodNode!
+  commonFood: CommonFoodAPINode!
 }
 
 type ComponentGoal {
@@ -2823,6 +2823,7 @@ type Limitation {
 type LinkUserAssessment {
   message: String!
   success: Boolean!
+  userAssessment: Assessment
 }
 
 input LinkUserAssessmentInput {
@@ -3685,6 +3686,7 @@ type NoteEdge {
 
 type Nutrient {
   amount: Float
+  id: Int
   name: String
   type: NutrientEnum!
   unit: String
@@ -4484,7 +4486,7 @@ type Query {
   coachAvailability(appointmentType: ID!, coaches: [ID!], end: DateTime!, start: DateTime!): [TimePeriod!]!
   coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
-  commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection
+  commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodAPIConnection
   consentTypes(name: String): [ConsentType!]
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], enablePersonalizedContent: Boolean = false, first: Int, id: ID, isRead: Boolean, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
