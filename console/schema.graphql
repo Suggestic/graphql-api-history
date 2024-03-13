@@ -1808,7 +1808,7 @@ type Query {
   programGoals(program: ID!): [Goal!]!
 
   """List custom attributes"""
-  customAttributes(first: Int, last: Int, after: String, before: String): CustomAttributeConnection!
+  customAttributes(search: String, first: Int, last: Int, after: String, before: String): CustomAttributeConnection!
 
   """List segment conditions"""
   segmentConditions(first: Int, last: Int, after: String, before: String): ConditionConnection!
@@ -1817,7 +1817,7 @@ type Query {
   segmentCondition(id: ID!): Condition
 
   """List user segments"""
-  userSegments(first: Int, last: Int, after: String, before: String): UserSegmentConnection!
+  userSegments(search: String, first: Int, last: Int, after: String, before: String): UserSegmentConnection!
 
   """Retrieve a user segment by ID"""
   userSegment(id: ID!): UserSegment
