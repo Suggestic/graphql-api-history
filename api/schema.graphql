@@ -2256,6 +2256,7 @@ union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | MealProxy | MyBrandedF
 enum FoodCategory {
   BRANDED
   COMMON
+  COMMON_NCC
   MEAL_PLAN_MEAL
   MY_BRANDED
   MY_COMMON
@@ -3167,6 +3168,7 @@ enum MealTrackStatus {
 enum MealType {
   BRANDED_FOOD
   COMMON_FOOD
+  COMMON_NCC
   MEAL_PLAN_MEAL
   MENU_ITEM
   MY_BRANDED_FOOD
