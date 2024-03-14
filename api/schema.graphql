@@ -1139,6 +1139,10 @@ type Contribution {
   eqv: Float
 }
 
+type ConversationSummary {
+  text: String
+}
+
 type CPC {
   benefits: String
   description: String
@@ -3478,6 +3482,7 @@ type Mutation {
   setUserAnswers(input: SetUserAnswersInput!): SetUserAnswers
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
+  storeConversationSummary(input: StoreConversationSummaryInput!): StoreConversationSummary
   swapMealPlanRecipe(mealId: String, mealTag: MealTime, recipeId: String!, serving: Int): SwapMealPlanRecipe
   toggleShoppingListItem(isAggregate: Boolean!, itemId: String!): ToggleShoppingListItem
   toggleShoppingListItems(isAggregate: Boolean!, itemIds: [String!]!): ToggleShoppingListItems
@@ -4493,6 +4498,7 @@ type Query {
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], enablePersonalizedContent: Boolean = false, first: Int, id: ID, isRead: Boolean, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
+  conversationSummary(profile: ID!): ConversationSummary!
   countries: [GenericScalar]
   cuisines(after: String, before: String, first: Int, last: Int, name: String): CuisineConnection
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
@@ -5352,6 +5358,16 @@ type StepsCounterConnection {
 type StepsCounterEdge {
   cursor: String!
   node: StepCount
+}
+
+type StoreConversationSummary {
+  message: String!
+  success: Boolean!
+}
+
+input StoreConversationSummaryInput {
+  profile: ID!
+  text: String!
 }
 
 type Streak {
