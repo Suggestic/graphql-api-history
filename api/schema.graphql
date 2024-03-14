@@ -1001,10 +1001,10 @@ type CommonFoodAPIConnection {
 
 type CommonFoodAPIEdge {
   cursor: String!
-  node: CommonFoodAPINode
+  node: CommonFoodNode
 }
 
-type CommonFoodAPINode implements Node {
+type CommonFoodNode implements Node {
   dataType: String
   description: String
   foodDataId: String
@@ -1019,7 +1019,7 @@ type CommonFoodAPINode implements Node {
 }
 
 type CommonFoodNodeProxy {
-  commonFood: CommonFoodAPINode!
+  commonFood: CommonFoodNode!
 }
 
 type ComponentGoal {
