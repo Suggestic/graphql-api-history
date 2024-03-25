@@ -4645,6 +4645,7 @@ type Query {
   usdaFoodByNdbNumber(ndbNumber: String): UsdaFood
   userAnswersByAssessment(filters: UserAnswersByAssessmentInput, id: ID!): Assessment
   userAssessment(assessmentId: ID!): Assessment
+  userAssessmentHistory(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int): UserAnswerHistoryConnection
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   userConsent(consentTypeId: ID, profileId: ID): [UserConsentType!]
   users(after: String, before: String, filters: UsersFiltersInput, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
@@ -6478,6 +6479,27 @@ type UserAnswerConnection {
 type UserAnswerEdge {
   cursor: String!
   node: UserAnswer
+}
+
+type UserAnswerHistory implements Node {
+  answer: AssessmentAnswer
+  answerText: String
+  attempts: Int!
+  createdAt: DateTime!
+  id: ID!
+  question: AssessmentQuestion!
+  rankingOrder: Int
+  updatedAt: DateTime!
+}
+
+type UserAnswerHistoryConnection {
+  edges: [UserAnswerHistoryEdge]!
+  pageInfo: PageInfo!
+}
+
+type UserAnswerHistoryEdge {
+  cursor: String!
+  node: UserAnswerHistory
 }
 
 input UserAnswerInput {
