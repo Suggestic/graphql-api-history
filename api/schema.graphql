@@ -4498,7 +4498,7 @@ type Query {
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], enablePersonalizedContent: Boolean = false, first: Int, id: ID, isRead: Boolean, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
-  conversationSummary(profile: ID!): ConversationSummary!
+  conversationSummary: ConversationSummary!
   countries: [GenericScalar]
   cuisines(after: String, before: String, first: Int, last: Int, name: String): CuisineConnection
   currentJourneys(after: String, before: String, first: Int, id: UUID, journeyId: ID, last: Int, offset: Int): JourneyProfileTypeConnection
@@ -5367,7 +5367,6 @@ type StoreConversationSummary {
 }
 
 input StoreConversationSummaryInput {
-  profile: ID!
   text: String!
 }
 
