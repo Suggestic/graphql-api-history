@@ -791,13 +791,13 @@ type BrandedFoodEdge {
 
 type BrandedFoodNode implements Node {
   brandName: String
-  brandOwner: String!
+  brandOwner: String
   brandedFoodCategory: String
   calories: Float
   dataType: String
   description: String
   foodDataId: String
-  gtinUpc: String!
+  gtinUpc: String
   householdServingFulltext: String
   id: ID!
   isActive: Boolean!
@@ -1049,6 +1049,28 @@ type ConnectedSource {
 }
 
 type ConsentType implements Node {
+  id: ID!
+  name: String!
+}
+
+type ConstraintConnection {
+  count: Int
+  edges: [ConstraintEdge]!
+  pageInfo: PageInfo!
+}
+
+type ConstraintEdge {
+  cursor: String!
+  node: ConstraintType
+}
+
+input ConstraintFilters {
+  assistant: ID
+}
+
+type ConstraintType implements Node {
+  assistant: Assistant!
+  description: String!
   id: ID!
   name: String!
 }
@@ -2164,9 +2186,42 @@ type ErrorType {
   messages: [String!]!
 }
 
+type EscalationConnection {
+  count: Int
+  edges: [EscalationEdge]!
+  pageInfo: PageInfo!
+}
+
 type EscalationConversationResponse {
   flagged: Boolean
   name: String
+}
+
+type EscalationEdge {
+  cursor: String!
+  node: EscalationType
+}
+
+input EscalationFilters {
+  assistant: ID
+}
+
+enum EscalationRedirectTo {
+  CONCIERGE
+  NONE
+  SUPPORT
+}
+
+type EscalationType implements Node {
+  alertCoach: Boolean!
+  assistant: Assistant!
+  autoRespond: Boolean!
+  autoRespondText: String
+  description: String!
+  flagMessage: Boolean!
+  id: ID!
+  name: String!
+  redirectTo: EscalationRedirectTo!
 }
 
 enum EventParticipationStatus {
@@ -4495,6 +4550,7 @@ type Query {
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
   commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodAPIConnection
   consentTypes(name: String): [ConsentType!]
+  constraints(after: String, before: String, filters: ConstraintFilters, first: Int, last: Int): ConstraintConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
   contentLibrary(after: String, before: String, categories: [ID], enablePersonalizedContent: Boolean = false, first: Int, id: ID, isRead: Boolean, last: Int, offset: Int, order: ContentLibraryOrderBy, search: String, tags: [String!]): ContentLibraryTypeConnection
   contentTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): ContentTagTypeConnection
@@ -4510,6 +4566,7 @@ type Query {
   dashboard: Dashboard
   dietPreferences(id: ID): [DietPreference]
   drugNutrientInteractions(after: String, before: String, filters: DrugNutrientInteractionsFilterInput, first: Int, last: Int, offset: Int): DrugGroupConnection
+  escalations(after: String, before: String, filters: EscalationFilters, first: Int, last: Int): EscalationConnection
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
