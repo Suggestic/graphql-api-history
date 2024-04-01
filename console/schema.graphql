@@ -1,0 +1,2735 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+type AcceptUserInvite {
+  success: Boolean!
+  message: String!
+}
+
+enum ActivityLevel {
+  NOT_ACTIVE
+  EXERCISE_1_2
+  EXERCISE_3_MORE
+  EXERCISE_1
+  EXERCISE_2
+}
+
+type ActivityLog implements Node {
+  id: ID!
+  user: User!
+  eventName: String!
+  payload: Generic
+  createdAt: Datetime
+}
+
+type ActivityLogConnection {
+  edges: [ActivityLogEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ActivityLogEdge {
+  cursor: String!
+  node: ActivityLog
+}
+
+type AddBiomarker {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarker: Biomarker
+}
+
+input AddBiomarkerInput {
+  name: String!
+  category: ID!
+  method: String
+  description: String
+  order: Int
+  isVisible: Boolean
+  range: BiomarkerRangeInput
+  optimalRange: BiomarkerRangeInput
+  borderlineRange: BiomarkerRangeInput
+  units: [ID!]!
+  aliases: [BiomarkerAliasInput!]
+  normalValues: [Generic!]
+}
+
+type AddUserToAssistantList {
+  success: Boolean!
+  message: String
+  assistantListUser: [AssistantListUser]
+}
+
+type appCustomizationFeature {
+  key: String!
+  name: String!
+  description: String!
+}
+
+type AppUser implements Node {
+  id: ID!
+  profileId: String
+  email: String!
+  name: String!
+  phone: String
+  isActive: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type AppUserConnection {
+  edges: [AppUserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AppUserEdge {
+  cursor: String!
+  node: AppUser
+}
+
+type ArticleRecommended implements Node {
+  valueMax: Float
+  valueMin: Float
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  article: ContentLibrary!
+  biomarker: Biomarker!
+  normalValues: [Generic!]
+}
+
+type ArticleRecommendedConnection {
+  pageInfo: PageInfo!
+  edges: [ArticleRecommendedEdge]!
+}
+
+type ArticleRecommendedEdge {
+  node: ArticleRecommended
+  cursor: String!
+}
+
+type Assistant {
+  id: ID!
+  program: ID!
+  name: String!
+  mainGoal: String
+  mode: AssistantMode!
+}
+
+type AssistantConversationChat {
+  success: Boolean!
+  message: String!
+  response: AssistantTesterChatResponse
+}
+
+input AssistantConversationInput {
+  interactionId: ID
+  hasConstraints: Boolean!
+  hasEscalations: Boolean!
+  hasKnowledgeBase: Boolean!
+  usingInteractionGoal: Boolean!
+  userProfile: ProfileTest
+}
+
+type AssistantList {
+  id: ID!
+  name: String
+  assistantId: ID!
+}
+
+type AssistantListResult {
+  success: Boolean!
+  message: String!
+  assistantList: AssistantList
+}
+
+type AssistantListUser {
+  id: ID!
+  profile: ID!
+}
+
+enum AssistantMode {
+  MANUAL
+  AUTO
+}
+
+type AssistantResult {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
+type AssistantTesterChatResponse {
+  id: ID!
+  chat: [ChatResponse]!
+  escalations: [EscalationConversationResponse]
+}
+
+enum BiologicalSex {
+  MALE
+  FEMALE
+}
+
+type Biomarker {
+  id: ID!
+  name: String!
+  method: String
+  category: BiomarkerCategory!
+  units: [BiomarkerUnit!]!
+  aliases: [BiomarkerAlias!]
+  description: String
+  range: BiomarkerRange
+  optimalRange: BiomarkerRange
+  borderlineRange: BiomarkerRange
+  normalValues: [Generic!]
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type BiomarkerAlias {
+  name: String!
+  language: String!
+}
+
+input BiomarkerAliasInput {
+  name: String!
+  language: BiomarkerLanguage!
+}
+
+type BiomarkerCategory {
+  name: String!
+  parent: BiomarkerCategory
+  order: Int
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+}
+
+type BiomarkerCategoryConnection {
+  edges: [BiomarkerCategoryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerCategoryEdge {
+  cursor: String!
+  node: BiomarkerCategory
+}
+
+input BiomarkerCategoryFilterInput {
+  isOwned: Boolean
+}
+
+input BiomarkerCategoryOrderBy {
+  field: BiomarkerCategoryOrderByField!
+  order: SortOrder
+}
+
+enum BiomarkerCategoryOrderByField {
+  name
+  order
+  created_at
+  updated_at
+}
+
+type BiomarkerConnection {
+  edges: [BiomarkerEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerEdge {
+  cursor: String!
+  node: Biomarker
+}
+
+input BiomarkerFilterInput {
+  name: String
+  categoryId: ID
+}
+
+enum BiomarkerLanguage {
+  AFRIKAANS
+  ALBANIAN
+  ARABIC
+  CATALAN
+  CHINESE
+  CROATIAN
+  CZECH
+  DANISH
+  DUTCH
+  ENGLISH
+  ESTONIAN
+  FRENCH
+  GERMAN
+  HEBREW
+  HINDI
+  INDONESIAN
+  ITALIAN
+  JAPANESE
+  KOREAN
+  POLISH
+  PORTUGUESE
+  ROMANIAN
+  RUSSIAN
+  SERBIAN
+  SPANISH
+  SWEDISH
+  THAI
+  TURKISH
+  UKRAINIAN
+  VIETNAMESE
+  ZULU
+}
+
+type BiomarkerRange {
+  max: Float
+  min: Float
+}
+
+input BiomarkerRangeInput {
+  max: Float!
+  min: Float!
+}
+
+type BiomarkerUnit {
+  id: ID!
+  name: String!
+  factor: Float!
+  alias: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type BiomarkerUnitConnection {
+  edges: [BiomarkerUnitEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BiomarkerUnitEdge {
+  cursor: String!
+  node: BiomarkerUnit
+}
+
+type ChangePassword {
+  success: Boolean!
+  message: String!
+}
+
+type ChatResponse {
+  id: ID!
+  sender: String!
+  content: String!
+  createdAt: Datetime!
+}
+
+type Condition {
+  id: ID!
+  attrName: String
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+  dataType: DataType
+  biomarkerId: ID
+}
+
+type ConditionConnection {
+  edges: [ConditionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ConditionEdge {
+  cursor: String!
+  node: Condition
+}
+
+type Constraint {
+  id: ID!
+  name: String
+  description: String
+  assistantId: ID!
+}
+
+input ConstraintInput {
+  name: String
+  description: String
+  assistantId: ID!
+}
+
+type ConstraintResult {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
+}
+
+type ContentCategory {
+  id: ID!
+  name: String!
+  slug: String!
+  order: Int!
+  tags: [ContentTag]
+  subcategories: [ContentCategory]
+  image: String
+  lang: Generic
+  subtitle: String
+}
+
+type ContentCategoryConnection {
+  edges: [ContentCategoryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentCategoryEdge {
+  cursor: String!
+  node: ContentCategory
+}
+
+type ContentLibrary implements Node {
+  id: ID!
+  title: String!
+  imageUrl: String!
+  sourceUrl: String
+  order: Int!
+  subTitle: String
+  databaseId: String
+  isBlocked: Boolean
+  isFavorite: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  categories: [ContentCategory!]!
+  tags: [ContentTag!]!
+  programs: [Program!]
+}
+
+type ContentLibraryConnection {
+  edges: [ContentLibraryEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentLibraryEdge {
+  cursor: String!
+  node: ContentLibrary
+}
+
+input ContentLibraryOrderBy {
+  field: ContentLibraryOrderByFields
+  order: SortOrder
+}
+
+enum ContentLibraryOrderByFields {
+  created_at
+  popularity
+}
+
+type ContentTag implements Node {
+  id: ID!
+  name: String!
+}
+
+type ContentTagConnection {
+  edges: [ContentTagEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentTagEdge {
+  cursor: String!
+  node: ContentTag
+}
+
+type CopyProgram {
+  success: Boolean!
+  message: String!
+  newProgram: Program
+}
+
+input CreateAndInviteUserInput {
+  email: String!
+  role: Role!
+  enable2fa: Boolean!
+}
+
+type CreateArticleRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  articleRecommended: ArticleRecommended
+}
+
+input CreateArticleRecommendedInput {
+  biomarkerId: ID!
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  articleId: ID!
+}
+
+type CreateAssistant {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
+type CreateAssistantList {
+  success: Boolean!
+  message: String!
+  assistantList: AssistantList
+}
+
+type CreateBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarkerCategory: BiomarkerCategory
+}
+
+input CreateBiomarkerCategoryInput {
+  name: String!
+  parent: ID
+  order: Int
+}
+
+type CreateConstraint {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
+}
+
+type CreateContentCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentCategory: ContentCategory
+}
+
+input CreateContentCategoryInput {
+  name: String!
+  order: Int!
+  subcategories: [ID!]
+  image: Upload
+  tags: [ID!]
+  lang: Generic
+  subtitle: String
+}
+
+type CreateContentLibrary {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentLibrary: ContentLibrary
+}
+
+input CreateContentLibraryInput {
+  title: String!
+  imageUrl: String!
+  sourceUrl: String
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  categories: [ID!]
+  tags: [ID!]
+  programs: [ID!]
+}
+
+type CreateContentTag {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentTag: ContentTag
+}
+
+type CreateCustomAttribute {
+  success: Boolean!
+  message: String!
+  customAttribute: CustomAttribute
+}
+
+type CreateDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapAnswer: DailyRecapAnswer
+}
+
+input CreateDailyRecapAnswerInput {
+  answer: String!
+  type: String!
+}
+
+type CreateDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+input CreateDailyRecapQuestionInput {
+  question: String!
+  imageUrl: String
+  program: ID
+  answers: [ID!]!
+}
+
+type CreateDayJourney {
+  success: Boolean!
+  message: String!
+  dayJourney: DayJourney
+}
+
+type CreateEscalation {
+  success: Boolean!
+  message: String!
+  escalation: Escalation
+}
+
+type CreateIngredient {
+  success: Boolean!
+  message: String!
+}
+
+type CreateIngredientGroup {
+  success: Boolean!
+  message: String!
+  ingredientGroup: IngredientGroup
+}
+
+input CreateIngredientGroupInput {
+  name: String!
+  ingredients: [ID!]!
+}
+
+type CreateInteraction {
+  success: Boolean!
+  message: String!
+  interaction: Interaction
+}
+
+type CreateJourney {
+  success: Boolean!
+  message: String!
+  journey: Journey
+}
+
+type CreateKnowledgeBase {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  knowledgeBase: KnowledgeBase
+}
+
+type CreateProgram {
+  success: Boolean!
+  message: String!
+  program: Program
+}
+
+type CreateProgramGoal {
+  success: Boolean!
+  message: String!
+  goal: Goal
+}
+
+input CreateProgramGoalInput {
+  name: String!
+  biologicalSex: BiologicalSex!
+  programId: ID!
+  nutrients: [NutrientGoalInput!]!
+  minAge: Int
+  maxAge: Int
+  monday: Boolean!
+  tuesday: Boolean!
+  wednesday: Boolean!
+  thursday: Boolean!
+  friday: Boolean!
+  saturday: Boolean!
+  sunday: Boolean!
+}
+
+input CreateProgramInput {
+  name: String!
+  author: String!
+  isActive: Boolean
+  descriptionShort: String
+  descriptionLong: String
+  restrictions: [ID!]
+  visibility: Boolean
+  energyNutrientEquation: Equation
+  image: Upload
+  cover: Upload
+  backgroundImage: Upload
+  authorAvatar: Upload
+}
+
+type CreateRuleSet {
+  success: Boolean!
+  message: String!
+  ruleSet: RuleSet
+}
+
+input CreateRuleSetInput {
+  order: Int!
+  name: String!
+  actionType: RuleSetActionType!
+  ruleType: RuleType
+  recipeTags: [ID!]
+  contentTags: [ID!]
+  userSegments: [ID!]
+  ingredientGroups: [ID!]
+  program: ID
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  priority: Int
+  visibility: Boolean
+}
+
+type CreateSegmentCondition {
+  success: Boolean!
+  message: String!
+  condition: Condition
+}
+
+input CreateSegmentConditionInput {
+  biomarkerId: ID
+  dataType: DataType
+  attrName: String
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+}
+
+type CreateSupplement {
+  success: Boolean!
+  message: String!
+  supplement: Supplement
+}
+
+input CreateSupplementInput {
+  name: String!
+  category: String!
+  mainImage: String!
+  brand: String!
+  servingName: String!
+  directionsOfUse: [DirectionsOfUseInput!]
+  description: String
+  images: [String!]
+  directionsOfUseText: String
+  sizeCount: Int
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
+}
+
+type CreateSupplementRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  supplementRecommended: SupplementRecommended
+}
+
+input CreateSupplementRecommendedInput {
+  biomarkerId: ID!
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  supplementId: ID!
+}
+
+type CreateThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+  customization: ThirdPartyAppCustomization
+}
+
+input CreateThirdPartyAppCustomizationInput {
+  logo: Upload
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type CreateUser {
+  success: Boolean!
+  message: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String
+  password: String!
+  thirdPartySlug: String
+  roles: [Role!]!
+  enable2fa: Boolean
+  selfReportedRole: Role
+  active: Boolean
+}
+
+type CreateUserSegment {
+  success: Boolean!
+  message: String!
+  userSegment: UserSegment
+}
+
+input CreateUserSegmentInput {
+  """Name of the user segment"""
+  name: String!
+
+  """Priority over other user segments"""
+  priority: Int
+
+  """List of program ids using the segment to apply custom rules"""
+  programs: [ID!]!
+
+  """
+  List of existing conditions that must match with the user's attrs to join the segment
+  """
+  conditions: [ID!]!
+
+  """
+  Add new conditions that must match with the user's attrs to join the segment
+  """
+  createConditions: [CreateSegmentConditionInput!]!
+
+  """List of rule ids the are applied to the matching users"""
+  rules: [ID!]!
+}
+
+type Cuisine {
+  name: String!
+}
+
+type CuisineConnection {
+  edges: [CuisineEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CuisineEdge {
+  cursor: String!
+  node: Cuisine
+}
+
+type CustomAttribute {
+  id: ID!
+  label: String!
+  dataType: DataType
+}
+
+type CustomAttributeConnection {
+  edges: [CustomAttributeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CustomAttributeEdge {
+  cursor: String!
+  node: CustomAttribute
+}
+
+type DailyRecapAnswer {
+  id: ID!
+  thirdPartyId: Int
+  answer: String!
+  type: String!
+}
+
+enum DataType {
+  RANGE
+  NUMBER
+  TERM
+  BOOL
+}
+
+"""An ISO-8601 encoded UTC date string."""
+scalar Datetime
+
+type DayJourney {
+  id: ID!
+  order: Int
+  skipped: Boolean
+  interactions: [Interaction]
+}
+
+input DayJourneyInput {
+  journeyId: ID
+  order: Int!
+  skipped: Boolean!
+  interactions: [InteractionInput]
+}
+
+type DeleteAppUserProfile {
+  success: Boolean!
+  message: String!
+  email: String
+}
+
+type DeleteArticleRecommended {
+  success: Boolean!
+  message: String!
+  articleRecommended: ArticleRecommended
+}
+
+type DeleteAssistant {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteAssistantList {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteBiomarker {
+  success: Boolean!
+  message: String!
+  biomarker: Biomarker
+}
+
+type DeleteBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  biomarkerCategory: BiomarkerCategory
+}
+
+type DeleteConstraint {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteContentCategory {
+  success: Boolean!
+  message: String!
+  contentCategory: ContentCategory
+}
+
+type DeleteContentLibrary {
+  success: Boolean!
+  message: String!
+  contentLibrary: ContentLibrary
+}
+
+type DeleteContentTag {
+  success: Boolean!
+  message: String!
+  contentTag: ContentTag
+}
+
+type DeleteCustomAttribute {
+  success: Boolean!
+  message: String!
+  deleted: CustomAttribute
+}
+
+type DeleteDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  dailyRecapAnswer: DailyRecapAnswer
+}
+
+type DeleteDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+type DeleteDayJourney {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteEscalation {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteIngredient {
+  success: Boolean!
+  message: String!
+  deleted: Ingredient
+}
+
+type DeleteIngredientGroup {
+  success: Boolean!
+  message: String!
+  deleted: IngredientGroup
+}
+
+type DeleteInteraction {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteKnowledgeBase {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteProfileFromAssistantList {
+  success: Boolean!
+  message: String!
+  assistantListUser: [AssistantListUser]
+}
+
+type DeleteProgram {
+  success: Boolean!
+  message: String!
+  deleted: Program
+}
+
+type DeleteProgramGoal {
+  success: Boolean!
+  message: String!
+  deleted: Goal
+}
+
+type DeleteRuleSet {
+  success: Boolean!
+  message: String!
+  deleted: RuleSet
+}
+
+type DeleteSegmentCondition {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteSupplementRecommended {
+  success: Boolean!
+  message: String!
+  supplementRecommended: SupplementRecommended
+}
+
+type DeleteThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteUser {
+  success: Boolean!
+  message: String!
+  deleted: User
+}
+
+type DeleteUserSegment {
+  success: Boolean!
+  message: String
+  deleted: UserSegment
+}
+
+input DirectionsOfUseInput {
+  quantity: Float!
+  timeOfDay: TimeOfDay!
+}
+
+scalar Email
+
+enum Equation {
+  HARRIS_BENEDICT
+  ONCOLOGY
+}
+
+type Escalation {
+  id: ID!
+  name: String!
+  redirectTo: String!
+  description: String!
+  flagMessage: Boolean!
+  alertCoach: Boolean!
+  autoRespond: Boolean!
+  autoRespondText: String
+}
+
+type EscalationConversationResponse {
+  name: String!
+  flagged: Boolean!
+}
+
+input EscalationInput {
+  name: String!
+  redirectTo: RedirectTo!
+  description: String!
+  flagMessage: Boolean!
+  alertCoach: Boolean!
+  autoRespond: Boolean!
+  autoRespondText: String
+  assistantId: ID!
+}
+
+type EscalationResult {
+  success: Boolean!
+  message: String!
+  escalation: Escalation
+}
+
+enum FeatureOption {
+  MEAL_PLANNER
+  RECIPE_FINDER
+  RESTAURANTS
+  PROGRESS_TRACKER
+  FOOD_LOGGING
+  WEIGHT_GOALS
+  SUBSCRIPTIONS
+  NOTIFICATIONS
+  APPOINTMENTS
+  GROCERY_LIST
+  CHAT
+  PROGRAMS
+  PREFERENCES
+  VIDEO_CALLS
+  NUTRITION_DASHBOARD
+  LAB_TESTS
+  ONBOARDING
+}
+
+type FormError {
+  field: String
+  messages: [String!]
+}
+
+type Generate2faUri {
+  success: Boolean!
+  message: String!
+  uri: String
+}
+
+scalar Generic
+
+type Goal implements Node {
+  id: ID!
+  name: String!
+  biologicalSex: BiologicalSex!
+  programId: ID!
+  nutrients: [NutrientGoal!]!
+  minAge: Int
+  maxAge: Int
+  slug: String
+  monday: Boolean!
+  tuesday: Boolean!
+  wednesday: Boolean!
+  thursday: Boolean!
+  friday: Boolean!
+  saturday: Boolean!
+  sunday: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type Ingredient implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+  alias: [String!]!
+  isActive: Boolean!
+  createdAt: Datetime!
+  isReadOnly: Boolean!
+}
+
+type IngredientGroup implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+  groupType: IngredientGroupType!
+  isActive: Boolean!
+  createdAt: Datetime!
+  ingredients: [Ingredient!]!
+  isReadOnly: Boolean!
+}
+
+type IngredientGroupConnection {
+  edges: [IngredientGroupEdge!]!
+  pageInfo: PageInfo!
+}
+
+type IngredientGroupEdge {
+  cursor: String!
+  node: IngredientGroup
+}
+
+enum IngredientGroupType {
+  RESTRICTION_GROUP
+  BUILDING_GROUP
+}
+
+type Interaction {
+  id: ID!
+  dayJourneyId: ID!
+  order: Int
+  interaction: String
+  goal: String
+  deliveryTime: Time
+}
+
+input InteractionInput {
+  order: Int!
+  interaction: String!
+  goal: String!
+  deliveryTime: Time
+}
+
+enum InvitationStatus {
+  SENT
+  ACCEPTED
+}
+
+type Journey {
+  id: ID!
+  dayJourney: [DayJourney]
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
+}
+
+type JourneyChat {
+  success: Boolean!
+  message: String!
+  response: JourneyChatResponse
+}
+
+type JourneyChatResponse {
+  id: ID!
+  userMessage: String!
+  response: String!
+}
+
+input JourneyInput {
+  assistantId: ID!
+  dayJourney: [DayJourneyInput!]
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
+}
+
+type JourneyResult {
+  success: Boolean!
+  message: String!
+  journey: Journey
+}
+
+type KnowledgeBase {
+  id: ID!
+  name: String!
+  url: String
+  pdfFile: String
+  txt: String
+  sitemapUrl: String
+  taskStatus: TaskStatus
+  pdfUrl: String
+  sitemapUrls: [SitemapUrl]
+}
+
+type KnowledgeBaseChat {
+  success: Boolean!
+  message: String!
+  response: KnowledgeBaseChatResponse
+}
+
+type KnowledgeBaseChatResponse {
+  id: ID!
+  userMessage: String!
+  response: String!
+}
+
+type KnowledgeBaseEntity {
+  id: ID!
+  name: String!
+  url: String
+  pdfFile: String
+  txt: String
+  sitemapUrl: String
+  taskStatus: TaskStatus
+  pdfUrl: String
+  sitemapUrls: [SitemapUrl]
+}
+
+input KnowledgeBaseInput {
+  name: String!
+  url: String
+  txt: String
+}
+
+type KnowledgeBaseResult {
+  success: Boolean!
+  message: String!
+  knowledgeBase: KnowledgeBaseEntity
+}
+
+type Login {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+}
+
+type Logout {
+  success: Boolean!
+  message: String!
+}
+
+type MakeCoach {
+  success: Boolean!
+  message: String!
+}
+
+input MakeCoachInput {
+  email: String!
+  name: String!
+  isCoachAdmin: Boolean!
+}
+
+input MessageInput {
+  assistantId: ID!
+  userMessage: String!
+}
+
+type Mutation {
+  """Get and access tokens for the login profile"""
+  login(email: String!, password: String!): Login!
+
+  """Revokes the user authentication session"""
+  logout: Logout!
+
+  """Set a new role to the userID"""
+  setRole(userID: ID!, role: Role!): SetRole!
+
+  """Replace the roles of the userID"""
+  setRoles(userID: ID!, roles: [Role!]!): SetRoles!
+
+  """Create a new user with a non-admin role and member of a third party"""
+  createUser(input: CreateUserInput!): CreateUser!
+
+  """Grant access to the coaching portal to a user"""
+  makeCoach(input: MakeCoachInput!): MakeCoach!
+
+  """Change your password"""
+  changePassword(old: String!, new: String!): ChangePassword!
+
+  """Send an email to reset password"""
+  requestPasswordReset(email: String!): RequestPasswordReset!
+
+  """Set a new password for the user"""
+  resetPassword(token: String!, password: String!): ResetPassword!
+
+  """Reset your password if has expired"""
+  resetPasswordExpired(email: String!, old: String!, new: String!): ResetPasswordExpired!
+
+  """Create a new developer user and third party app"""
+  signUpDeveloper(input: SignUpDeveloperInput!): SignUpDeveloper!
+  verifyDeveloperEmail(token: String!, password: String!): VerifyDeveloperEmail!
+
+  """Create a new `Program` owned by the profile's third party"""
+  createProgram(input: CreateProgramInput!): CreateProgram!
+
+  """Update the `Program` if it's owned by the profile's third party"""
+  updateProgram(input: UpdateProgramInput!): UpdateProgram!
+
+  """Copy a `Program`. The copy will be owned by the profile's third party"""
+  copyProgram(id: ID!, rename: String): CopyProgram!
+
+  """Create a new ingredient group with the ingredients received"""
+  createIngredientGroup(input: CreateIngredientGroupInput!): CreateIngredientGroup!
+
+  """Update the `IngredientGroup` if is owned by the user"""
+  updateIngredientGroup(input: UpdateIngredientGroupInput!): UpdateIngredientGroup!
+
+  """Delete an owned `IngredientGroup`"""
+  deleteIngredientGroup(id: ID!): DeleteIngredientGroup!
+
+  """Create a new ingredient available to add to a group"""
+  createIngredient(name: String!, alias: [String!]): CreateIngredient!
+
+  """Delete an owned ingredient"""
+  deleteIngredient(id: ID!): DeleteIngredient!
+
+  """Update an owned ingredient"""
+  updateIngredient(input: UpdateIngredientInput!): UpdateIngredient!
+
+  """
+  Create a new rule set related to the ingredient groups by the action type
+  """
+  createRuleSet(input: CreateRuleSetInput!): CreateRuleSet!
+
+  """Update an owned rule set by ID"""
+  updateRuleSet(input: UpdateRuleSetInput!): UpdateRuleSet!
+
+  """Remove an owned rule set by ID"""
+  deleteRuleSet(id: ID!): DeleteRuleSet!
+
+  """Create a new program goal"""
+  createProgramGoal(input: CreateProgramGoalInput!): CreateProgramGoal!
+
+  """Update an owned program goal"""
+  updateProgramGoal(input: UpdateProgramGoalInput!): UpdateProgramGoal!
+
+  """Delete an owned program goal"""
+  deleteProgramGoal(goal: ID!): DeleteProgramGoal!
+
+  """Create a new custom attribute label"""
+  createCustomAttribute(label: String!, dataType: DataType): CreateCustomAttribute!
+
+  """Update an owned custom attribute"""
+  updateCustomAttribute(id: ID!, label: String, dataType: DataType): UpdateCustomAttribute!
+
+  """Delete an owned custom attribute"""
+  deleteCustomAttribute(id: ID!): DeleteCustomAttribute!
+
+  """Create a new segment condition"""
+  createSegmentCondition(input: CreateSegmentConditionInput!): CreateSegmentCondition!
+
+  """Update a segment condition"""
+  updateSegmentCondition(input: UpdateSegmentConditionInput!): UpdateSegmentCondition!
+
+  """Delete a segment condition"""
+  deleteSegmentCondition(id: ID!): DeleteSegmentCondition!
+
+  """Create a user segment"""
+  createUserSegment(input: CreateUserSegmentInput!): CreateUserSegment!
+
+  """Update a user segment"""
+  updateUserSegment(input: UpdateUserSegmentInput!): UpdateUserSegment!
+
+  """Delete a user segment by ID"""
+  deleteUserSegment(id: ID!): DeleteUserSegment!
+
+  """Update a user"""
+  updateUser(input: UpdateUserInput!): UpdateUser!
+
+  """Delete a user by ID"""
+  deleteUser(id: ID!): DeleteUser!
+
+  """Generate URI to be encoded in a QR Code"""
+  generate2faUri(email: String!): Generate2faUri!
+
+  """Validate 2FA verification code"""
+  verify2faCode(email: String!, code: String!): Verify2faCode!
+
+  """Create Content Tags"""
+  createContentTag(name: String!): CreateContentTag!
+
+  """Update Content Tags"""
+  updateContentTag(input: UpdateContentTagInput!): UpdateContentTag!
+
+  """Delete Content Tag"""
+  deleteContentTag(id: ID!): DeleteContentTag!
+
+  """Create Content Category"""
+  createContentCategory(input: CreateContentCategoryInput!): CreateContentCategory!
+
+  """Update Content Category"""
+  updateContentCategory(input: UpdateContentCategoryInput!): UpdateContentCategory!
+
+  """Delete Content Category"""
+  deleteContentCategory(id: ID!): DeleteContentCategory!
+
+  """Create contentLibrary"""
+  createContentLibrary(input: CreateContentLibraryInput!): CreateContentLibrary!
+
+  """Update contentLibrary"""
+  updateContentLibrary(input: UpdateContentLibraryInput!): UpdateContentLibrary!
+
+  """Delete contentLibrary"""
+  deleteContentLibrary(id: ID!): DeleteContentLibrary!
+
+  """Create a supplement recommended"""
+  createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended!
+
+  """Update a supplement recommended"""
+  updateSupplementRecommended(input: UpdateSupplementRecommendedInput!): UpdateSupplementRecommended!
+
+  """Delete a supplement recommended"""
+  deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended!
+
+  """Create an article recommended"""
+  createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended!
+
+  """Update an article recommended"""
+  updateArticleRecommended(input: UpdateArticleRecommendedInput!): UpdateArticleRecommended!
+
+  """Delete an article recommended"""
+  deleteArticleRecommended(id: ID!): DeleteArticleRecommended!
+
+  """Mutation to add/remove category as subcategory"""
+  setContentSubcategory(mainCategory: ID!, subcategory: ID!, action: SetAction!): SetContentSubcategory!
+
+  """Create a ThirdPartyAppCustomization"""
+  createThirdPartyAppCustomization(input: CreateThirdPartyAppCustomizationInput): CreateThirdPartyAppCustomization!
+
+  """Update a ThirdPartyAppCustomization"""
+  updateThirdPartyAppCustomization(input: UpdateThirdPartyAppCustomizationInput!): UpdateThirdPartyAppCustomization!
+
+  """Delete a ThirdPartyAppCustomization"""
+  deleteThirdPartyAppCustomization(id: ID!): DeleteThirdPartyAppCustomization!
+
+  """Send invitation to user"""
+  sendUserInvite(existingId: ID, create: CreateAndInviteUserInput): SendUserInvite!
+
+  """Accept an invitation"""
+  acceptUserInvite(token: String!, password: String!): AcceptUserInvite!
+
+  """Create DailyRecapAnswer"""
+  createDailyRecapAnswer(input: CreateDailyRecapAnswerInput!): CreateDailyRecapAnswer!
+
+  """Update DailyRecapAnswer"""
+  updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer!
+
+  """Delete DailyRecapAnswer"""
+  deleteDailyRecapAnswer(id: ID!): DeleteDailyRecapAnswer!
+
+  """Create DailyRecapQuestion"""
+  createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion!
+
+  """Update DailyRecapQuestion"""
+  updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion!
+
+  """Delete DailyRecapQuestion"""
+  deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion!
+
+  """Update Third Party components"""
+  updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent!
+
+  """Create Biomarker Category"""
+  createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory!
+
+  """Update Biomarker Category"""
+  updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory!
+
+  """Delete Biomarker Category"""
+  deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory!
+
+  """Create Third Party Biomarker"""
+  addBiomarker(input: AddBiomarkerInput!): AddBiomarker!
+
+  """Update Third Party Biomarker"""
+  updateBiomarker(input: UpdateBiomarkerInput!): UpdateBiomarker!
+
+  """Delete Third Party Biomarker"""
+  deleteBiomarker(id: ID!): DeleteBiomarker!
+
+  """Delete Assistant"""
+  deleteAssistant(id: ID!): DeleteAssistant!
+
+  """Delete Knowledge Base"""
+  deleteKnowledgeBase(id: ID!, assistantId: ID!): DeleteKnowledgeBase!
+
+  """Delete escalation"""
+  deleteEscalation(id: ID!, assistantId: ID!): DeleteEscalation!
+
+  """Delete escalation"""
+  deleteConstraint(id: ID!, assistantId: ID!): DeleteConstraint!
+
+  """Delete Assistant list"""
+  deleteAssistantList(id: ID!): DeleteAssistantList
+
+  """Delete a user from Assistant List"""
+  deleteProfileFromAssistantList(profileId: ID!, assistantListId: ID!): DeleteProfileFromAssistantList
+
+  """Update openIA key field of third party model"""
+  setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
+
+  """Create a new Assistant with its data"""
+  createAssistant(name: String!, mainGoal: String!, program: ID!): CreateAssistant
+
+  """Update a Assistant"""
+  updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
+
+  """Create a Journey"""
+  createJourney(input: JourneyInput): CreateJourney
+
+  """Update a Journey"""
+  updateJourney(input: UpdateJourneyInput!): UpdateJourney
+
+  """Create a Day in a Journey"""
+  createDayJourney(input: DayJourneyInput): CreateDayJourney
+
+  """Create a new Knowledge Base belongs to an Assistant"""
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String): CreateKnowledgeBase
+
+  """Create a chat response from Knowledge Base"""
+  createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
+
+  """Create a Escalation belongs to an Assistant"""
+  createEscalation(input: EscalationInput): CreateEscalation
+
+  """Create a Constraint belongs to an Assistant"""
+  createConstraint(input: ConstraintInput): CreateConstraint
+
+  """Updates a Constraint"""
+  updateConstraint(constraintId: ID!, name: String!, description: String!): UpdateConstraint
+
+  """Updated a Day journey"""
+  updateDayJourney(dayJourneyId: ID!, order: Int!, skipped: Boolean!): UpdateDayJourney
+
+  """Create a chat response from Journey"""
+  createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): JourneyChat
+
+  """Creates a chat for assistant tester"""
+  createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, useLongTermMemory: Boolean, profileId: ID!, language: String, toneOfVoice: String): AssistantConversationChat
+
+  """Create a List to belongs to an Assistant"""
+  createAssistantList(assistantId: ID!, name: String): CreateAssistantList
+
+  """Create an individual interaction"""
+  createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
+
+  """Update an individual interaction"""
+  updateInteraction(id: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): UpdateInteraction
+
+  """Delete a Day Journey"""
+  deleteDayJourney(id: ID!): DeleteDayJourney
+
+  """Delete an interaction by ID"""
+  deleteInteraction(interactionId: ID!): DeleteInteraction
+
+  """Add a user to a List"""
+  addUserToAssistantList(profileId: ID!, assistantListId: ID!): AddUserToAssistantList!
+
+  """Hard Delete an End-User (from the app)"""
+  deleteAppUserProfile(id: ID!): DeleteAppUserProfile!
+
+  """Create a Supplement"""
+  createSupplement(input: CreateSupplementInput!): CreateSupplement!
+
+  """Update a Supplement"""
+  updateSupplement(input: UpdateSupplementInput!): UpdateSupplement!
+
+  """Set App User as Test User"""
+  setThirdPartyAppUserAsTest(input: SetThirdPartyAppUserAsTestInput!): SetThirdPartyAppUserAsTest!
+}
+
+interface Node {
+  id: ID!
+}
+
+type NutrientGoal implements Node {
+  id: ID!
+  unit: NutrientUnit!
+  nutrient: NutrientType!
+  goalAmount: Float!
+  upperLimit: Float!
+  lowerLimit: Float!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+input NutrientGoalInput {
+  unit: NutrientUnit!
+  nutrient: NutrientType!
+  goalAmount: Float!
+  upperLimit: Float!
+  lowerLimit: Float!
+}
+
+enum NutrientType {
+  NETCARBS
+  CHOCDF
+  PROCNT
+  FAT
+  CALCIUM
+  CHROMIUM
+  COPPER
+  FLUORIDE
+  IODINE
+  IRON
+  MAGNESIUM
+  MANGANESE
+  MOLYBDENUM
+  PHOSPHORUS
+  SELENIUM
+  ZINC
+  POTASSIUM
+  SODIUM
+  CHLORIDE
+  VITAMIN_A
+  VITAMIN_C
+  VITAMIN_D
+  VITAMIN_E
+  VITAMIN_K
+  THIAMIN
+  RIBOFLAVIN
+  NIACIN
+  VITAMIN_B6
+  FOLATE
+  VITAMIN_B12
+  PANTOTHENIC_ACID
+  BIOTIN
+  CHOLINE
+  TOTAL_FIBER
+  LINOLEIC_ACID
+  ALPHA_LINOLENIC_ACID
+}
+
+enum NutrientUnit {
+  PERCENT
+  GRAM
+  MILLIGRAM
+  MICROGRAM
+}
+
+enum Operation {
+  ADD
+  REMOVE
+  REPLACE
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Profile {
+  id: ID!
+  name: String!
+  email: String!
+  roles: [Role!]!
+  permissions: [String!]!
+  companyName: String!
+  apiToken: String
+  selfReportedRole: String @deprecated(reason: "Use roles instead")
+  freeTrialRemainingDays: Int
+  active: Boolean
+  invitationExpireAt: Datetime
+  thirdParty: ThirdParty
+}
+
+input ProfileTest {
+  name: String!
+  age: Int!
+  biologicalSex: BiologicalSex
+  height: Float
+  weight: Float
+  goalWeight: Float
+  activityLevel: ActivityLevel
+  steps: Int
+}
+
+"""Diet Program that an app user can be subscribed to"""
+type Program implements Node {
+  id: ID!
+  name: String!
+  createdAt: Datetime!
+  slug: String!
+  author: String
+  isActive: Boolean!
+  isPremium: Boolean!
+  descriptionShort: String
+  descriptionLong: String
+  comment: String
+  order: Int!
+  tags: [String!]!
+  image: URI
+  cover: URI
+  backgroundImage: URI
+  authorAvatar: URI
+  emailCampaignId: String
+  mailchimpWorkflowEmailId: String
+  dynamicProgramParent: String
+  ruleSets: [RuleSet!]!
+  isReadOnly: Boolean!
+  restrictions: [Restriction!]!
+  visibility: Boolean!
+  energyNutrientEquation: Equation
+}
+
+type ProgramConnection {
+  edges: [ProgramEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProgramEdge {
+  cursor: String!
+  node: Program
+}
+
+input ProgramOrderBy {
+  field: ProgramOrderByField
+  order: SortOrder
+}
+
+enum ProgramOrderByField {
+  NAME
+  AUTHOR
+  CREATED_AT
+  IS_ACTIVE
+}
+
+type Query {
+  """Return the logged-in profile info, like email or roles"""
+  me: Profile
+
+  """List the logged-in profile permissions"""
+  userPermissions: [String!]!
+
+  """TP future flags"""
+  flags: Generic
+
+  """Fetch a user details"""
+  user(id: ID!): User
+
+  """List all the users"""
+  users(first: Int, last: Int, after: String, before: String, search: String): UserConnection!
+
+  """Retrieve a list with available program's restrictions"""
+  restrictions(first: Int, last: Int, after: String, before: String): RestrictionConnection!
+
+  """Retrieve a `Program` by ID, or null if it doesn't exist"""
+  program(id: ID!): Program
+
+  """List all `Program` available for the profile"""
+  programs(visibility: Boolean, first: Int, after: String, readOnly: Boolean, isActive: Boolean, orderBy: ProgramOrderBy): ProgramConnection!
+
+  """List all owned and read-only ingredients"""
+  ingredients(readOnly: Boolean): [Ingredient!]!
+
+  """Retrieve an `IngredientGroup` by ID, or null if it doesn't exist"""
+  ingredientGroup(id: ID!): IngredientGroup
+
+  """List all `IngredientGroup` available for the profile"""
+  ingredientGroups(first: Int, last: Int, after: String, before: String, readOnly: Boolean, search: String, onlyRestrictions: Boolean, onlyBuildingGroups: Boolean): IngredientGroupConnection!
+
+  """List all read-only and owned `RuleSet` ordered by name"""
+  ruleSets(first: Int, after: String, program: ID, readOnly: Boolean, search: String): RuleSetConnection!
+
+  """Retrieve a `RuleSet` by ID, or null if it doesn't exist"""
+  ruleSet(id: ID!): RuleSet
+
+  """List goals assigned to a program"""
+  programGoals(program: ID!): [Goal!]!
+
+  """List custom attributes"""
+  customAttributes(search: String, first: Int, last: Int, after: String, before: String): CustomAttributeConnection!
+
+  """List segment conditions"""
+  segmentConditions(first: Int, last: Int, after: String, before: String): ConditionConnection!
+
+  """Retrieve a condition by ID"""
+  segmentCondition(id: ID!): Condition
+
+  """List user segments"""
+  userSegments(search: String, first: Int, last: Int, after: String, before: String): UserSegmentConnection!
+
+  """Retrieve a user segment by ID"""
+  userSegment(id: ID!): UserSegment
+  availableThirdParties: [ThirdParty!]!
+
+  """List Content Tags"""
+  contentTags(first: Int, last: Int, after: String, before: String, name: String): ContentTagConnection!
+
+  """List Content Categories"""
+  contentCategories(first: Int, last: Int, after: String, before: String, id: ID, tags: [String!]): ContentCategoryConnection!
+
+  """List Content Libraries"""
+  contentLibraries(first: Int, last: Int, after: String, before: String, id: ID, search: String, categories: [ID!], tags: [String!], order: ContentLibraryOrderBy, enablePersonalizedContent: Boolean): ContentLibraryConnection!
+
+  """List Supplement Recommended"""
+  supplementsRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementRecommendedConnection
+
+  """List Article Recommended"""
+  articlesRecommended(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): ArticleRecommendedConnection
+
+  """Retrieve Features for AppCustomization"""
+  appCustomizationFeatures: [appCustomizationFeature!]!
+
+  """
+  Retrieve an user ThirdPartyAppCustomization or null if it doesn't exist
+  """
+  thirdPartyAppCustomization: ThirdPartyAppCustomization
+
+  """Daily Recap Answers & Questions"""
+  thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
+  thirdPartyDailyRecapQuestions(question: String, answers: [ID!], before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
+
+  """Retrieve Recipe tags"""
+  recipeTags(name: String, before: String, after: String, first: Int, last: Int): RecipeTagConnection
+
+  """Retrieve third-party enabled trackers"""
+  enabledTrackers: [TrackerComponent!]
+
+  """List Recipe's Cuisines"""
+  cuisines(name: String, before: String, after: String, first: Int, last: Int): CuisineConnection
+
+  """List biomarkers"""
+  biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
+
+  """List biomarker categories"""
+  biomarkerCategories(id: ID, parentId: ID, filters: BiomarkerCategoryFilterInput, before: String, after: String, first: Int, last: Int, orderBy: BiomarkerCategoryOrderBy): BiomarkerCategoryConnection
+
+  """List biomarker units"""
+  biomarkerUnits(id: ID, before: String, after: String, first: Int, last: Int): BiomarkerUnitConnection
+
+  """List the users logs"""
+  userLoginLogs(first: Int, last: Int, after: String, before: String, startDate: Datetime!, endDate: Datetime!, userId: ID): ActivityLogConnection!
+
+  """List the assistant by the provided ID"""
+  assistant(id: ID!): AssistantResult!
+
+  """List all assistants belongs to the third party"""
+  assistants: [Assistant!]
+
+  """List the journey by the provided ID"""
+  journey(assistantId: ID!): JourneyResult
+
+  """List the Knowledge Base by the provided ID"""
+  knowledgeBase(id: ID!): KnowledgeBaseResult!
+
+  """List all assistants belongs to the assistantId"""
+  knowledgeBases(assistantId: ID!): [KnowledgeBaseEntity]
+  knowledgeBaseChatResponse(assistantId: ID!): [KnowledgeBaseChatResponse]
+
+  """List Escalation"""
+  escalation(id: ID!): EscalationResult!
+
+  """List all Escalations  belongs to Assistant ID"""
+  escalations(assistantId: ID!): [Escalation]
+
+  """List Constraint"""
+  constraint(id: ID!): ConstraintResult!
+
+  """List all constraints belongs to Assistant ID"""
+  constraints(assistantId: ID!): [Constraint]
+
+  """List Constraint"""
+  assistantList(id: ID!): AssistantListResult!
+
+  """List all constraints belongs to Assistant ID"""
+  assistantLists(assistantId: ID!): [AssistantList]
+
+  """List end-users (from the app)"""
+  appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
+
+  """List all Supplements"""
+  supplements(id: ID, name: String, first: Int, last: Int, after: String, before: String): SupplementConnection!
+
+  """ List all profiles"""
+  wellnessProfile(id: ID!): WellnessProfileResult!
+}
+
+type RecipeTag implements Node {
+  id: ID!
+  displayName: String!
+  termName: String!
+}
+
+type RecipeTagConnection {
+  pageInfo: PageInfo!
+  edges: [RecipeTagEdge]!
+}
+
+type RecipeTagEdge {
+  node: RecipeTag
+  cursor: String!
+}
+
+enum RedirectTo {
+  NONE
+  SUPPORT
+  CONCIERGE
+}
+
+type RequestPasswordReset {
+  success: Boolean!
+  message: String!
+}
+
+type ResetPassword {
+  success: Boolean!
+  message: String!
+}
+
+type ResetPasswordExpired {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+}
+
+type Restriction implements Node {
+  id: ID!
+  name: String!
+  slug: String!
+}
+
+type RestrictionConnection {
+  edges: [RestrictionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type RestrictionEdge {
+  cursor: String!
+  node: Restriction
+}
+
+enum Role {
+  VIEWER
+  DEVELOPER
+  ADMIN
+  SUPER_ADMIN
+  COACH
+  COACH_ALL_MEMBERS
+  INACTIVE_COACH
+  NON_VERIFIED_COACH
+  COACH_ADMIN
+  FREE_DEVELOPER
+  FULL_ACCESS
+  CREATOR
+}
+
+type RuleSet implements Node {
+  id: ID!
+  order: Int!
+  name: String!
+  actionType: RuleSetActionType!
+  ingredientGroups: [IngredientGroup!]
+  ruleType: String!
+  recipeTags: [RecipeTag!]
+  contentTags: [ContentTag!]
+  userSegments: [UserSegment!]!
+  program: Program
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  visibility: Boolean!
+  isReadOnly: Boolean!
+  priority: Int!
+}
+
+enum RuleSetActionType {
+  AVOID
+  INCREASE
+  DECREASE
+}
+
+type RuleSetConnection {
+  edges: [RuleSetEdge!]!
+  pageInfo: PageInfo!
+}
+
+type RuleSetEdge {
+  cursor: String!
+  node: RuleSet
+}
+
+enum RuleType {
+  INGREDIENT_GROUPS
+  RECIPE_TAGS
+  CONTENT_TAGS
+}
+
+type SendUserInvite {
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+enum SetAction {
+  ADD
+  REMOVE
+}
+
+type SetContentSubcategory {
+  success: Boolean!
+  message: String!
+}
+
+type SetOpenAIKey {
+  success: Boolean!
+  message: String!
+  key: String
+}
+
+input SetOpenAIKeyInput {
+  key: String!
+}
+
+type SetRole {
+  success: Boolean!
+  message: String!
+}
+
+type SetRoles {
+  success: Boolean!
+  message: String!
+}
+
+type SetThirdPartyAppUserAsTest {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  user: AppUser
+}
+
+input SetThirdPartyAppUserAsTestInput {
+  user: ID!
+  isTest: Boolean!
+}
+
+type SignUpDeveloper {
+  success: Boolean!
+  message: String!
+}
+
+input SignUpDeveloperInput {
+  email: Email!
+  firstName: String!
+  lastName: String!
+  companyName: String
+}
+
+type SitemapUrl {
+  id: ID!
+  knowledgeBase: ID
+  url: String
+  sitemapUrl: String
+  taskStatus: TaskStatus
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+type Supplement implements Node {
+  id: ID!
+  name: String!
+  description: String
+  category: String!
+  mainImage: String!
+  images: [String!]
+  brand: String!
+  directionsOfUse: [SupplementDirection!]!
+  directionsOfUseText: String
+  servingName: String!
+  sizeCount: Int!
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type SupplementConnection {
+  pageInfo: PageInfo!
+  edges: [SupplementEdge]!
+}
+
+type SupplementDirection {
+  quantity: Float!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  timeOfDay: TimeOfDay!
+}
+
+type SupplementEdge {
+  node: Supplement
+  cursor: String!
+}
+
+type SupplementRecommended implements Node {
+  valueMax: Float
+  valueMin: Float
+  createdAt: Datetime!
+  updatedAt: Datetime!
+  id: ID!
+  supplement: Supplement!
+  biomarker: Biomarker!
+  normalValues: [Generic!]
+}
+
+type SupplementRecommendedConnection {
+  pageInfo: PageInfo!
+  edges: [SupplementRecommendedEdge]!
+}
+
+type SupplementRecommendedEdge {
+  node: SupplementRecommended
+  cursor: String!
+}
+
+enum TaskStatus {
+  CREATED
+  PROCESSING
+  DONE
+  ERROR
+}
+
+type ThirdParty {
+  name: String!
+  slug: String!
+  openaiKey: String
+}
+
+type ThirdPartyAppCustomization {
+  id: ID!
+  thirdPartyId: Int!
+  logo: String
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type ThirdPartyDailyRecapQuestion implements Node {
+  id: ID!
+  question: String!
+  imageUrl: String
+  programId: String
+  thirdParty: Int
+  answers: [DailyRecapAnswer!]!
+}
+
+type ThirdPartyDailyRecapQuestionConnection {
+  edges: [ThirdPartyDailyRecapQuestionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ThirdPartyDailyRecapQuestionEdge {
+  cursor: String!
+  node: ThirdPartyDailyRecapQuestion
+}
+
+"""An ISO-8601 encoded UTC Time 15:29:03Z string."""
+scalar Time
+
+enum TimeOfDay {
+  AT_WAKING
+  WITH_BREAKFAST
+  WITH_LUNCH
+  WITH_DINNER
+  AT_BEDTIME
+}
+
+enum TrackerComponent {
+  DAILY_RECAP
+  DAILY_MOOD
+  WEIGHT_TRACKER
+  MP_MEAL_TRACKER
+  HYDRATION_TRACKER
+  TODAY_FOOD
+  TODAY_SUPPLEMENT
+  FOOD_LOGS
+  STEPS_TRACKER
+  EXERCISE_TRACKER
+  PLAN_SUPPLEMENT
+  MY_CHECKLIST_TRACKER
+  SLEEP_TIME_TRACKER
+  SLEEP_QUALITY_SCORE_TRACKER
+  HRV_TRACKER
+  HEART_RATE_TRACKER
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  FOOD_LOG_MEAL_TRACKER
+  BLOOD_PRESSURE_TRACKER
+}
+
+type UpdateArticleRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  articleRecommended: ArticleRecommended
+}
+
+input UpdateArticleRecommendedInput {
+  id: ID!
+  biomarkerId: ID
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  articleId: ID
+}
+
+type UpdateAssistant {
+  success: Boolean!
+  message: String!
+  assistant: Assistant
+}
+
+input UpdateAssistantInput {
+  id: ID!
+  name: String
+  mainGoal: String
+  programId: ID
+  mode: AssistantMode
+}
+
+type UpdateBiomarker {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarker: Biomarker
+}
+
+type UpdateBiomarkerCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  biomarkerCategory: BiomarkerCategory
+}
+
+input UpdateBiomarkerCategoryInput {
+  id: ID!
+  name: String
+  parent: ID
+  order: Int
+}
+
+input UpdateBiomarkerInput {
+  id: ID!
+  name: String
+  category: ID
+  method: String
+  description: String
+  order: Int
+  isVisible: Boolean
+  range: BiomarkerRangeInput
+  optimalRange: BiomarkerRangeInput
+  borderlineRange: BiomarkerRangeInput
+  units: [ID!]
+  aliases: [BiomarkerAliasInput!]
+  normalValues: [Generic!]
+}
+
+type UpdateConstraint {
+  success: Boolean!
+  message: String!
+  constraint: Constraint
+}
+
+type UpdateContentCategory {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentCategory: ContentCategory
+}
+
+input UpdateContentCategoryInput {
+  id: ID!
+  name: String
+  order: Int
+  subcategories: [ID!]
+  image: Upload
+  tags: [ID!]
+  lang: Generic
+  subtitle: String
+}
+
+type UpdateContentLibrary {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentLibrary: ContentLibrary
+}
+
+input UpdateContentLibraryInput {
+  id: ID!
+  title: String
+  imageUrl: String
+  sourceUrl: String
+  order: Int
+  subTitle: String
+  isBlocked: Boolean
+  isFeatured: Boolean
+  lang: Generic
+  categories: [ID!]
+  tags: [ID!]
+  programs: [ID!]
+}
+
+type UpdateContentTag {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  contentTag: ContentTag
+}
+
+input UpdateContentTagInput {
+  id: ID!
+  name: String!
+}
+
+type UpdateCustomAttribute {
+  success: Boolean!
+  message: String!
+  customAttribute: CustomAttribute
+}
+
+type UpdateDailyRecapAnswer {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapAnswer: DailyRecapAnswer
+}
+
+input UpdateDailyRecapAnswerInput {
+  id: ID!
+  answer: String
+  type: String
+}
+
+type UpdateDailyRecapQuestion {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  dailyRecapQuestion: ThirdPartyDailyRecapQuestion
+}
+
+input UpdateDailyRecapQuestionInput {
+  id: ID!
+  question: String
+  imageUrl: String
+  program: ID
+  answers: [ID!]
+}
+
+type UpdateDayJourney {
+  success: Boolean!
+  message: String!
+  dayJourney: DayJourney
+}
+
+type UpdateIngredient {
+  success: Boolean!
+  message: String!
+  ingredient: Ingredient
+}
+
+type UpdateIngredientGroup {
+  success: Boolean!
+  message: String!
+  updated: IngredientGroup
+}
+
+input UpdateIngredientGroupInput {
+  id: ID!
+  name: String
+  ingredients: [ID!]
+}
+
+input UpdateIngredientInput {
+  id: ID!
+  name: String
+  alias: [String!]
+}
+
+type UpdateInteraction {
+  success: Boolean!
+  message: String!
+  interaction: Interaction
+}
+
+type UpdateJourney {
+  success: Boolean!
+  message: String!
+  journey: Journey
+}
+
+input UpdateJourneyInput {
+  id: ID!
+  sendWelcomeMessage: Boolean
+  welcomeMessage: String
+}
+
+type UpdateProgram {
+  success: Boolean!
+  message: String!
+  updated: Program
+}
+
+type UpdateProgramGoal {
+  success: Boolean!
+  message: String!
+  goal: Goal
+}
+
+input UpdateProgramGoalInput {
+  id: ID!
+  name: String
+  biologicalSex: BiologicalSex
+  programId: ID
+  nutrients: [NutrientGoalInput!]
+  minAge: Int
+  maxAge: Int
+  monday: Boolean
+  tuesday: Boolean
+  wednesday: Boolean
+  thursday: Boolean
+  friday: Boolean
+  saturday: Boolean
+  sunday: Boolean
+}
+
+input UpdateProgramInput {
+  id: ID!
+  name: String
+  author: String
+  isActive: Boolean
+  descriptionShort: String
+  descriptionLong: String
+  restrictions: [ID!]
+  visibility: Boolean
+  energyNutrientEquation: Equation
+  image: Upload
+  cover: Upload
+  backgroundImage: Upload
+  authorAvatar: Upload
+}
+
+type UpdateRuleSet {
+  success: Boolean!
+  message: String!
+  updated: RuleSet
+}
+
+input UpdateRuleSetInput {
+  id: ID!
+  order: Int
+  name: String
+  actionType: RuleSetActionType
+  ruleType: RuleType
+  recipeTags: [ID!]
+  contentTags: [ID!]
+  userSegments: [ID!]
+  ingredientGroups: [ID!]
+  program: ID
+  comment: String
+  tags: [String!]
+  sources: [String!]
+  publicName: String
+  publicComment: String
+  simpleName: String
+  simpleExamples: String
+  priority: Int
+  visibility: Boolean
+}
+
+type UpdateSegmentCondition {
+  success: Boolean!
+  message: String!
+  condition: Condition
+}
+
+input UpdateSegmentConditionInput {
+  id: ID!
+  biomarkerId: ID
+  dataType: DataType
+  attrName: String
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+}
+
+type UpdateSupplement {
+  success: Boolean!
+  message: String!
+  supplement: Supplement
+}
+
+input UpdateSupplementInput {
+  id: ID!
+  name: String
+  category: String
+  mainImage: String
+  brand: String
+  servingName: String
+  directionsOfUse: [DirectionsOfUseInput!]
+  description: String
+  images: [String!]
+  directionsOfUseText: String
+  sizeCount: Int
+  externalId: String
+  sku: String
+  storeId: String
+  shopifyVariantId: String
+  shopifyParentId: String
+  instructions: String
+  ingredients: String
+  supplementFacts: String
+}
+
+type UpdateSupplementRecommended {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  supplementRecommended: SupplementRecommended
+}
+
+input UpdateSupplementRecommendedInput {
+  id: ID!
+  biomarkerId: ID
+  range: BiomarkerRangeInput
+  normalValues: [Generic!]
+  supplementId: ID
+}
+
+type UpdateThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+  customization: ThirdPartyAppCustomization
+}
+
+input UpdateThirdPartyAppCustomizationInput {
+  id: ID!
+  logo: Upload
+  backgroundGradientColorFirst: String
+  backgroundGradientColorSecond: String
+  primaryColor: String
+  secondaryColor: String
+  selectedFeatures: [FeatureOption!]
+}
+
+type UpdateThirdPartyTrackerComponent {
+  success: Boolean!
+  message: String!
+  enabledComponents: [TrackerComponent!]
+}
+
+input UpdateThirdPartyTrackerComponentInput {
+  components: [TrackerComponent!]!
+  operation: Operation!
+}
+
+type UpdateUser {
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+input UpdateUserInput {
+  id: String!
+  email: String
+  name: String
+  enable2fa: Boolean
+  selfReportedRole: Role
+  active: Boolean
+  roles: [Role!]
+}
+
+type UpdateUserSegment {
+  success: Boolean!
+  message: String!
+  userSegment: UserSegment
+}
+
+input UpdateUserSegmentInput {
+  """ID of the user segment to update"""
+  id: ID!
+
+  """Name of the user segment"""
+  name: String
+
+  """Priority over other user segments"""
+  priority: Int
+
+  """List of program ids using the segment to apply custom rules"""
+  programs: [ID!]
+
+  """
+  List of existing conditions that must match with the user's attrs to join the segment
+  """
+  conditions: [ID!]
+
+  """
+  Add new conditions that must match with the user's attrs to join the segment
+  """
+  createConditions: [CreateSegmentConditionInput!]
+
+  """List of rule ids the are applied to the matching users"""
+  rules: [ID!]
+}
+
+scalar Upload
+
+"""An RFC 3986, RFC 3987, and RFC 6570 (level 4) compliant URI string."""
+scalar URI
+
+type User implements Node {
+  id: ID!
+  email: String!
+  roles: [Role!]!
+  freeTrialRemainingDays: Int
+  selfReportedRole: String @deprecated(reason: "Use roles instead")
+  active: Boolean
+  createdAt: Datetime!
+  invitationExpireAt: Datetime
+  invitationStatus: InvitationStatus
+  invitationHasExpired: Boolean
+}
+
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User
+}
+
+type UserSegment {
+  id: ID!
+  name: String!
+  priority: Int!
+  programs: [Program!]!
+  conditions: [Condition!]!
+  rules: [RuleSet!]!
+  dataType: DataType
+}
+
+type UserSegmentConnection {
+  edges: [UserSegmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type UserSegmentEdge {
+  cursor: String!
+  node: UserSegment
+}
+
+type Verify2faCode {
+  success: Boolean!
+  message: String!
+}
+
+type VerifyDeveloperEmail {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+  profile: Profile
+}
+
+type WellnessProfile {
+  id: ID!
+  age: Int
+  biologicalSex: String
+  height: Float
+  weight: Float
+  activityLevel: String
+}
+
+type WellnessProfileResult {
+  success: Boolean!
+  message: String!
+  profile: WellnessProfile
+}
+
