@@ -731,6 +731,7 @@ input CoachFiltersInput {
   isActive: Boolean
   coachTypes: [ID!]
   coachTeams: [ID!]
+  isAccountLocked: Boolean
 }
 
 input CoachMakeAdminInput {
