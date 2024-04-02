@@ -154,6 +154,7 @@ type AddUserToJourney {
 
 input AddUserToJourneyInput {
   journey: ID!
+  portalUser: ID
   profile: ID!
 }
 
