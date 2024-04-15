@@ -57,12 +57,6 @@ input AddBiomarkerInput {
   normalValues: [Generic!]
 }
 
-type AddUserToAssistantList {
-  success: Boolean!
-  message: String
-  assistantListUser: [AssistantListUser]
-}
-
 type appCustomizationFeature {
   key: String!
   name: String!
@@ -113,7 +107,7 @@ type ArticleRecommendedEdge {
 
 type Assistant {
   id: ID!
-  program: ID!
+  program: ID
   name: String!
   mainGoal: String
   mode: AssistantMode!
@@ -132,23 +126,6 @@ input AssistantConversationInput {
   hasKnowledgeBase: Boolean!
   usingInteractionGoal: Boolean!
   userProfile: ProfileTest
-}
-
-type AssistantList {
-  id: ID!
-  name: String
-  assistantId: ID!
-}
-
-type AssistantListResult {
-  success: Boolean!
-  message: String!
-  assistantList: AssistantList
-}
-
-type AssistantListUser {
-  id: ID!
-  profile: ID!
 }
 
 enum AssistantMode {
@@ -470,12 +447,6 @@ type CreateAssistant {
   success: Boolean!
   message: String!
   assistant: Assistant
-}
-
-type CreateAssistantList {
-  success: Boolean!
-  message: String!
-  assistantList: AssistantList
 }
 
 type CreateBiomarkerCategory {
@@ -887,11 +858,6 @@ type DeleteAssistant {
   message: String!
 }
 
-type DeleteAssistantList {
-  success: Boolean!
-  message: String!
-}
-
 type DeleteBiomarker {
   success: Boolean!
   message: String!
@@ -975,12 +941,6 @@ type DeleteInteraction {
 type DeleteKnowledgeBase {
   success: Boolean!
   message: String!
-}
-
-type DeleteProfileFromAssistantList {
-  success: Boolean!
-  message: String!
-  assistantListUser: [AssistantListUser]
 }
 
 type DeleteProgram {
@@ -1527,17 +1487,11 @@ type Mutation {
   """Delete escalation"""
   deleteConstraint(id: ID!, assistantId: ID!): DeleteConstraint!
 
-  """Delete Assistant list"""
-  deleteAssistantList(id: ID!): DeleteAssistantList
-
-  """Delete a user from Assistant List"""
-  deleteProfileFromAssistantList(profileId: ID!, assistantListId: ID!): DeleteProfileFromAssistantList
-
   """Update openIA key field of third party model"""
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(name: String!, mainGoal: String!, program: ID!): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID): CreateAssistant
 
   """Update a Assistant"""
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
@@ -1575,9 +1529,6 @@ type Mutation {
   """Creates a chat for assistant tester"""
   createAssistantConversationMessage(assistantId: ID!, userMessage: String!, assistantConversationInput: AssistantConversationInput!, isInitial: Boolean!, useLongTermMemory: Boolean, profileId: ID!, language: String, toneOfVoice: String): AssistantConversationChat
 
-  """Create a List to belongs to an Assistant"""
-  createAssistantList(assistantId: ID!, name: String): CreateAssistantList
-
   """Create an individual interaction"""
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
 
@@ -1589,9 +1540,6 @@ type Mutation {
 
   """Delete an interaction by ID"""
   deleteInteraction(interactionId: ID!): DeleteInteraction
-
-  """Add a user to a List"""
-  addUserToAssistantList(profileId: ID!, assistantListId: ID!): AddUserToAssistantList!
 
   """Hard Delete an End-User (from the app)"""
   deleteAppUserProfile(id: ID!): DeleteAppUserProfile!
@@ -1898,12 +1846,6 @@ type Query {
 
   """List all constraints belongs to Assistant ID"""
   constraints(assistantId: ID!): [Constraint]
-
-  """List Constraint"""
-  assistantList(id: ID!): AssistantListResult!
-
-  """List all constraints belongs to Assistant ID"""
-  assistantLists(assistantId: ID!): [AssistantList]
 
   """List end-users (from the app)"""
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!

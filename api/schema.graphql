@@ -513,7 +513,7 @@ type Assistant {
   mainGoal: String!
   mode: AssistantMode!
   name: String!
-  program: ID!
+  program: ID
 }
 
 input AssistantConversationInput {
@@ -1273,7 +1273,7 @@ input CreateAssistantInput {
   mainGoal: String!
   mode: AssistantMode = MANUAL
   name: String!
-  program: ID!
+  program: ID
 }
 
 type CreateBiomarkerCategory {
