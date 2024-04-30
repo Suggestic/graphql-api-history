@@ -2869,6 +2869,7 @@ enum LabTestReportStatus {
 
 enum Language {
   AR
+  BE
   EN
   ES
   NL
@@ -4678,8 +4679,6 @@ type Query {
   streaks(endDate: Date!, source: SourceType, startDate: Date!): [Streak!]!
   streaksStats(endDate: Date!, source: SourceType, startDate: Date!): StreaksStats!
   subscriptions(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): SubscriptionTypeConnection
-  suggestMeal(date: Date!, mealTime: MealTime!): SuggestedMeal
-  suggestedMeals(date: Date!): SuggestedMeals
   supplement(id: ID!): Supplement
   supplementParent(supplementId: ID!): SupplementParent
   supplementPlans(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementPlanConnection
@@ -5074,6 +5073,7 @@ type Restaurant implements Node {
   maxPriceRange: Float @deprecated(reason: "no longer used")
   minPriceRange: Float @deprecated(reason: "no longer used")
   name: String
+  objectType: String
   phone: String
   photos: [String]
   postalCode: String
@@ -5529,28 +5529,6 @@ type SubscriptionTypeConnection {
 type SubscriptionTypeEdge {
   cursor: String!
   node: SubscriptionType
-}
-
-type SuggestedMeal {
-  databaseId: String
-  isLogged: Boolean
-  loggedDatabaseId: String
-  mainImage: String
-  mealTime: MealTime
-  mealType: MealType
-  name: String
-  nutrients: Nutrients @deprecated(reason: "Use nutritionalInfo or nutrientsPerServing instead")
-  nutrientsPerServing: NutrientsPerServing
-  nutritionalInfo: NutritionalInfo
-  recipeType: String
-  squareImage: String
-}
-
-type SuggestedMeals {
-  breakfast: SuggestedMeal
-  dinner: SuggestedMeal
-  lunch: SuggestedMeal
-  snack: SuggestedMeal
 }
 
 type Suggestion {

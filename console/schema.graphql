@@ -1125,7 +1125,7 @@ enum IngredientGroupType {
 
 type Interaction {
   id: ID!
-  dayJourneyId: ID!
+  dayJourneyId: ID
   order: Int
   interaction: String
   goal: String
@@ -1186,6 +1186,13 @@ type KnowledgeBase {
   taskStatus: TaskStatus
   pdfUrl: String
   sitemapUrls: [SitemapUrl]
+  category: KnowledgeBaseCategory
+}
+
+enum KnowledgeBaseCategory {
+  PRODUCT
+  SUPPORT
+  GENERAL
 }
 
 type KnowledgeBaseChat {
@@ -1200,18 +1207,6 @@ type KnowledgeBaseChatResponse {
   response: String!
 }
 
-type KnowledgeBaseEntity {
-  id: ID!
-  name: String!
-  url: String
-  pdfFile: String
-  txt: String
-  sitemapUrl: String
-  taskStatus: TaskStatus
-  pdfUrl: String
-  sitemapUrls: [SitemapUrl]
-}
-
 input KnowledgeBaseInput {
   name: String!
   url: String
@@ -1221,7 +1216,7 @@ input KnowledgeBaseInput {
 type KnowledgeBaseResult {
   success: Boolean!
   message: String!
-  knowledgeBase: KnowledgeBaseEntity
+  knowledgeBase: KnowledgeBase
 }
 
 type Login {
@@ -1506,7 +1501,7 @@ type Mutation {
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
   """Create a new Knowledge Base belongs to an Assistant"""
-  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory): CreateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
@@ -1832,7 +1827,7 @@ type Query {
   knowledgeBase(id: ID!): KnowledgeBaseResult!
 
   """List all assistants belongs to the assistantId"""
-  knowledgeBases(assistantId: ID!): [KnowledgeBaseEntity]
+  knowledgeBases(assistantId: ID!): [KnowledgeBase]
   knowledgeBaseChatResponse(assistantId: ID!): [KnowledgeBaseChatResponse]
 
   """List Escalation"""
