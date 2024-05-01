@@ -1421,6 +1421,20 @@ type CreateGooglePlayTransaction {
   success: Boolean
 }
 
+type CreateGuardrail {
+  errors: [FormError!]
+  guardrail: Guardrail
+  message: String!
+  success: Boolean!
+}
+
+input CreateGuardrailInput {
+  assistant: ID!
+  description: String!
+  message: String!
+  name: String!
+}
+
 type CreateInteraction {
   interaction: InteractionType
   message: String!
@@ -1923,6 +1937,12 @@ type DeleteExerciseEntry {
 }
 
 type DeleteFoodLog {
+  message: String!
+  success: Boolean!
+}
+
+type DeleteGuardrail {
+  guardrail: Guardrail
   message: String!
   success: Boolean!
 }
@@ -2471,6 +2491,30 @@ enum GroupQuestion {
   MOOD
 }
 
+type Guardrail implements Node {
+  assistant: Assistant!
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  message: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type GuardrailConnection {
+  edges: [GuardrailEdge]!
+  pageInfo: PageInfo!
+}
+
+type GuardrailEdge {
+  cursor: String!
+  node: Guardrail
+}
+
+input GuardrailFilterInput {
+  assistant: ID
+}
+
 enum HabitAnswerType {
   NEGATIVE
   NEUTRAL
@@ -2787,6 +2831,12 @@ type JourneyType {
 
 scalar JSONString
 
+enum KnowledgeBaseCategory {
+  GENERAL
+  PRODUCT
+  SUPPORT
+}
+
 type KnowledgeBaseChatResponse {
   id: ID!
   response: String!
@@ -2807,6 +2857,7 @@ enum KnowledgeBaseTaskStatus {
 }
 
 type KnowledgeBaseType {
+  category: KnowledgeBaseCategory
   id: ID
   name: String!
   pdfFile: String
@@ -3418,10 +3469,11 @@ type Mutation {
   createDayJourney(input: DayJourneyInput!): CreateDayJourney
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
+  createGuardrail(input: CreateGuardrailInput!): CreateGuardrail
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
   createJourney(input: JourneyInput!): CreateJourney
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
-  createKnowledgeBase(assistantId: ID!, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, category: KnowledgeBaseCategory, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
@@ -3470,6 +3522,7 @@ type Mutation {
 
   """deleteFoodLog deletes a food log by ID"""
   deleteFoodLog(id: ID!): DeleteFoodLog!
+  deleteGuardrail(id: ID!): DeleteGuardrail
 
   """deleteHRVLog delete hrv log entry"""
   deleteHRVLog(id: ID!): DeleteHRVLog!
@@ -3567,6 +3620,7 @@ type Mutation {
   updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
+  updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
   updateJourney(input: UpdateJourneyInput!): UpdateJourney
@@ -4579,6 +4633,7 @@ type Query {
   foodLogsByUser(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!, userId: String!): MealLogConnection
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
+  guardrails(after: String, before: String, filters: GuardrailFilterInput, first: Int, id: ID, last: Int, offset: Int): GuardrailConnection
   heartRateLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): HeartRateLogsConnnection!
   historicalBiomarkerResults(after: String, before: String, filters: HistoricalBiomarkerResultsFilterInput, first: Int, last: Int, offset: Int): ProfileBiomarkerConnection
   historicalResultsByBiomarker(id: ID!): ProfileBiomarkerResult
@@ -6146,6 +6201,21 @@ input UpdateDietPreferenceInput {
   name: String
   operationOverRestrictions: Operation
   restrictions: [ID!]
+}
+
+type UpdateGuardrail {
+  errors: [FormError!]
+  guardrail: Guardrail
+  message: String!
+  success: Boolean!
+}
+
+input UpdateGuardrailInput {
+  assistant: ID
+  description: String
+  id: ID!
+  message: String
+  name: String
 }
 
 type UpdateHydration {
