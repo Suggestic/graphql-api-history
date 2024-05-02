@@ -513,7 +513,10 @@ type Assistant {
   mainGoal: String!
   mode: AssistantMode!
   name: String!
+  onboarding: Boolean!
+  onboardingPrompt: String
   program: ID
+  voice: String
 }
 
 input AssistantConversationInput {
@@ -1273,7 +1276,10 @@ input CreateAssistantInput {
   mainGoal: String!
   mode: AssistantMode = MANUAL
   name: String!
+  onboarding: String
+  onboardingPrompt: String
   program: ID
+  voice: String
 }
 
 type CreateBiomarkerCategory {
@@ -6039,7 +6045,10 @@ input UpdateAssistantInput {
   mainGoal: String
   mode: AssistantMode
   name: String
+  onboarding: String
+  onboardingPrompt: String
   programId: ID
+  voice: String
 }
 
 type UpdateBiomarker {
