@@ -111,6 +111,9 @@ type Assistant {
   name: String!
   mainGoal: String
   mode: AssistantMode!
+  voice: String
+  onboarding: String
+  onboardingPrompt: String
 }
 
 type AssistantConversationChat {
@@ -557,6 +560,20 @@ type CreateEscalation {
   escalation: Escalation
 }
 
+type CreateGuardrail {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  guardrail: Guardrail
+}
+
+input CreateGuardrailInput {
+  assistant: ID!
+  name: String!
+  description: String!
+  message: String!
+}
+
 type CreateIngredient {
   success: Boolean!
   message: String!
@@ -921,6 +938,12 @@ type DeleteEscalation {
   message: String!
 }
 
+type DeleteGuardrail {
+  success: Boolean!
+  message: String!
+  guardrail: Guardrail
+}
+
 type DeleteIngredient {
   success: Boolean!
   message: String!
@@ -1085,6 +1108,27 @@ type Goal implements Node {
   sunday: Boolean!
   createdAt: Datetime!
   updatedAt: Datetime!
+}
+
+type Guardrail {
+  id: ID!
+  name: String!
+  description: String!
+  message: String!
+}
+
+type GuardrailConnection {
+  pageInfo: PageInfo!
+  edges: [GuardrailEdge]!
+}
+
+type GuardrailEdge {
+  node: Guardrail
+  cursor: String!
+}
+
+input GuardrailFilterInput {
+  assistant: ID
 }
 
 type Ingredient implements Node {
@@ -1486,7 +1530,7 @@ type Mutation {
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(name: String!, mainGoal: String!, program: ID): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: String, onboardingPrompt: String): CreateAssistant
 
   """Update a Assistant"""
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
@@ -1547,6 +1591,15 @@ type Mutation {
 
   """Set App User as Test User"""
   setThirdPartyAppUserAsTest(input: SetThirdPartyAppUserAsTestInput!): SetThirdPartyAppUserAsTest!
+
+  """Delete Guardrail"""
+  deleteGuardrail(id: ID!): DeleteGuardrail!
+
+  """Create a Guardrail belongs to an Assistant"""
+  createGuardrail(input: CreateGuardrailInput!): CreateGuardrail!
+
+  """Updates a Guardrail"""
+  updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail!
 }
 
 interface Node {
@@ -1841,6 +1894,9 @@ type Query {
 
   """List all constraints belongs to Assistant ID"""
   constraints(assistantId: ID!): [Constraint]
+
+  """List guardrails"""
+  guardrails(id: ID, name: String, first: Int, last: Int, after: String, before: String, filters: GuardrailFilterInput): GuardrailConnection!
 
   """List end-users (from the app)"""
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
@@ -2206,6 +2262,9 @@ input UpdateAssistantInput {
   mainGoal: String
   programId: ID
   mode: AssistantMode
+  voice: String
+  onboarding: String
+  onboardingPrompt: String
 }
 
 type UpdateBiomarker {
@@ -2341,6 +2400,21 @@ type UpdateDayJourney {
   success: Boolean!
   message: String!
   dayJourney: DayJourney
+}
+
+type UpdateGuardrail {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  guardrail: Guardrail
+}
+
+input UpdateGuardrailInput {
+  id: ID!
+  assistant: ID
+  name: String
+  description: String
+  message: String
 }
 
 type UpdateIngredient {
