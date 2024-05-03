@@ -2337,12 +2337,13 @@ enum ExerciseType {
   YOGA
 }
 
-union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | MealProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy
+union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | GenericFoodNodeProxy | MealProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy
 
 enum FoodCategory {
   BRANDED
   COMMON
   COMMON_NCC
+  GENERIC_FOOD
   MEAL_PLAN_MEAL
   MY_BRANDED
   MY_COMMON
@@ -2473,7 +2474,7 @@ type GenericFoodEdge {
   node: GenericFoodNode
 }
 
-type GenericFoodNode {
+type GenericFoodNode implements Node {
   barcode: String
   brandName: String
   brandOwner: String
@@ -2482,7 +2483,7 @@ type GenericFoodNode {
   dataType: String
   description: String
   foodDataId: String
-  id: ID
+  id: ID!
   isActive: Boolean!
   isBranded: Boolean
   isCommon: Boolean
@@ -2494,6 +2495,10 @@ type GenericFoodNode {
   servingSize: Float!
   servingSizeUnit: String!
   tags: [String!]!
+}
+
+type GenericFoodNodeProxy {
+  genericFood: GenericFoodNode!
 }
 
 scalar GenericScalar
