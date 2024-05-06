@@ -211,8 +211,21 @@ type AppointmentType {
   refundableBeforeHours: Int!
 }
 
-type AppointmentTypes {
-  types: [AppointmentType]!
+type AppointmentTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [AppointmentTypeEdge]!
+}
+
+"""A Relay edge containing a `AppointmentType` and its cursor."""
+type AppointmentTypeEdge {
+  """The item at the end of the edge"""
+  node: AppointmentType
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 input AppUserActivityLogFiltersInput {
@@ -301,7 +314,7 @@ type Assistant {
   mainGoal: String!
   mode: AssistantMode!
   name: String!
-  program: ID!
+  program: ID
   journey: AssistantJourney
 }
 
@@ -2694,7 +2707,7 @@ type Query {
     id: ID!
   ): MealPlanTemplate
   mealPlanTemplates(newerFirst: Boolean, isOwned: Boolean, search: String, coachTypes: [ID!], before: String, after: String, first: Int, last: Int): MPTConnection
-  appointmentTypes: AppointmentTypes!
+  appointmentTypes(before: String, after: String, first: Int, last: Int): AppointmentTypeConnection
   noteTemplates(before: String, after: String, first: Int, last: Int): NoteTemplateConnection
   appointmentsByDate(fromDate: Date, toDate: Date, timezone: String, coachIds: [ID!], labTestReportIds: [ID!]): [AppointmentsInDate!]!
   subscriptions(before: String, after: String, first: Int, last: Int): SubscriptionConnection
