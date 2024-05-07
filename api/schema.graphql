@@ -4691,7 +4691,7 @@ type Query {
   isUserProgramStarted: Boolean
   journey(assistantId: ID!): JourneyAssistantTypeResponse
   knowledgeBase(id: ID!): KnowledgeBaseResponse
-  knowledgeBases(assistantId: ID!): [KnowledgeBaseType]
+  knowledgeBases(assistantId: ID!, search: String): [KnowledgeBaseType]
   labTestReports(after: String, before: String, externalId: String, first: Int, id: ID, isVisible: Boolean, last: Int, orderId: String, profile: ID, requisitionId: String): LabTestReportConnection
   locationAutocomplete(lat: Float!, lon: Float!, query: String!): [LocationAutocomplete]
   log(id: ID!): Logger
