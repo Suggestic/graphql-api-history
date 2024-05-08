@@ -2965,8 +2965,8 @@ enum LabTestReportStatus {
 
 enum Language {
   AR
-  BE
   EN
+  EN_GB
   ES
   NL
 }
@@ -3480,7 +3480,7 @@ type Mutation {
   """
   addSleepTime(date: Date, source: SourceType, value: Int!): AddSleepTime!
   addStepsCount(datetime: DateTime!, source: SourceType, steps: Int!): AddStepsCount!
-  addToShoppingList(recipeId: String!): AddToShoppingList
+  addToShoppingList(recipeId: String!, servings: Int): AddToShoppingList
   addUserConsent(input: AddUserConsentInput!): AddUserConsent
   addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
   autoGenerateConversationMessage(input: AutoGenerateConversationMessageInput!): AutoGenerateConversationMessage
