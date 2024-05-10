@@ -534,6 +534,10 @@ type AssistantConversationResponse {
   id: ID!
 }
 
+input AssistantFiltersInput {
+  ids: [String]!
+}
+
 type AssistantIngredient {
   grams: Float
   name: String
@@ -4555,6 +4559,7 @@ type Program implements Node {
   restrictions(encoded: Boolean): [String!]!
   showDefaultGoals: Boolean!
   slug: String
+  subscriptionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTypeConnection!
   tags: [String!]!
   thirdpartydailyrecapquestionSet(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
   transactionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTransactionConnection!
@@ -4636,7 +4641,7 @@ type Query {
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
   assessment(id: ID!): Assessment
   assessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
-  assistants: [Assistant!]
+  assistants(filters: AssistantFiltersInput): [Assistant!]
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
   biomarkerCatalog(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
