@@ -112,7 +112,7 @@ type Assistant {
   mainGoal: String
   mode: AssistantMode!
   voice: String
-  onboarding: String
+  onboarding: Boolean
   onboardingPrompt: String
 }
 
@@ -1530,7 +1530,7 @@ type Mutation {
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: String, onboardingPrompt: String): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: Boolean, onboardingPrompt: String): CreateAssistant
 
   """Update a Assistant"""
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
@@ -1880,7 +1880,7 @@ type Query {
   knowledgeBase(id: ID!): KnowledgeBaseResult!
 
   """List all assistants belongs to the assistantId"""
-  knowledgeBases(assistantId: ID!): [KnowledgeBase]
+  knowledgeBases(assistantId: ID!, search: String): [KnowledgeBase]
   knowledgeBaseChatResponse(assistantId: ID!): [KnowledgeBaseChatResponse]
 
   """List Escalation"""
@@ -2263,7 +2263,7 @@ input UpdateAssistantInput {
   programId: ID
   mode: AssistantMode
   voice: String
-  onboarding: String
+  onboarding: Boolean
   onboardingPrompt: String
 }
 

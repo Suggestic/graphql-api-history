@@ -1280,7 +1280,7 @@ input CreateAssistantInput {
   mainGoal: String!
   mode: AssistantMode = MANUAL
   name: String!
-  onboarding: String
+  onboarding: Boolean
   onboardingPrompt: String
   program: ID
   voice: String
@@ -6092,7 +6092,7 @@ input UpdateAssistantInput {
   mainGoal: String
   mode: AssistantMode
   name: String
-  onboarding: String
+  onboarding: Boolean
   onboardingPrompt: String
   programId: ID
   voice: String
