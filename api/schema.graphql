@@ -4583,6 +4583,10 @@ enum ProgramEnergyNutrientEquation {
   ONCOLOGY
 }
 
+input ProgramFiltersInput {
+  hasSubscription: Boolean = false
+}
+
 input ProgramOrderBy {
   field: ProgramOrderByField = created_at
   order: SortOrder = ASC
@@ -4747,7 +4751,7 @@ type Query {
   premiumProgramRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   profileRecommendations: [ProfileRecommendationType]
   program(id: ID!): Program
-  programs(after: String, before: String, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int, orderBy: ProgramOrderBy): ProgramConnection
+  programs(after: String, before: String, filters: ProgramFiltersInput, first: Int, isActive: Boolean, isPremium: Boolean, last: Int, offset: Int, orderBy: ProgramOrderBy): ProgramConnection
   purchases: UserPurchases
   question(id: ID!): AssessmentQuestion
   questionAttributes(after: String, before: String, first: Int, last: Int, offset: Int): AssessmentQuestionAttributeConnection
