@@ -1426,6 +1426,11 @@ input CreateDietPreferenceInput {
   restrictions: [ID!]
 }
 
+type CreateExpressTrack {
+  message: String!
+  success: Boolean!
+}
+
 type CreateGooglePlayTransaction {
   message: String
   success: Boolean
@@ -2339,6 +2344,27 @@ enum ExerciseType {
   WORKOUT_ROUTINE
   YARD_WORK
   YOGA
+}
+
+type ExpressMealTrack {
+  calories: Float!
+  carbs: Float!
+  createdAt: DateTime!
+  datetime: DateTime!
+  fats: Float!
+  id: ID!
+  mealTime: MealTime!
+  proteins: Float!
+}
+
+type ExpressMealTrackConnection {
+  edges: [ExpressMealTrackEdge]!
+  pageInfo: PageInfo!
+}
+
+type ExpressMealTrackEdge {
+  cursor: String!
+  node: ExpressMealTrack
 }
 
 union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | GenericFoodNodeProxy | MealProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy
@@ -3519,6 +3545,7 @@ type Mutation {
   createDailyRecapQuestion(input: CreateDailyRecapQuestionInput!): CreateDailyRecapQuestion
   createDayJourney(input: DayJourneyInput!): CreateDayJourney
   createDietPreference(input: CreateDietPreferenceInput!): CreateDietPreference
+  createExpressTrack(calories: Float!, carbs: Float!, datetime: DateTime, fats: Float!, mealTime: MealTime!, proteins: Float!): CreateExpressTrack!
   createGooglePlayTransaction(acknowledged: Boolean!, autoRenewing: Boolean!, orderId: String!, packageName: String!, productId: String!, purchaseState: Int!, purchaseTime: Float!, purchaseToken: String!, subscriptionSku: String!): CreateGooglePlayTransaction
   createGuardrail(input: CreateGuardrailInput!): CreateGuardrail
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
@@ -4680,6 +4707,7 @@ type Query {
   drugNutrientInteractions(after: String, before: String, filters: DrugNutrientInteractionsFilterInput, first: Int, last: Int, offset: Int): DrugGroupConnection
   escalations(after: String, before: String, filters: EscalationFilters, first: Int, last: Int): EscalationConnection
   exerciseTracker(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): ExerciseEntriesConnection!
+  expressMealTracks(after: String, end: DateTime!, first: Int, id: ID, mealTime: MealTime, start: DateTime!): ExpressMealTrackConnection!
   featureLimitations: [AppRestriction!]!
   featuredRecipesByProgram(programId: String): [Recipe]
   flags: GenericScalar
