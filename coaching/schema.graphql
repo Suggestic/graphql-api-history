@@ -2780,7 +2780,7 @@ type Recipe {
   name: String!
   numOfServing: Int
   isActive: Boolean!
-  mainImage: String!
+  mainImage: String
   author: String!
   mealTimes: [MealTime]!
   serving: Int!
