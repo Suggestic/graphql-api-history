@@ -1769,6 +1769,10 @@ type DailyRecapAnswer implements Node {
   type: String!
 }
 
+enum DailyRecapQuestionGroup {
+  MOOD
+}
+
 type DailyStreakScore {
   date: Date!
   score: Float!
@@ -4827,7 +4831,7 @@ type Query {
   supplementsRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementRecommendedConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
-  thirdPartyDailyRecapQuestions(after: String, answers: [ID!], before: String, first: Int, last: Int, offset: Int, question: String): ThirdPartyDailyRecapQuestionConnection
+  thirdPartyDailyRecapQuestions(after: String, answers: [ID!], before: String, first: Int, group: DailyRecapQuestionGroup, last: Int, offset: Int, question: String): ThirdPartyDailyRecapQuestionConnection
   thirdPartyGoals(goal: TrackerComponent, id: ID): [ThirdPartyGoal!]
   todayFoods(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
   todaySupplements(endDate: Date!, startDate: Date!): Checklist @deprecated(reason: "No longer supported. Use intakesChecklist instead")
@@ -5898,7 +5902,7 @@ type ThirdPartyAppCustomization implements Node {
 
 type ThirdPartyDailyRecapQuestion implements Node {
   answers: [DailyRecapAnswer!]
-  group: String
+  group: DailyRecapQuestionGroup
   id: ID!
   imageUrl: String
   isDefault: Boolean
