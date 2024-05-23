@@ -1251,6 +1251,7 @@ input CreateAssessmentInput {
   bottomProgressBar: Boolean = false
   closeButton: Boolean = true
   description: String
+  disableLoader: Boolean
   hasScore: Boolean = true
   icon: Upload
   interval: Int
@@ -1259,6 +1260,9 @@ input CreateAssessmentInput {
   order: Int = 0
   progressBar: Boolean = true
   progressMaxCount: Int = 0
+  relativeButtonPosition: Boolean
+  resultsImageUrl: String
+  style: GenericScalar
   title: String!
   weight: Int
 }
@@ -6103,6 +6107,7 @@ input UpdateAssessmentInput {
   bottomProgressBar: Boolean
   closeButton: Boolean
   description: String
+  disableLoader: Boolean
   hasScore: Boolean
   icon: Upload
   id: ID!
@@ -6112,6 +6117,9 @@ input UpdateAssessmentInput {
   order: Int
   progressBar: Boolean
   progressMaxCount: Int
+  relativeButtonPosition: Boolean
+  resultsImageUrl: String
+  style: GenericScalar
   title: String
   weight: Int
 }
