@@ -377,6 +377,7 @@ type Assessment implements Node {
 }
 
 type AssessmentAnswer implements Node {
+  assessmentEnded: Boolean!
   attribute: GenericScalar
   blockOtherAnswers: Boolean!
   createdAt: DateTime!
@@ -384,6 +385,7 @@ type AssessmentAnswer implements Node {
   isCorrect: Boolean!
   isSelected: Boolean
   nextQuestion: AssessmentQuestion
+  question: AssessmentQuestion
   rankingOrder: Int
   score: Float
   supplements: [AssessmentAnswerSupplement]
@@ -437,10 +439,13 @@ type AssessmentQuestion implements Node {
   attributes: [AssessmentQuestionAttribute!]
   canSkip: Boolean!
   collapsibleHelpText: Boolean!
+  comment: String
   createdAt: DateTime!
+  dependsOnAnswers: [AssessmentAnswer!]
   finalButton: String
   finalText: String
   finalTitle: String
+  hasDynamicAnswers: Boolean!
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
@@ -453,6 +458,7 @@ type AssessmentQuestion implements Node {
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestion: AssessmentQuestion
+  order: Int!
   profileField: QuestionProfileField
   questionType: QuestionType!
   text: String!
@@ -1611,19 +1617,24 @@ input CreateQuestionInput {
   attributes: [ID!]
   canSkip: Boolean = false
   collapsibleHelpText: Boolean = false
+  comment: String
+  dependsOnAnswers: [ID!]
   finalButton: String
   finalText: String
   finalTitle: String
+  hasDynamicAnswers: Boolean = false
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
   information: String
   informationTitle: String
+  isExit: Boolean = false
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestionId: ID
+  order: Int = 0
   profileField: ProfileField
   questionType: QuestionType = SINGLE_SELECT
   text: String!
@@ -6488,20 +6499,25 @@ input UpdateQuestionInput {
   attributes: [ID!]
   canSkip: Boolean
   collapsibleHelpText: Boolean
+  comment: String
+  dependsOnAnswers: [ID!]
   finalButton: String
   finalText: String
   finalTitle: String
+  hasDynamicAnswers: Boolean = false
   helpText: String
   helpTitle: String
   htmlElement: FormHtmlElement
   id: ID!
   information: String
   informationTitle: String
+  isExit: Boolean = false
   isFinalQuestion: Boolean
   isInitialQuestion: Boolean
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestionId: ID
+  order: Int = 0
   profileField: ProfileField
   questionType: QuestionType
   text: String
