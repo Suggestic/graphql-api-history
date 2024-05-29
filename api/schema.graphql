@@ -243,6 +243,11 @@ type AnswerCounter {
   total: Int!
 }
 
+input AnswersFilterInput {
+  questionId: ID
+  text: String
+}
+
 input AnswerSupplementInput {
   score: Float!
   supplementId: ID!
@@ -523,6 +528,11 @@ type Assistant {
   onboardingPrompt: String
   program: ID
   voice: String
+}
+
+type AssistantAnalytics {
+  currentNumberUserSubscribed: Int!
+  totalMessagesSent: Int!
 }
 
 input AssistantConversationInput {
@@ -1206,11 +1216,22 @@ type CPCRule {
   increase: [CPC]
 }
 
+type CreateAnswer {
+  answer: AssessmentAnswer
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
 input CreateAnswerInput {
+  assessmentEnded: Boolean = false
   attribute: AttributeInput
-  isCorrect: Boolean = false
+  blockOtherAnswers: Boolean = false
+  isCorrect: Boolean
   nextQuestionId: ID
+  questionId: ID!
   score: Int
+  supplements: [AnswerSupplementInput!]
   text: String!
   value: String
 }
@@ -1611,8 +1632,17 @@ type CreateQuestion {
   success: Boolean!
 }
 
+input CreateQuestionAnswerInput {
+  attribute: AttributeInput
+  isCorrect: Boolean = false
+  nextQuestionId: ID
+  score: Int
+  text: String!
+  value: String
+}
+
 input CreateQuestionInput {
-  answers: [CreateAnswerInput!]
+  answers: [CreateQuestionAnswerInput!]
   assessmentId: ID!
   attributes: [ID!]
   canSkip: Boolean = false
@@ -1871,6 +1901,12 @@ type DebugMPMealTimeValues {
   dinner: Int
   lunch: Int
   snack: Int
+}
+
+type DeleteAnswer {
+  answer: AssessmentAnswer
+  message: String!
+  success: Boolean!
 }
 
 type DeleteArticleRecommended {
@@ -3548,6 +3584,7 @@ type Mutation {
   clearShoppingList: ClearShoppingList
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   confirmFoodLogAssistant(input: ConfirmFoodLogAssistantInput!): ConfirmFoodLogAssistant
+  createAnswer(input: CreateAnswerInput!): CreateAnswer
   createAppointment(input: CreateAppointmentInput!): CreateAppointment
   createArticleRecommended(input: CreateArticleRecommendedInput!): CreateArticleRecommended
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
@@ -3598,6 +3635,7 @@ type Mutation {
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
+  deleteAnswer(id: ID!): DeleteAnswer
   deleteAppUserProfile(id: ID!): HardDeleteAppUserProfile
   deleteArticleRecommended(id: ID!): DeleteArticleRecommended
   deleteAssessment(id: ID!): DeleteAssessment
@@ -4686,12 +4724,15 @@ type PurchaseMealRecipe {
 
 type Query {
   allUsersAnswersByAssessment(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int, orderBy: UserAnswerOrderByInput): UserAnswerConnection
+  answer(id: ID!): AssessmentAnswer
+  answers(after: String, before: String, filters: AnswersFilterInput, first: Int, last: Int, offset: Int): AssessmentAnswerConnection
   appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
   assessment(id: ID!): Assessment
   assessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
+  assistantAnalytics(assistant: ID!): AssistantAnalytics
   assistants(filters: AssistantFiltersInput): [Assistant!]
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
@@ -6060,7 +6101,9 @@ type UpdateAnswer {
 }
 
 input UpdateAnswerInput {
+  assessmentEnded: Boolean = false
   attribute: AttributeInput
+  blockOtherAnswers: Boolean = false
   id: ID!
   isCorrect: Boolean
   nextQuestionId: ID
@@ -6494,7 +6537,7 @@ type UpdateQuestion {
 }
 
 input UpdateQuestionInput {
-  answers: [CreateAnswerInput!]
+  answers: [CreateQuestionAnswerInput!]
   assessmentId: ID
   attributes: [ID!]
   canSkip: Boolean
