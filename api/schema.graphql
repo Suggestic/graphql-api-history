@@ -2006,6 +2006,11 @@ type DeleteExerciseEntry {
   success: Boolean!
 }
 
+type DeleteExpressTrack {
+  message: String!
+  success: Boolean!
+}
+
 type DeleteFoodLog {
   message: String!
   success: Boolean!
@@ -3654,6 +3659,7 @@ type Mutation {
   deleteDayJourney(id: ID!): DeleteDayJourney
   deleteDietPreference(id: ID!): DeleteDietPreference
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
+  deleteExpressTrack(id: ID!): DeleteExpressTrack!
 
   """deleteFoodLog deletes a food log by ID"""
   deleteFoodLog(id: ID!): DeleteFoodLog!
@@ -3755,6 +3761,7 @@ type Mutation {
   updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
+  updateExpressTrack(calories: Float, carbs: Float, datetime: DateTime, fats: Float, id: ID!, mealTime: MealTime, proteins: Float): UpdateExpressTrack!
   updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
   updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
@@ -6355,6 +6362,11 @@ input UpdateDietPreferenceInput {
   name: String
   operationOverRestrictions: Operation
   restrictions: [ID!]
+}
+
+type UpdateExpressTrack {
+  message: String!
+  success: Boolean!
 }
 
 type UpdateGuardrail {
