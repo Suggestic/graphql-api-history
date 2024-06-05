@@ -1747,6 +1747,12 @@ input CreateThirdPartyGoalInput {
   value: Float!
 }
 
+type CreateTwilioAccessToken {
+  jwt: String
+  message: String!
+  success: Boolean!
+}
+
 type CreateUser {
   message: String!
   success: Boolean!
@@ -3638,6 +3644,7 @@ type Mutation {
   createSupplementPlan(fromTemplate: ID, input: CreateSPInput): CreateSupplementPlan
   createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
+  createTwilioAccessToken: CreateTwilioAccessToken
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteAnswer(id: ID!): DeleteAnswer
@@ -3731,6 +3738,7 @@ type Mutation {
   setMealPlanToTemplate(profileId: ID!, templateId: ID!): SetMealPlanToTemplate
   setThirdPartyAppUserAsTest(input: SetThirdPartyAppUserAsTestInput!): SetThirdPartyAppUserAsTest
   setUserAnswers(input: SetUserAnswersInput!): SetUserAnswers
+  startChatConversation(input: StartChatConversationInput!): StartChatConversationPayload
   startJourneys(daysUnlocked: Int, override: Boolean): StartJourneys
   startOverMealPlan: StartOverMealPlan
   storeConversationSummary(input: StoreConversationSummaryInput!): StoreConversationSummary
@@ -5584,6 +5592,18 @@ input SPUpdateProtocolInput {
   thursday: Boolean
   tuesday: Boolean
   wednesday: Boolean
+}
+
+input StartChatConversationInput {
+  assistant: ID!
+  clientMutationId: String
+}
+
+type StartChatConversationPayload {
+  clientMutationId: String
+  conversationSid: String
+  message: String!
+  success: Boolean!
 }
 
 type StartJourneys {
