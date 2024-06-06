@@ -432,6 +432,13 @@ type AssessmentConnection {
   pageInfo: PageInfo!
 }
 
+type AssessmentDynamicQuestion implements Node {
+  dependsOnAnswers: [AssessmentAnswer!]
+  id: ID!
+  order: Int!
+  parentQuestion: AssessmentQuestion
+}
+
 type AssessmentEdge {
   cursor: String!
   node: Assessment
@@ -446,7 +453,7 @@ type AssessmentQuestion implements Node {
   collapsibleHelpText: Boolean!
   comment: String
   createdAt: DateTime!
-  dependsOnAnswers: [AssessmentAnswer!]
+  dynamicQuestion: AssessmentDynamicQuestion
   finalButton: String
   finalText: String
   finalTitle: String
@@ -463,7 +470,6 @@ type AssessmentQuestion implements Node {
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestion: AssessmentQuestion
-  order: Int!
   profileField: QuestionProfileField
   questionType: QuestionType!
   text: String!
@@ -1457,6 +1463,12 @@ input CreateDietPreferenceInput {
   restrictions: [ID!]
 }
 
+input CreateDynamicQuestionInput {
+  dependsOnAnswers: [ID!]!
+  order: Int = 0
+  parentQuestionId: ID
+}
+
 type CreateExpressTrack {
   message: String!
   success: Boolean!
@@ -1648,7 +1660,7 @@ input CreateQuestionInput {
   canSkip: Boolean = false
   collapsibleHelpText: Boolean = false
   comment: String
-  dependsOnAnswers: [ID!]
+  dynamicQuestion: CreateDynamicQuestionInput
   finalButton: String
   finalText: String
   finalTitle: String
@@ -1664,7 +1676,6 @@ input CreateQuestionInput {
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestionId: ID
-  order: Int = 0
   profileField: ProfileField
   questionType: QuestionType = SINGLE_SELECT
   text: String!
@@ -2003,6 +2014,12 @@ type DeleteDayJourney {
 
 type DeleteDietPreference {
   dietPreference: DietPreference
+  message: String!
+  success: Boolean!
+}
+
+type DeleteDynamicQuestion {
+  dynamicQuestion: AssessmentDynamicQuestion
   message: String!
   success: Boolean!
 }
@@ -3665,6 +3682,7 @@ type Mutation {
   deleteDailyRecapQuestion(id: ID!): DeleteDailyRecapQuestion
   deleteDayJourney(id: ID!): DeleteDayJourney
   deleteDietPreference(id: ID!): DeleteDietPreference
+  deleteDynamicQuestion(id: ID!): DeleteDynamicQuestion
   deleteExerciseEntry(id: ID!): DeleteExerciseEntry!
   deleteExpressTrack(id: ID!): DeleteExpressTrack!
 
@@ -3769,6 +3787,7 @@ type Mutation {
   updateDailyRecapAnswer(input: UpdateDailyRecapAnswerInput!): UpdateDailyRecapAnswer
   updateDailyRecapQuestion(input: UpdateDailyRecapQuestionInput!): UpdateDailyRecapQuestion
   updateDietPreference(input: UpdateDietPreferenceInput!): UpdateDietPreference
+  updateDynamicQuestion(input: UpdateDynamicQuestionInput!): UpdateDynamicQuestion
   updateExpressTrack(calories: Float, carbs: Float, datetime: DateTime, fats: Float, id: ID!, mealTime: MealTime, proteins: Float): UpdateExpressTrack!
   updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail
   updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
@@ -6384,6 +6403,20 @@ input UpdateDietPreferenceInput {
   restrictions: [ID!]
 }
 
+type UpdateDynamicQuestion {
+  dynamicQuestion: AssessmentDynamicQuestion
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+}
+
+input UpdateDynamicQuestionInput {
+  dependsOnAnswers: [ID!]
+  id: ID!
+  order: Int
+  parentQuestionId: ID
+}
+
 type UpdateExpressTrack {
   message: String!
   success: Boolean!
@@ -6575,7 +6608,6 @@ input UpdateQuestionInput {
   canSkip: Boolean
   collapsibleHelpText: Boolean
   comment: String
-  dependsOnAnswers: [ID!]
   finalButton: String
   finalText: String
   finalTitle: String
@@ -6592,7 +6624,6 @@ input UpdateQuestionInput {
   maxOptionsSelected: Int
   minOptionsSelected: Int
   nextQuestionId: ID
-  order: Int = 0
   profileField: ProfileField
   questionType: QuestionType
   text: String
