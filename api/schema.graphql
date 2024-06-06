@@ -6415,6 +6415,7 @@ input UpdateDynamicQuestionInput {
   id: ID!
   order: Int
   parentQuestionId: ID
+  questionId: ID
 }
 
 type UpdateExpressTrack {
