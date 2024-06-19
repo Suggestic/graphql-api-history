@@ -536,6 +536,11 @@ type Assistant {
   voice: String
 }
 
+input AssistantAnalyticFiltersInput {
+  endDate: Date
+  startDate: Date
+}
+
 type AssistantAnalytics {
   currentNumberUserSubscribed: Int!
   totalMessagesSent: Int!
@@ -3723,7 +3728,7 @@ type Mutation {
   generateMagicLink(email: String!): GenerateMagicLink
   generateMealPlan(addDays: Boolean, appendDays: Int = 7, breakfastDistribution: Float, dinnerDistribution: Float, fromTemplate: ID, ignoreLock: Boolean, includeFavorites: Boolean, isAppend: Boolean = false, isCache: Boolean, kcalLimit: Float, lunchDistribution: Float, maxIngredientsCount: IntValueByMealTime, maxNumOfServings: Int, maxServingWeight: Int, maxTimeMinutes: IntValueByMealTime, minServingWeight: Int, repeat: DateTime, snackDistribution: Float, startDate: Date, variety: MPVariety): GenerateMealPlan
   generateShopifyMultipassUrl(input: GenerateShopifyMultipassUrlInput): GenerateShopifyMultipassUrl
-  generateSimpleMealPlan(addDays: Boolean, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
+  generateSimpleMealPlan(addDays: Boolean, appendDays: Int = 7, boostAdherence: Boolean, filters: SimpleMPFiltersInput, format: [MealTime!], ignoreLock: Boolean, isAppend: Boolean = false, repeat: DateTime, variety: MPVariety): GenerateSimpleMealPlan
   generateVideoZoomToken(input: GenerateVideoZoomTokenInput!): GenerateVideoZoomTokenPayload
   linkUserAssessment(input: LinkUserAssessmentInput!): LinkUserAssessment
   login(userId: String!): LoginUser
@@ -4767,7 +4772,7 @@ type Query {
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
   assessment(id: ID!): Assessment
   assessments(after: String, before: String, filters: AssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
-  assistantAnalytics(assistant: ID!): AssistantAnalytics
+  assistantAnalytics(assistant: ID!, filters: AssistantAnalyticFiltersInput): AssistantAnalytics
   assistants(filters: AssistantFiltersInput): [Assistant!]
   autocomplete(after: String, before: String, enter: Boolean, first: Int, last: Int, mealType: MealType, mealTypes: [MealType], query: String): OutoCompleteConnection
   barcodeSearch(barcode: String!): FoodProduct
