@@ -73,6 +73,7 @@ enum ActivityType {
   PLAN_SUPPLEMENTS_MY_CHECKLIST
   FOOD_LOG_MEAL_TRACKER
   DAILY_MOOD
+  BLOOD_PRESSURE_TRACKER
 }
 
 type AddAppointmentCredits {
