@@ -4388,6 +4388,7 @@ type Portion {
   amount: Float
   gramWeight: Float
   modifier: String
+  portionWeight: Float
   seqNum: Int
   unit: String
 }
