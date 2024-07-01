@@ -4818,7 +4818,7 @@ type Query {
   foodLogAssistant(userInput: String!): FoodLogAssistant
   foodLogs(after: String, end: Date!, first: Int, id: ID, start: Date!): FoodLogConnection!
   foodLogsByUser(after: String, before: String, first: Int, fromDate: Date!, last: Int, toDate: Date!, userId: String!): MealLogConnection
-  foodSearch(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): GenericFoodConnection
+  foodSearch(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, isBranded: Boolean, isCommon: Boolean, last: Int, query: String): GenericFoodConnection
   frequentMealLogs: [MealLog]
   googleTransaction(after: String, before: String, first: Int, id: UUID, last: Int, offset: Int): GooglePlayTransactionTypeConnection
   guardrails(after: String, before: String, filters: GuardrailFilterInput, first: Int, id: ID, last: Int, offset: Int): GuardrailConnection
