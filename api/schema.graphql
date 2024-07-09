@@ -3351,10 +3351,13 @@ type MealLogMacroAggs {
 
 type MealPlanDay {
   calories: Float
+  carbs: Float
   date(useDatetime: Boolean): String
   day: Int
+  fat: Float
   id: ID!
   meals: [Meal]
+  protein: Float
 }
 
 type MealPlanDayRecipe {
