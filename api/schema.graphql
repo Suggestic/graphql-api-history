@@ -4394,6 +4394,7 @@ type Portion {
   portionWeight: Float
   seqNum: Int
   unit: String
+  unitDescription: String
 }
 
 input PortionInput {
@@ -5439,6 +5440,7 @@ type SgScores {
 input SimpleMPFiltersInput {
   cuisines: [String]
   kcalRange: RangeByMealTimeInput
+  maxTimeMinutes: IntValueByMealTime
   tags: TermValuesByMealTimeInput
 }
 
