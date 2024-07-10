@@ -900,6 +900,12 @@ type CommonFoodNodeProxy {
   commonFood: CommonFood
 }
 
+enum CommunicationChannel {
+  SMS
+  CHAT
+  WHATSAPP
+}
+
 enum ConferenceProviderName {
   MS_TEAMS
   GO_TO
@@ -1947,6 +1953,7 @@ type Member implements Node {
   restrictions: [Restriction!]!
   sendbirdToken: String @deprecated(reason: "Renamed. Use sendbirdId instead")
   sendbirdId: String
+  preferredCommunicationChannel: CommunicationChannel!
   dailyRecaps(startDate: Date!, endDate: Date!, group: GroupQuestion): [DailyRecap!]!
   dailyMoodSummary(startDate: Date!, endDate: Date!): DailyMoodSummary!
   activityStreaks(startDate: Date!, endDate: Date!): [ActivityStreak!]!
