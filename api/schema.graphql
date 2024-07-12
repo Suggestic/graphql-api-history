@@ -3745,6 +3745,7 @@ type Mutation {
   profileRestrictionsUpdate(replace: Boolean, restrictions: [ID]): ProfileRestrictionsUpdate
   publishEvent(appVersion: String!, client: String!, eventType: EventType!, location: GenericScalar, timezone: String!): PublishEvent
   purchaseMealRecipe(externalId: String, profileId: String!, recipeId: ID!): PurchaseMealRecipe
+  removeCoachChatConversation(input: RemoveCoachChatConversationInput!): RemoveCoachChatConversation
   removeFavoriteArticle(articleId: ID!): RemoveFavoriteArticle
   removeFromShoppingList(recipeId: String!): RemoveFromShoppingList
   removeMealLog(databaseId: String!): RemoveMealLogMutation
@@ -5222,6 +5223,16 @@ type RelativeCalories {
   protein: Float
   saturatedFat: Float
   transFat: Float
+}
+
+type RemoveCoachChatConversation {
+  message: String!
+  success: Boolean!
+}
+
+input RemoveCoachChatConversationInput {
+  coachId: ID!
+  conversationSid: String!
 }
 
 type RemoveFavoriteArticle {
