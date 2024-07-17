@@ -86,6 +86,16 @@ type AddBloodPressureLog {
   success: Boolean!
 }
 
+type AddCoachChatConversation {
+  message: String!
+  success: Boolean!
+}
+
+input AddCoachChatConversationInput {
+  coachId: ID!
+  conversationSid: String!
+}
+
 type AddExerciseEntry {
   message: String!
   success: Boolean!
@@ -3580,6 +3590,7 @@ type Mutation {
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
   addBloodPressureLog(datetime: DateTime!, diastolicValue: PositiveInt!, source: SourceType, systolicValue: PositiveInt!): AddBloodPressureLog!
+  addCoachChatConversation(input: AddCoachChatConversationInput!): AddCoachChatConversation
   addExerciseEntry(calories: Int, datetime: DateTime!, durationMinutes: Int!, intensity: ExerciseIntensity!, source: SourceType, type: ExerciseType!): AddExerciseEntry!
   addFavoriteArticle(articleId: ID!): AddFavoriteArticle
 
@@ -3745,6 +3756,7 @@ type Mutation {
   profileRestrictionsUpdate(replace: Boolean, restrictions: [ID]): ProfileRestrictionsUpdate
   publishEvent(appVersion: String!, client: String!, eventType: EventType!, location: GenericScalar, timezone: String!): PublishEvent
   purchaseMealRecipe(externalId: String, profileId: String!, recipeId: ID!): PurchaseMealRecipe
+  reassignChatConversation(input: ReassignChatConversationInput!): ReassignChatConversation
   removeCoachChatConversation(input: RemoveCoachChatConversationInput!): RemoveCoachChatConversation
   removeFavoriteArticle(articleId: ID!): RemoveFavoriteArticle
   removeFromShoppingList(recipeId: String!): RemoveFromShoppingList
@@ -4393,6 +4405,7 @@ type Portion {
   gramWeight: Float
   modifier: String
   modifierDescription: String
+  mostCommon: Boolean
   portionWeight: Float
   seqNum: Int
   unit: String
@@ -5062,6 +5075,16 @@ type RawNutrientsFull {
   saturatedFat: Float
   sodiumNa: Float
   transFats: Float
+}
+
+type ReassignChatConversation {
+  message: String!
+  success: Boolean!
+}
+
+input ReassignChatConversationInput {
+  coachId: ID!
+  conversationSid: String!
 }
 
 type Recipe implements Node {
