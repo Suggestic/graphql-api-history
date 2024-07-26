@@ -3782,6 +3782,7 @@ input UserInfo {
   name: String
   birthdate: Date
   email: String
+  preferredCommunicationChannel: CommunicationChannel
 }
 
 """User's meal plan settings"""
