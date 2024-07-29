@@ -5670,7 +5670,7 @@ input SPUpdateProtocolInput {
 }
 
 input StartChatConversationInput {
-  assistant: ID!
+  assistant: ID
   clientMutationId: String
 }
 
