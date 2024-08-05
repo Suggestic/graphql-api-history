@@ -57,6 +57,16 @@ input AddBiomarkerInput {
   normalValues: [Generic!]
 }
 
+input AnswersFilterInput {
+  questionId: ID
+  text: String
+}
+
+input AnswerSupplementInput {
+  supplementId: ID!
+  score: Float!
+}
+
 type appCustomizationFeature {
   key: String!
   name: String!
@@ -105,6 +115,144 @@ type ArticleRecommendedEdge {
   cursor: String!
 }
 
+type Assessment implements Node {
+  id: ID!
+  title: String!
+  description: String
+  assessmentType: AssessmentType!
+  order: Int!
+  icon: String
+  interval: Int
+  weight: Int
+  isDraft: Boolean!
+  isPublic: Boolean!
+  progressBar: Boolean!
+  progressMaxCount: Int!
+  hasScore: Boolean!
+  style: Generic
+  bottomProgressBar: Boolean!
+  disableLoader: Boolean!
+  relativeButtonPosition: Boolean!
+  resultsImageUrl: String
+  score: Float
+  closeButton: Boolean!
+  status: AssessmentStatus
+  url: String
+}
+
+type AssessmentAnswer implements Node {
+  id: ID!
+  attribute: Generic
+  blockOtherAnswers: Boolean!
+  isCorrect: Boolean!
+  isSelected: Boolean
+  nextQuestionId: ID
+  rankingOrder: Int
+  score: Float
+  text: String!
+  value: String
+  assessmentEnded: Boolean!
+  questionId: ID
+  supplements: [AssessmentAnswerSupplement]
+}
+
+type AssessmentAnswerConnection {
+  pageInfo: PageInfo!
+  edges: [AssessmentAnswerEdge]!
+}
+
+type AssessmentAnswerEdge {
+  cursor: String!
+  node: AssessmentAnswer
+}
+
+type AssessmentAnswerSupplement implements Node {
+  id: ID!
+  score: Float!
+  supplement: Supplement!
+}
+
+type AssessmentConnection {
+  pageInfo: PageInfo!
+  edges: [AssessmentEdge]!
+}
+
+type AssessmentDynamicQuestion {
+  id: ID!
+  order: Int!
+  dependsOnAnswers: [AssessmentAnswer!]!
+  parentQuestionId: ID
+}
+
+type AssessmentEdge {
+  cursor: String!
+  node: Assessment
+}
+
+type AssessmentQuestion implements Node {
+  id: ID!
+  text: String!
+  questionType: QuestionType!
+  htmlElement: FormHtmlElement
+  isFinalQuestion: Boolean!
+  isInitialQuestion: Boolean!
+  canSkip: Boolean!
+  nextQuestion: AssessmentQuestion
+  information: String
+  helpText: String
+  profileField: QuestionProfileField
+  answers: [AssessmentAnswer!]
+  attributes: [AssessmentQuestionAttribute!]
+  finalText: String
+  helpTitle: String
+  informationTitle: String
+  maxOptionsSelected: Int
+  minOptionsSelected: Int
+  collapsibleHelpText: Boolean!
+  finalButton: String
+  finalTitle: String
+  comment: String
+  isExit: Boolean!
+  hasDynamicAnswers: Boolean
+  dynamicQuestion: AssessmentDynamicQuestion
+}
+
+type AssessmentQuestionAttribute {
+  id: ID!
+  name: String!
+  value: String!
+}
+
+type AssessmentQuestionConnection {
+  pageInfo: PageInfo!
+  edges: [AssessmentQuestionEdge]!
+}
+
+type AssessmentQuestionEdge {
+  cursor: String!
+  node: AssessmentQuestion
+}
+
+input AssessmentsFilterInput {
+  description: String
+  isDraft: Boolean
+  isPublic: Boolean
+  title: String
+}
+
+enum AssessmentStatus {
+  DONE
+  IN_PROGRESS
+  NEEDS_UPDATE
+  TODO
+}
+
+enum AssessmentType {
+  COMMON
+  ON_BOARDING
+  DIET_ID
+}
+
 type Assistant {
   id: ID!
   program: ID
@@ -114,6 +262,16 @@ type Assistant {
   voice: String
   onboarding: Boolean
   onboardingPrompt: String
+}
+
+input AssistantAnalyticFiltersInput {
+  startDate: Datetime
+  endDate: Datetime
+}
+
+type AssistantAnalytics {
+  currentNumberUserSubscribed: Int!
+  totalMessagesSent: Int!
 }
 
 type AssistantConversationChat {
@@ -146,6 +304,19 @@ type AssistantTesterChatResponse {
   id: ID!
   chat: [ChatResponse]!
   escalations: [EscalationConversationResponse]
+}
+
+enum AttrDataType {
+  BOOLEAN
+  FLOAT
+  INT
+  STRING
+}
+
+input AttributeInput {
+  dataType: AttrDataType!
+  name: String!
+  value: Generic
 }
 
 enum BiologicalSex {
@@ -420,6 +591,10 @@ type ContentTagEdge {
   node: ContentTag
 }
 
+type ConversationSummary {
+  text: String
+}
+
 type CopyProgram {
   success: Boolean!
   message: String!
@@ -430,6 +605,26 @@ input CreateAndInviteUserInput {
   email: String!
   role: Role!
   enable2fa: Boolean!
+}
+
+type CreateAnswer {
+  errors: [FormError!]
+  message: String!
+  answer: AssessmentAnswer
+  success: Boolean!
+}
+
+input CreateAnswerInput {
+  questionId: ID!
+  text: String
+  value: String
+  isCorrect: Boolean = false
+  score: Int
+  nextQuestionId: ID
+  attribute: AttributeInput
+  assessmentEnded: Boolean
+  blockOtherAnswers: Boolean
+  supplements: [AnswerSupplementInput!]
 }
 
 type CreateArticleRecommended {
@@ -444,6 +639,33 @@ input CreateArticleRecommendedInput {
   range: BiomarkerRangeInput
   normalValues: [Generic!]
   articleId: ID!
+}
+
+type CreateAssessment {
+  success: Boolean!
+  message: String!
+  assessment: Assessment
+}
+
+input CreateAssessmentInput {
+  title: String!
+  description: String
+  assessmentType: AssessmentType! = COMMON
+  order: Int
+  icon: Upload
+  interval: Int
+  weight: Int
+  isDraft: Boolean
+  isPublic: Boolean
+  progressBar: Boolean
+  progressMaxCount: Int
+  hasScore: Boolean
+  style: Generic
+  bottomProgressBar: Boolean
+  disableLoader: Boolean
+  relativeButtonPosition: Boolean
+  resultsImageUrl: String
+  closeButton: Boolean
 }
 
 type CreateAssistant {
@@ -554,6 +776,12 @@ type CreateDayJourney {
   dayJourney: DayJourney
 }
 
+input CreateDynamicQuestionInput {
+  order: Int = 0
+  dependsOnAnswers: [DependOnAnswerInput!]
+  parentQuestionId: ID
+}
+
 type CreateEscalation {
   success: Boolean!
   message: String!
@@ -650,6 +878,50 @@ input CreateProgramInput {
   cover: Upload
   backgroundImage: Upload
   authorAvatar: Upload
+}
+
+type CreateQuestion {
+  errors: [FormError!]
+  message: String!
+  question: AssessmentQuestion
+  success: Boolean!
+}
+
+input CreateQuestionAnswerInput {
+  attribute: AttributeInput
+  isCorrect: Boolean = false
+  nextQuestionId: ID
+  score: Int
+  text: String!
+  value: String
+}
+
+input CreateQuestionInput {
+  text: String!
+  questionType: QuestionType = SINGLE_SELECT
+  htmlElement: FormHtmlElement
+  isInitialQuestion: Boolean
+  isFinalQuestion: Boolean
+  canSkip: Boolean = false
+  nextQuestionId: ID
+  information: String
+  helpText: String
+  profileField: QuestionProfileField
+  answers: [CreateQuestionAnswerInput!]
+  attributes: [ID!]
+  finalText: String
+  helpTitle: String
+  informationTitle: String
+  maxOptionsSelected: Int
+  minOptionsSelected: Int
+  collapsibleHelpText: Boolean = false
+  finalButton: String
+  finalTitle: String
+  assessmentId: ID!
+  comment: String
+  isExist: Boolean = false
+  hasDynamicAnswers: Boolean = false
+  dynamicQuestion: CreateDynamicQuestionInput
 }
 
 type CreateRuleSet {
@@ -834,6 +1106,10 @@ type DailyRecapAnswer {
   type: String!
 }
 
+enum DailyRecapQuestionGroup {
+  MOOD
+}
+
 enum DataType {
   RANGE
   NUMBER
@@ -858,6 +1134,12 @@ input DayJourneyInput {
   interactions: [InteractionInput]
 }
 
+type DeleteAnswer {
+  message: String!
+  answer: AssessmentAnswer
+  success: Boolean!
+}
+
 type DeleteAppUserProfile {
   success: Boolean!
   message: String!
@@ -868,6 +1150,12 @@ type DeleteArticleRecommended {
   success: Boolean!
   message: String!
   articleRecommended: ArticleRecommended
+}
+
+type DeleteAssessment {
+  success: Boolean!
+  message: String!
+  assessment: Assessment
 }
 
 type DeleteAssistant {
@@ -933,6 +1221,12 @@ type DeleteDayJourney {
   message: String!
 }
 
+type DeleteDynamicQuestion {
+  message: String!
+  dynamicQuestion: AssessmentDynamicQuestion
+  success: Boolean!
+}
+
 type DeleteEscalation {
   success: Boolean!
   message: String!
@@ -978,6 +1272,12 @@ type DeleteProgramGoal {
   deleted: Goal
 }
 
+type DeleteQuestion {
+  message: String!
+  question: AssessmentQuestion
+  success: Boolean!
+}
+
 type DeleteRuleSet {
   success: Boolean!
   message: String!
@@ -1010,6 +1310,11 @@ type DeleteUserSegment {
   success: Boolean!
   message: String
   deleted: UserSegment
+}
+
+input DependOnAnswerInput {
+  questionId: ID!
+  answerId: ID!
 }
 
 input DirectionsOfUseInput {
@@ -1082,6 +1387,14 @@ type FormError {
   messages: [String!]
 }
 
+enum FormHtmlElement {
+  CHECKBOX
+  INPUT
+  RADIO_BUTTON
+  SELECT
+  TEXTAREA
+}
+
 type Generate2faUri {
   success: Boolean!
   message: String!
@@ -1110,7 +1423,7 @@ type Goal implements Node {
   updatedAt: Datetime!
 }
 
-type Guardrail {
+type Guardrail implements Node {
   id: ID!
   name: String!
   description: String!
@@ -1325,6 +1638,9 @@ type Mutation {
   """Create a new developer user and third party app"""
   signUpDeveloper(input: SignUpDeveloperInput!): SignUpDeveloper!
   verifyDeveloperEmail(token: String!, password: String!): VerifyDeveloperEmail!
+
+  """update third party"""
+  updateThirdPartyApp(input: UpdateThirdPartyAppInput!): UpdateThirdPartyApp!
 
   """Create a new `Program` owned by the profile's third party"""
   createProgram(input: CreateProgramInput!): CreateProgram!
@@ -1600,6 +1916,39 @@ type Mutation {
 
   """Updates a Guardrail"""
   updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail!
+
+  """Create an Assessment"""
+  createAssessment(input: CreateAssessmentInput!): CreateAssessment!
+
+  """Update an Assessment"""
+  updateAssessment(input: UpdateAssessmentInput!): UpdateAssessment!
+
+  """Delete an Assessment"""
+  deleteAssessment(id: ID!): DeleteAssessment!
+
+  """Create a question"""
+  createQuestion(input: CreateQuestionInput!): CreateQuestion
+
+  """Update a question"""
+  updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
+
+  """Delete a question"""
+  deleteQuestion(id: ID!): DeleteQuestion
+
+  """Update a dynamic question"""
+  updateDynamicQuestion(input: UpdateDynamicQuestionInput!): UpdateDynamicQuestion
+
+  """Delete a dynamic question"""
+  deleteDynamicQuestion(id: ID!): DeleteDynamicQuestion
+
+  """Create a answer"""
+  createAnswer(input: CreateAnswerInput!): CreateAnswer
+
+  """Update a answer"""
+  updateAnswer(input: UpdateAnswerInput!): UpdateAnswer
+
+  """Delete a answer"""
+  deleteAnswer(id: ID!): DeleteAnswer
 }
 
 interface Node {
@@ -1844,7 +2193,7 @@ type Query {
 
   """Daily Recap Answers & Questions"""
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
-  thirdPartyDailyRecapQuestions(question: String, answers: [ID!], before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
+  thirdPartyDailyRecapQuestions(question: String, answers: [ID!], group: DailyRecapQuestionGroup, before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection
 
   """Retrieve Recipe tags"""
   recipeTags(name: String, before: String, after: String, first: Int, last: Int): RecipeTagConnection
@@ -1896,7 +2245,7 @@ type Query {
   constraints(assistantId: ID!): [Constraint]
 
   """List guardrails"""
-  guardrails(id: ID, name: String, first: Int, last: Int, after: String, before: String, filters: GuardrailFilterInput): GuardrailConnection!
+  guardrails(id: ID, first: Int, last: Int, after: String, before: String, filters: GuardrailFilterInput): GuardrailConnection!
 
   """List end-users (from the app)"""
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
@@ -1906,6 +2255,61 @@ type Query {
 
   """ List all profiles"""
   wellnessProfile(id: ID!): WellnessProfileResult!
+  assistantAnalytics(assistant: ID!, filters: AssistantAnalyticFiltersInput): AssistantAnalytics!
+
+  """Get an assessment"""
+  assessment(id: ID!): Assessment!
+
+  """List all assessments"""
+  assessments(first: Int, last: Int, after: String, before: String, filters: AssessmentsFilterInput): AssessmentConnection!
+
+  """List all questions"""
+  questions(first: Int, last: Int, after: String, before: String, filters: QuestionsFilterInput): AssessmentQuestionConnection!
+
+  """Get a question"""
+  question(id: ID!): AssessmentQuestion
+
+  """List all answers"""
+  answers(first: Int, last: Int, after: String, before: String, filters: AnswersFilterInput): AssessmentAnswerConnection!
+
+  """Get an answer"""
+  answer(id: ID!): AssessmentAnswer
+  conversationSummary(userId: ID!): ConversationSummary
+}
+
+enum QuestionProfileField {
+  ACTIVITY_LEVEL
+  BIOLOGICAL_SEX
+  BIRTHDATE
+  CUSTOM_ATTRIBUTES
+  FAVORITE_CUISINES
+  HEIGHT
+  IS_IMPERIAL
+  MALNUTRITION_RISK
+  PROGRAM
+  RESTRICTIONS
+  STARTING_WEIGHT
+  TARGET_WEIGHT
+  TUBE_FEEDING_ORAL_INTAKE
+  WEEKLY_WEIGHT_GOAL
+}
+
+input QuestionsFilterInput {
+  assessmentId: ID
+  canSkip: Boolean
+  questionType: QuestionType
+  text: String
+}
+
+enum QuestionType {
+  DATE_PICKER
+  DROPDOWN
+  MULTI_SELECT
+  OPEN_NUMBER
+  OPEN_QUESTION
+  OPEN_TEXT
+  SINGLE_SELECT
+  TIME_PICKER
 }
 
 type RecipeTag implements Node {
@@ -2116,6 +2520,7 @@ type Supplement implements Node {
   instructions: String
   ingredients: String
   supplementFacts: String
+  productUrl: String
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -2170,6 +2575,8 @@ type ThirdParty {
   name: String!
   slug: String!
   openaiKey: String
+  defaultAssistantId: ID
+  autoAssignAssistant: Boolean
 }
 
 type ThirdPartyAppCustomization {
@@ -2190,6 +2597,7 @@ type ThirdPartyDailyRecapQuestion implements Node {
   programId: String
   thirdParty: Int
   answers: [DailyRecapAnswer!]!
+  group: DailyRecapQuestionGroup
 }
 
 type ThirdPartyDailyRecapQuestionConnection {
@@ -2235,6 +2643,26 @@ enum TrackerComponent {
   BLOOD_PRESSURE_TRACKER
 }
 
+type UpdateAnswer {
+  errors: [FormError!]
+  message: String!
+  answer: AssessmentAnswer
+  success: Boolean!
+}
+
+input UpdateAnswerInput {
+  id: ID!
+  text: String
+  value: String
+  isCorrect: Boolean
+  score: Int
+  nextQuestionId: ID
+  attribute: AttributeInput
+  assessmentEnded: Boolean
+  blockOtherAnswers: Boolean
+  supplements: [AnswerSupplementInput!]
+}
+
 type UpdateArticleRecommended {
   success: Boolean!
   message: String!
@@ -2248,6 +2676,34 @@ input UpdateArticleRecommendedInput {
   range: BiomarkerRangeInput
   normalValues: [Generic!]
   articleId: ID
+}
+
+type UpdateAssessment {
+  success: Boolean!
+  message: String!
+  assessment: Assessment
+}
+
+input UpdateAssessmentInput {
+  id: ID!
+  title: String
+  description: String
+  assessmentType: AssessmentType
+  order: Int
+  icon: Upload
+  interval: Int
+  weight: Int
+  isDraft: Boolean
+  isPublic: Boolean
+  progressBar: Boolean
+  progressMaxCount: Int
+  hasScore: Boolean
+  style: Generic
+  bottomProgressBar: Boolean
+  disableLoader: Boolean
+  relativeButtonPosition: Boolean
+  resultsImageUrl: String
+  closeButton: Boolean
 }
 
 type UpdateAssistant {
@@ -2402,6 +2858,21 @@ type UpdateDayJourney {
   dayJourney: DayJourney
 }
 
+type UpdateDynamicQuestion {
+  message: String!
+  errors: [FormError!]
+  dynamicQuestion: AssessmentDynamicQuestion
+  success: Boolean!
+}
+
+input UpdateDynamicQuestionInput {
+  id: ID!
+  questionId: ID
+  dependsOnAnswers: [ID!]
+  order: Int
+  parentQuestionId: ID
+}
+
 type UpdateGuardrail {
   success: Boolean!
   message: String!
@@ -2504,6 +2975,41 @@ input UpdateProgramInput {
   authorAvatar: Upload
 }
 
+type UpdateQuestion {
+  errors: [FormError!]
+  message: String!
+  question: AssessmentQuestion
+  success: Boolean!
+}
+
+input UpdateQuestionInput {
+  id: ID!
+  text: String
+  questionType: QuestionType
+  htmlElement: FormHtmlElement
+  isInitialQuestion: Boolean
+  isFinalQuestion: Boolean
+  canSkip: Boolean = false
+  nextQuestionId: ID
+  information: String
+  helpText: String
+  profileField: QuestionProfileField
+  answers: [CreateQuestionAnswerInput!]
+  attributes: [ID!]
+  finalText: String
+  helpTitle: String
+  informationTitle: String
+  maxOptionsSelected: Int
+  minOptionsSelected: Int
+  collapsibleHelpText: Boolean = false
+  finalButton: String
+  finalTitle: String
+  assessmentId: ID
+  comment: String
+  isExist: Boolean = false
+  hasDynamicAnswers: Boolean = false
+}
+
 type UpdateRuleSet {
   success: Boolean!
   message: String!
@@ -2592,6 +3098,11 @@ input UpdateSupplementRecommendedInput {
   supplementId: ID
 }
 
+type UpdateThirdPartyApp {
+  success: Boolean!
+  message: String!
+}
+
 type UpdateThirdPartyAppCustomization {
   success: Boolean!
   message: String!
@@ -2606,6 +3117,11 @@ input UpdateThirdPartyAppCustomizationInput {
   primaryColor: String
   secondaryColor: String
   selectedFeatures: [FeatureOption!]
+}
+
+input UpdateThirdPartyAppInput {
+  defaultAssistantId: ID
+  autoAssignAssistant: Boolean
 }
 
 type UpdateThirdPartyTrackerComponent {
@@ -2736,6 +3252,14 @@ type WellnessProfile {
   height: Float
   weight: Float
   activityLevel: String
+  programName: String
+  dailyCaloricIntakeGoal: Int
+  birthdate: Datetime
+  targetWeight: Float
+  startingWeight: Float
+  restrictions: Restriction
+  hasOnboarded: Boolean!
+  phone: String
 }
 
 type WellnessProfileResult {
