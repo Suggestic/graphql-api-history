@@ -3777,6 +3777,7 @@ type Mutation {
   requestUserDataDownload: RequestUserDataDownload
   resendAppointmentConfirmationEmail(appointment: ID!, profile: ID): ResendAppointmentConfirmationEmail
   resetPassword(code: String!, newPassword: String!): ResetPassword
+  saveZoomSessionForAppointment(input: SaveZoomSessionForAppointmentInput!): SaveZoomSessionForAppointment
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
   sendFeedback(message: String!, subject: String!): SendFeedback
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
@@ -5414,6 +5415,16 @@ type RestrictionConnection {
 type RestrictionEdge {
   cursor: String!
   node: Restriction
+}
+
+type SaveZoomSessionForAppointment {
+  message: String!
+  success: Boolean!
+}
+
+input SaveZoomSessionForAppointmentInput {
+  appointment: ID!
+  sessionId: String!
 }
 
 type SelectDailyRecapQuestions {
