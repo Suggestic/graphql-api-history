@@ -2577,6 +2577,8 @@ type ThirdParty {
   openaiKey: String
   defaultAssistantId: ID
   autoAssignAssistant: Boolean
+  vellumMainWorkflow: String
+  vellumJourneyWorkflow: String
 }
 
 type ThirdPartyAppCustomization {
