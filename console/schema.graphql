@@ -2579,6 +2579,7 @@ type ThirdParty {
   autoAssignAssistant: Boolean
   vellumMainWorkflow: String
   vellumJourneyWorkflow: String
+  clientId: String!
 }
 
 type ThirdPartyAppCustomization {
