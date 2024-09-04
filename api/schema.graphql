@@ -5349,6 +5349,7 @@ type Restaurant implements Node {
   databaseId: String
   description: String
   favoritesCount: Int
+  googleMapsUrl: String
   gotAr: Boolean
   hours: Hours
   id: ID!
@@ -5371,6 +5372,8 @@ type Restaurant implements Node {
   priceRating: String
   recommendation: String
   recommendationsCount: Int
+  restaurantDeliveryPlatformsUrls: [String]
+  restaurantImageUrls: [String]
   shortName: String
   stateProvince: String
   suggest: String
