@@ -122,6 +122,11 @@ type AddHRVLog {
   success: Boolean!
 }
 
+type AddRecipeItemsToShoppingList {
+  message: String!
+  success: Boolean!
+}
+
 type AddRecipesToShoppingList {
   message: String
   success: Boolean
@@ -1039,13 +1044,13 @@ input CoachTypesFilterInput {
   name: String
 }
 
-type CommonFoodAPIConnection {
+type CommonFoodConnection {
   count: Int
-  edges: [CommonFoodAPIEdge]!
+  edges: [CommonFoodEdge]!
   pageInfo: PageInfo!
 }
 
-type CommonFoodAPIEdge {
+type CommonFoodEdge {
   cursor: String!
   node: CommonFoodNode
 }
@@ -3610,6 +3615,7 @@ type Mutation {
 
   """addHeartRateLog add Heart Rate Log log"""
   addHeartRateLog(source: SourceType, timestamp: DateTime, value: PositiveInt!): AddHeartRateLog!
+  addRecipeItemsToShoppingList(recipes: [RecipeInShoppingList!]!): AddRecipeItemsToShoppingList
   addRecipesToShoppingList(recipeIds: [String]!): AddRecipesToShoppingList
 
   """addSleepQualityScore add sleep quality score log"""
@@ -3855,13 +3861,13 @@ type Mutation {
 
 type MyBrandedFood implements Node {
   brandName: String
-  brandOwner: String!
+  brandOwner: String
   brandedFoodCategory: String
   calories: Float
   dataType: String
   description: String
   foodDataId: String
-  gtinUpc: String!
+  gtinUpc: String
   householdServingFulltext: String
   id: ID!
   isActive: Boolean!
@@ -4812,12 +4818,12 @@ type Query {
   biomarkerUnits(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): BiomarkerUnitConnection
   biomarkers(after: String, before: String, filters: BiomarkerFilterInput, first: Int, id: ID, last: Int): BiomarkerConnection
   bloodPressureLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): BloodPressureLogsConnnection!
-  brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection
+  brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection @deprecated(reason: "This query will soon be deprecated. Please use food_search with the parameter is_branded=True instead.")
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
   coachAvailability(appointmentType: ID!, coaches: [ID!], end: DateTime!, start: DateTime!): [TimePeriod!]!
   coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
-  commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodAPIConnection
+  commonFoods(after: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): CommonFoodConnection @deprecated(reason: "This query will soon be deprecated. Please use food_search with the parameter is_common=True instead.")
   consentTypes(name: String): [ConsentType!]
   constraints(after: String, before: String, filters: ConstraintFilters, first: Int, last: Int): ConstraintConnection
   contentCategories(after: String, before: String, first: Int, id: ID, last: Int, offset: Int, tags: [String!]): ContentCategoryTypeConnection
@@ -5179,6 +5185,11 @@ type RecipeConnection {
 type RecipeEdge {
   cursor: String!
   node: Recipe
+}
+
+input RecipeInShoppingList {
+  recipeId: String!
+  servings: Int = 1
 }
 
 enum RecipeMealTime {
