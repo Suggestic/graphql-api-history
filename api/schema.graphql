@@ -4717,12 +4717,15 @@ type Program implements Node {
   isPremium: Boolean!
   name: String!
   order: Int!
+  ownerParty: ThirdParty
   productSet(after: String, before: String, first: Int, last: Int, offset: Int): ProductTypeConnection!
   restrictions(encoded: Boolean): [String!]!
   showDefaultGoals: Boolean!
   slug: String
   subscriptionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTypeConnection!
   tags: [String!]!
+  thirdParties(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyConnection!
+  thirdPartiesDefault(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyConnection!
   thirdpartydailyrecapquestionSet(after: String, before: String, first: Int, last: Int, offset: Int): ThirdPartyDailyRecapQuestionConnection!
   transactionSet(after: String, before: String, first: Int, last: Int, offset: Int): SubscriptionTransactionConnection!
   videoUrl: String
@@ -4962,6 +4965,7 @@ type Query {
   supplementRecommendations(assessmentId: ID!, top: Int = 3): [AssessmentAnswerSupplement!]
   supplements(after: String, before: String, first: Int, id: ID, last: Int, name: String, offset: Int): SupplementConnection
   supplementsRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): SupplementRecommendedConnection
+  thirdParty: ThirdParty
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   thirdPartyDailyRecapAnswers(answer: String, answerType: String): [DailyRecapAnswer!]
   thirdPartyDailyRecapQuestions(after: String, answers: [ID!], before: String, first: Int, group: DailyRecapQuestionGroup, last: Int, offset: Int, question: String): ThirdPartyDailyRecapQuestionConnection
@@ -5904,6 +5908,7 @@ type Supplement implements Node {
   instructions: String
   mainImage: String!
   name: String!
+  ownerParty: ThirdParty
   productUrl: String
   protocolBundle(after: String, before: String, first: Int, last: Int, offset: Int): ProtocolConnection!
   servingName: String!
@@ -6075,6 +6080,13 @@ input TermValuesByMealTimeInput {
   snack: [String!]
 }
 
+type ThirdParty implements Node {
+  clientId: UUID!
+  id: ID!
+  slug: String!
+  widgetChatFlag: Boolean!
+}
+
 type ThirdPartyAppCustomization implements Node {
   backgroundGradientColor1: String
   backgroundGradientColor2: String
@@ -6083,6 +6095,11 @@ type ThirdPartyAppCustomization implements Node {
   primaryColor: String
   secondaryColor: String
   selectedFeatures: [String!]!
+}
+
+type ThirdPartyConnection {
+  edges: [ThirdPartyEdge]!
+  pageInfo: PageInfo!
 }
 
 type ThirdPartyDailyRecapQuestion implements Node {
@@ -6105,6 +6122,11 @@ type ThirdPartyDailyRecapQuestionConnection {
 type ThirdPartyDailyRecapQuestionEdge {
   cursor: String!
   node: ThirdPartyDailyRecapQuestion
+}
+
+type ThirdPartyEdge {
+  cursor: String!
+  node: ThirdParty
 }
 
 type ThirdPartyGoal implements Node {
