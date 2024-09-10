@@ -1544,6 +1544,7 @@ type KnowledgeBase {
   pdfUrl: String
   sitemapUrls: [SitemapUrl]
   category: KnowledgeBaseCategory
+  metadata: Generic
 }
 
 enum KnowledgeBaseCategory {
@@ -1861,7 +1862,7 @@ type Mutation {
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
   """Create a new Knowledge Base belongs to an Assistant"""
-  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic): CreateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat

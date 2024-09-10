@@ -3044,6 +3044,7 @@ enum KnowledgeBaseTaskStatus {
 type KnowledgeBaseType {
   category: KnowledgeBaseCategory
   id: ID
+  metadata: JSONString
   name: String!
   pdfFile: String
   pdfUrl: String
@@ -3667,7 +3668,7 @@ type Mutation {
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
   createJourney(input: JourneyInput!): CreateJourney
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
-  createKnowledgeBase(assistantId: ID!, category: KnowledgeBaseCategory, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, category: KnowledgeBaseCategory, metadata: GenericScalar, name: String!, pdfFile: Upload, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
