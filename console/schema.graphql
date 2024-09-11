@@ -1545,6 +1545,7 @@ type KnowledgeBase {
   sitemapUrls: [SitemapUrl]
   category: KnowledgeBaseCategory
   metadata: Generic
+  preProcess: Boolean
 }
 
 enum KnowledgeBaseCategory {
@@ -1862,7 +1863,7 @@ type Mutation {
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
   """Create a new Knowledge Base belongs to an Assistant"""
-  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic, preProcess: Boolean): CreateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
@@ -2581,6 +2582,7 @@ type ThirdParty {
   vellumMainWorkflow: String
   vellumJourneyWorkflow: String
   clientId: String!
+  widgetChatFlag: Boolean
 }
 
 type ThirdPartyAppCustomization {
@@ -3126,6 +3128,7 @@ input UpdateThirdPartyAppCustomizationInput {
 input UpdateThirdPartyAppInput {
   defaultAssistantId: ID
   autoAssignAssistant: Boolean
+  widgetChatFlag: Boolean
 }
 
 type UpdateThirdPartyTrackerComponent {
