@@ -2583,6 +2583,7 @@ type ThirdParty {
   vellumJourneyWorkflow: String
   clientId: String!
   widgetChatFlag: Boolean
+  notificationUrl: String
 }
 
 type ThirdPartyAppCustomization {
@@ -3129,6 +3130,7 @@ input UpdateThirdPartyAppInput {
   defaultAssistantId: ID
   autoAssignAssistant: Boolean
   widgetChatFlag: Boolean
+  notificationUrl: String
 }
 
 type UpdateThirdPartyTrackerComponent {
