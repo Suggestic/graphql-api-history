@@ -2047,6 +2047,9 @@ type Profile {
   freeTrialRemainingDays: Int
   active: Boolean
   invitationExpireAt: Datetime
+  hasToken2fa: Boolean
+  enabled2fa: Boolean
+  code2faExpireAt: Datetime
   thirdParty: ThirdParty
 }
 
