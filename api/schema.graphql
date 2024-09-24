@@ -2818,6 +2818,10 @@ enum Icon {
   UNKNOWN
 }
 
+input ImageAssistantInput {
+  image: Upload!
+}
+
 type Ingredient {
   confirmed: Boolean
   cpc: String
@@ -3765,6 +3769,7 @@ type Mutation {
   mergeUser(input: MergeUserInput!): MergeUser
   newUserAssessments(input: NewUserAssessmentsInput!): NewUserAssessments
   processAppleReceipt(input: ProcessAppleReceiptInput!): ProcessAppleReceipt
+  processFoodImageAssistant(input: ImageAssistantInput!): ProcessFoodImageAssistant
   profileMacroGoalsSettings(activityLevel: ActivityLevel!, biologicalSex: BiologicalSex!, birthdate: Date!, goalsOn: Boolean!, height: Float!, isImperial: Boolean, startingWeight: Float!, targetWeight: Float!, weeklyWeightGoal: WeeklyWeightGoal!): ProfileMacroGoalsSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
   profileRestrictionsUpdate(replace: Boolean, restrictions: [ID]): ProfileRestrictionsUpdate
@@ -4467,6 +4472,12 @@ type ProcessAppleReceipt {
 input ProcessAppleReceiptInput {
   isInitial: Boolean
   receiptData: String!
+}
+
+type ProcessFoodImageAssistant {
+  foodLogAssistant: FoodLogAssistant
+  message: String!
+  success: Boolean!
 }
 
 type ProductOption {
