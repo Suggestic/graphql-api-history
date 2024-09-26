@@ -2587,6 +2587,9 @@ type ThirdParty {
   clientId: String!
   widgetChatFlag: Boolean
   notificationUrl: String
+  shopifyShopUrl: String
+  shopifyAccessToken: String
+  shopifyStorefrontAccessToken: String
 }
 
 type ThirdPartyAppCustomization {
