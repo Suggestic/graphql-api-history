@@ -2191,6 +2191,7 @@ type Mutation {
   createAppointmentEvent(input: CreateAppointmentEventInput!): CreateAppointmentEvent
   deleteAppointmentEvent(id: ID!): DeleteAppointmentEvent
   updateAppointmentEvent(input: UpdateAppointmentEventInput!): UpdateAppointmentEvent
+  saveZoomSessionForAppointment(input: SaveZoomSessionForAppointmentInput!): SaveZoomSessionForAppointment
   createNoteTemplate(text: String!, title: String!): CreateNoteTemplate
   updateNoteTemplate(id: ID!, text: String, title: String): UpdateNoteTemplate
   deleteNoteTemplate(id: ID!): DeleteNoteTemplate
@@ -2905,6 +2906,16 @@ type RestrictionEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type SaveZoomSessionForAppointment {
+  success: Boolean!
+  message: String!
+}
+
+input SaveZoomSessionForAppointmentInput {
+  appointment: ID!
+  sessionId: String!
 }
 
 type SetCoachAutoResponse {
