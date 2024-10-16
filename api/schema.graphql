@@ -3972,7 +3972,7 @@ type MyCommonFoodEdge {
 }
 
 type MyCommonFoodProxy {
-  myCommonFood: MyCommonFood!
+  myCommonFoodProxy: MyCommonFood!
 }
 
 type NewUserAssessments {
