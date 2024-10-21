@@ -6102,6 +6102,7 @@ type ThirdParty implements Node {
   slug: String!
   vellumJourneyWorkflow: String
   vellumMainWorkflow: String
+  widgetChatFlag: Boolean!
 }
 
 type ThirdPartyAppCustomization implements Node {
