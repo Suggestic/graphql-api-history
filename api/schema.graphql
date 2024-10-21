@@ -6098,6 +6098,7 @@ input TermValuesByMealTimeInput {
 
 type ThirdParty implements Node {
   clientId: UUID!
+  defaultAssistant: Assistant
   id: ID!
   slug: String!
   vellumJourneyWorkflow: String
