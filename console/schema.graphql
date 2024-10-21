@@ -262,6 +262,8 @@ type Assistant {
   voice: String
   onboarding: Boolean
   onboardingPrompt: String
+  welcomeMessage: String
+  initialSuggestedReplies: [String]
 }
 
 input AssistantAnalyticFiltersInput {
@@ -1848,7 +1850,7 @@ type Mutation {
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: Boolean, onboardingPrompt: String): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: Boolean, onboardingPrompt: String, welcomeMessage: String, initialSuggestedReplies: [String!]): CreateAssistant
 
   """Update a Assistant"""
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
@@ -2734,6 +2736,8 @@ input UpdateAssistantInput {
   voice: String
   onboarding: Boolean
   onboardingPrompt: String
+  welcomeMessage: String
+  initialSuggestedReplies: [String!]
 }
 
 type UpdateBiomarker {
