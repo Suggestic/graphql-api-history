@@ -3141,6 +3141,8 @@ input UpdateThirdPartyAppInput {
   autoAssignAssistant: Boolean
   widgetChatFlag: Boolean
   notificationUrl: String
+  vellumMainWorkflow: String
+  vellumJourneyWorkflow: String
 }
 
 type UpdateThirdPartyTrackerComponent {
