@@ -4896,7 +4896,7 @@ type Query {
   intakesChecklist(category: IntakeCategory!, end: Date!, start: Date!): IntakesChecklist
   isUserProgramStarted: Boolean
   journey(assistantId: ID!): JourneyAssistantTypeResponse
-  kbSearch: KBSearchResults
+  kbSearch(query: String!): KBSearchResults
   knowledgeBase(id: ID!): KnowledgeBaseResponse
   knowledgeBases(assistantId: ID!, search: String): [KnowledgeBaseType]
   labTestReports(after: String, before: String, externalId: String, first: Int, id: ID, isVisible: Boolean, last: Int, orderId: String, profile: ID, requisitionId: String): LabTestReportConnection
