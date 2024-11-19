@@ -3221,6 +3221,7 @@ type User implements Node {
   invitationExpireAt: Datetime
   invitationStatus: InvitationStatus
   invitationHasExpired: Boolean
+  enabled2fa: Boolean
 }
 
 type UserConnection {
