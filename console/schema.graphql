@@ -1732,6 +1732,9 @@ type Mutation {
   """Validate 2FA verification code"""
   verify2faCode(email: String!, code: String!): Verify2faCode!
 
+  """reset code_2fa_expire_at field"""
+  reset2faExpiration(userId: ID!): Reset2faExpiration!
+
   """Create Content Tags"""
   createContentTag(name: String!): CreateContentTag!
 
@@ -2342,6 +2345,11 @@ enum RedirectTo {
 }
 
 type RequestPasswordReset {
+  success: Boolean!
+  message: String!
+}
+
+type Reset2faExpiration {
   success: Boolean!
   message: String!
 }
