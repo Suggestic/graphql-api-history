@@ -3265,6 +3265,7 @@ type UserSegmentEdge {
 type Verify2faCode {
   success: Boolean!
   message: String!
+  code2faExpireAt: Datetime
 }
 
 type VerifyDeveloperEmail {
