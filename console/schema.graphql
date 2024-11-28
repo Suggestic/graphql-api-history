@@ -1401,6 +1401,7 @@ type Generate2faUri {
   success: Boolean!
   message: String!
   uri: String
+  secret: String
 }
 
 scalar Generic
