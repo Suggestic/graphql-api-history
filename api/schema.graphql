@@ -3048,6 +3048,12 @@ type KnowledgeBaseChatResponse {
   userMessage: String!
 }
 
+enum KnowledgeBaseRefreshRate {
+  DAILY
+  MONTHLY
+  WEEKLY
+}
+
 type KnowledgeBaseResponse {
   knowledgeBase: KnowledgeBaseType
   message: String!
@@ -3064,16 +3070,18 @@ enum KnowledgeBaseTaskStatus {
 type KnowledgeBaseType {
   category: KnowledgeBaseCategory
   id: ID
+  lastCrawledAt: DateTime
   metadata: JSONString
   name: String!
   pdfFile: String
   pdfUrl: String
   preProcess: Boolean!
+  refreshRate: KnowledgeBaseRefreshRate
   sitemapUrl: String
   sitemapUrls: [SitemapUrlType]
   taskStatus: KnowledgeBaseTaskStatus!
   txt: String
-  url: String!
+  url: String
 }
 
 type LabTestReport {
@@ -3867,6 +3875,7 @@ type Mutation {
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
   updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
+  updateRefreshKnowledgeBase(input: UpdateRefreshRateKnowledgeBaseInput!): UpdateRefreshRateKnowledgeBase
   updateShoppingListRecipeServings(numberOfServings: Int!, recipeId: String!): UpdateShoppingListRecipeServings
   updateSubscription(profileId: String, subscriptionId: String!, userId: String): UpdateSubscription
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
@@ -5573,7 +5582,6 @@ type SitemapUrlType {
   sitemapUrl: String!
   taskStatus: SitemapURLTaskStatus!
   url: String!
-  urlLastFetch: DateTime!
 }
 
 enum SkillLevel {
@@ -5670,6 +5678,7 @@ enum SourceType {
   GARMIN
   GOOGLEFIT_NATIVE
   GOOGLEFIT_REST
+  HEALTHCONNECT
   HUAWEIHEALTH
   IHEALTH
   MISFIT
@@ -6767,6 +6776,17 @@ input UpdateQuestionInput {
   profileField: ProfileField
   questionType: QuestionType
   text: String
+}
+
+type UpdateRefreshRateKnowledgeBase {
+  knowledgeBase: KnowledgeBaseType
+  message: String!
+  success: Boolean!
+}
+
+input UpdateRefreshRateKnowledgeBaseInput {
+  knowledgeBase: ID!
+  refreshRate: KnowledgeBaseRefreshRate!
 }
 
 type UpdateShoppingListRecipeServings {
