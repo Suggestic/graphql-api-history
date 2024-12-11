@@ -1404,6 +1404,12 @@ type Generate2faUri {
   secret: String
 }
 
+type GenerateApiKey {
+  success: Boolean!
+  message: String!
+  apiKey: String
+}
+
 scalar Generic
 
 type Goal implements Node {
@@ -1549,6 +1555,8 @@ type KnowledgeBase {
   category: KnowledgeBaseCategory
   metadata: Generic
   preProcess: Boolean
+  lastCrawledAt: Datetime
+  refreshRate: KnowledgeBaseRefreshRate
 }
 
 enum KnowledgeBaseCategory {
@@ -1573,6 +1581,12 @@ input KnowledgeBaseInput {
   name: String!
   url: String
   txt: String
+}
+
+enum KnowledgeBaseRefreshRate {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
 
 type KnowledgeBaseResult {
@@ -1646,6 +1660,12 @@ type Mutation {
 
   """update third party"""
   updateThirdPartyApp(input: UpdateThirdPartyAppInput!): UpdateThirdPartyApp!
+
+  """Generate API Key"""
+  generateApiKey: GenerateApiKey!
+
+  """revoke API Key"""
+  revokeApiKey(key: String!): RevokeApiKey!
 
   """Create a new `Program` owned by the profile's third party"""
   createProgram(input: CreateProgramInput!): CreateProgram!
@@ -1870,6 +1890,9 @@ type Mutation {
 
   """Create a new Knowledge Base belongs to an Assistant"""
   createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic, preProcess: Boolean): CreateKnowledgeBase
+
+  """update refresh rate knowledge base"""
+  updateRefreshRateKnowledgeBase(input: UpdateRefreshRateKnowledgeBaseInput!): UpdateRefreshRateKnowledgeBase
 
   """Create a chat response from Knowledge Base"""
   createKnowledgeBaseChat(input: MessageInput!): KnowledgeBaseChat
@@ -2286,6 +2309,7 @@ type Query {
   """Get an answer"""
   answer(id: ID!): AssessmentAnswer
   conversationSummary(userId: ID!): ConversationSummary
+  workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
 }
 
 enum QuestionProfileField {
@@ -2383,6 +2407,11 @@ type RestrictionEdge {
   node: Restriction
 }
 
+type RevokeApiKey {
+  success: Boolean!
+  message: String!
+}
+
 enum Role {
   VIEWER
   DEVELOPER
@@ -2396,6 +2425,7 @@ enum Role {
   FREE_DEVELOPER
   FULL_ACCESS
   CREATOR
+  MODERATOR
 }
 
 type RuleSet implements Node {
@@ -3036,6 +3066,17 @@ input UpdateQuestionInput {
   hasDynamicAnswers: Boolean = false
 }
 
+type UpdateRefreshRateKnowledgeBase {
+  success: Boolean!
+  message: String!
+  knowledgeBase: KnowledgeBase
+}
+
+input UpdateRefreshRateKnowledgeBaseInput {
+  knowledgeBase: ID!
+  refreshRate: KnowledgeBaseRefreshRate!
+}
+
 type UpdateRuleSet {
   success: Boolean!
   message: String!
@@ -3298,5 +3339,33 @@ type WellnessProfileResult {
   success: Boolean!
   message: String!
   profile: WellnessProfile
+}
+
+type WorkflowExecutionLog implements Node {
+  id: ID!
+  parentExecutableEntityType: String!
+  start: Datetime!
+  end: Datetime!
+  releaseTag: String!
+  latency: String
+  inputValues: Generic!
+  outputValues: Generic!
+  errors: Generic
+}
+
+type WorkflowExecutionLogConnection {
+  pageInfo: PageInfo!
+  edges: [WorkflowExecutionLogEdge]!
+}
+
+type WorkflowExecutionLogEdge {
+  cursor: String!
+  node: WorkflowExecutionLog
+}
+
+input WorkflowExecutionLogFilterInput {
+  workflowDeploymentId: String!
+  executionId: String
+  releaseTag: String
 }
 
