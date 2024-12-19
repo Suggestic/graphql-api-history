@@ -3351,6 +3351,7 @@ type WorkflowExecutionLog implements Node {
   inputValues: Generic!
   outputValues: Generic!
   errors: Generic
+  metadata: Generic
 }
 
 type WorkflowExecutionLogConnection {
@@ -3367,5 +3368,10 @@ input WorkflowExecutionLogFilterInput {
   workflowDeploymentId: String!
   executionId: String
   releaseTag: String
+  sessionId: String
+  trackingId: String
+  quality: Boolean
+  startDate: Datetime
+  endDate: Datetime
 }
 
