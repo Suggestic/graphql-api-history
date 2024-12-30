@@ -401,6 +401,7 @@ type AssessmentAnswer implements Node {
   attribute: GenericScalar
   blockOtherAnswers: Boolean!
   createdAt: DateTime!
+  icon: String
   id: ID!
   isCorrect: Boolean!
   isSelected: Boolean
@@ -410,6 +411,7 @@ type AssessmentAnswer implements Node {
   score: Float
   supplements: [AssessmentAnswerSupplement]
   text: String!
+  triggerEvent: String
   updatedAt: DateTime!
   value: String
 }
@@ -540,6 +542,8 @@ enum AssessmentType {
 }
 
 type Assistant {
+  chatAvatar: String
+  chatName: String
   id: ID!
   initialSuggestedReplies: [String!]!
   journey: JourneyAssistantType
@@ -1262,12 +1266,14 @@ input CreateAnswerInput {
   assessmentEnded: Boolean = false
   attribute: AttributeInput
   blockOtherAnswers: Boolean = false
+  icon: Upload
   isCorrect: Boolean
   nextQuestionId: ID
   questionId: ID!
   score: Int
   supplements: [AnswerSupplementInput!]
   text: String!
+  triggerEvent: String
   value: String
 }
 
@@ -1343,6 +1349,8 @@ type CreateAssistantConversationMessage {
 }
 
 input CreateAssistantInput {
+  chatAvatar: Upload
+  chatName: String
   initialSuggestedReplies: [String!]
   mainGoal: String!
   mode: AssistantMode = MANUAL
@@ -6296,12 +6304,14 @@ input UpdateAnswerInput {
   assessmentEnded: Boolean = false
   attribute: AttributeInput
   blockOtherAnswers: Boolean = false
+  icon: Upload
   id: ID!
   isCorrect: Boolean
   nextQuestionId: ID
   score: Int
   supplements: [AnswerSupplementInput!]
   text: String
+  triggerEvent: String
   value: String
 }
 
@@ -6378,6 +6388,8 @@ type UpdateAssistant {
 }
 
 input UpdateAssistantInput {
+  chatAvatar: Upload
+  chatName: String
   id: ID!
   initialSuggestedReplies: [String!]
   mainGoal: String
