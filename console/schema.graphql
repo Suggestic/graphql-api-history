@@ -57,6 +57,17 @@ input AddBiomarkerInput {
   normalValues: [Generic!]
 }
 
+type AddCommentsWorkflowExecutionLogs {
+  success: Boolean!
+  message: String!
+  comment: WorkflowExecutionLogComment
+}
+
+input AddCommentsWorkflowExecutionLogsInput {
+  comment: String
+  executionId: String
+}
+
 input AnswersFilterInput {
   questionId: ID
   text: String
@@ -153,6 +164,8 @@ type AssessmentAnswer implements Node {
   value: String
   assessmentEnded: Boolean!
   questionId: ID
+  icon: String
+  triggerEvent: String
   supplements: [AssessmentAnswerSupplement]
 }
 
@@ -264,6 +277,8 @@ type Assistant {
   onboardingPrompt: String
   welcomeMessage: String
   initialSuggestedReplies: [String]
+  chatAvatar: String
+  chatName: String
 }
 
 input AssistantAnalyticFiltersInput {
@@ -626,6 +641,8 @@ input CreateAnswerInput {
   attribute: AttributeInput
   assessmentEnded: Boolean
   blockOtherAnswers: Boolean
+  icon: Upload
+  triggerEvent: String
   supplements: [AnswerSupplementInput!]
 }
 
@@ -1404,12 +1421,6 @@ type Generate2faUri {
   secret: String
 }
 
-type GenerateApiKey {
-  success: Boolean!
-  message: String!
-  apiKey: String
-}
-
 scalar Generic
 
 type Goal implements Node {
@@ -1661,11 +1672,8 @@ type Mutation {
   """update third party"""
   updateThirdPartyApp(input: UpdateThirdPartyAppInput!): UpdateThirdPartyApp!
 
-  """Generate API Key"""
-  generateApiKey: GenerateApiKey!
-
-  """revoke API Key"""
-  revokeApiKey(key: String!): RevokeApiKey!
+  """Reset API Key"""
+  resetApiKey: ResetApiKey!
 
   """Create a new `Program` owned by the profile's third party"""
   createProgram(input: CreateProgramInput!): CreateProgram!
@@ -1874,7 +1882,7 @@ type Mutation {
   setOpenIAKey(input: SetOpenAIKeyInput!): SetOpenAIKey!
 
   """Create a new Assistant with its data"""
-  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: Boolean, onboardingPrompt: String, welcomeMessage: String, initialSuggestedReplies: [String!]): CreateAssistant
+  createAssistant(name: String!, mainGoal: String!, program: ID, voice: String, onboarding: Boolean, onboardingPrompt: String, welcomeMessage: String, initialSuggestedReplies: [String!], chatAvatar: Upload, chatName: String): CreateAssistant
 
   """Update a Assistant"""
   updateAssistant(input: UpdateAssistantInput!): UpdateAssistant
@@ -1980,6 +1988,7 @@ type Mutation {
 
   """Delete a answer"""
   deleteAnswer(id: ID!): DeleteAnswer
+  addCommentsWorkflowExecutionLogs(input: AddCommentsWorkflowExecutionLogsInput!): AddCommentsWorkflowExecutionLogs!
 }
 
 interface Node {
@@ -2379,6 +2388,12 @@ type Reset2faExpiration {
   message: String!
 }
 
+type ResetApiKey {
+  success: Boolean!
+  message: String!
+  apiKey: String
+}
+
 type ResetPassword {
   success: Boolean!
   message: String!
@@ -2405,11 +2420,6 @@ type RestrictionConnection {
 type RestrictionEdge {
   cursor: String!
   node: Restriction
-}
-
-type RevokeApiKey {
-  success: Boolean!
-  message: String!
 }
 
 enum Role {
@@ -2714,6 +2724,8 @@ input UpdateAnswerInput {
   attribute: AttributeInput
   assessmentEnded: Boolean
   blockOtherAnswers: Boolean
+  icon: Upload
+  triggerEvent: String
   supplements: [AnswerSupplementInput!]
 }
 
@@ -2777,6 +2789,8 @@ input UpdateAssistantInput {
   onboardingPrompt: String
   welcomeMessage: String
   initialSuggestedReplies: [String!]
+  chatAvatar: Upload
+  chatName: String
 }
 
 type UpdateBiomarker {
@@ -3352,6 +3366,13 @@ type WorkflowExecutionLog implements Node {
   outputValues: Generic!
   errors: Generic
   metadata: Generic
+  desiredOutputValues: Generic
+}
+
+type WorkflowExecutionLogComment {
+  id: ID!
+  executionId: ID!
+  comment: String!
 }
 
 type WorkflowExecutionLogConnection {
@@ -3366,12 +3387,15 @@ type WorkflowExecutionLogEdge {
 
 input WorkflowExecutionLogFilterInput {
   workflowDeploymentId: String!
-  executionId: String
+  executionId: ID
   releaseTag: String
   sessionId: String
   trackingId: String
   quality: Boolean
   startDate: Datetime
   endDate: Datetime
+  assistantId: ID
+  message: String
+  output: String
 }
 
