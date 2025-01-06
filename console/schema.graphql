@@ -60,7 +60,7 @@ input AddBiomarkerInput {
 type AddCommentsWorkflowExecutionLogs {
   success: Boolean!
   message: String!
-  comment: WorkflowExecutionLogComment
+  comment: String
 }
 
 input AddCommentsWorkflowExecutionLogsInput {
@@ -3367,12 +3367,7 @@ type WorkflowExecutionLog implements Node {
   errors: Generic
   metadata: Generic
   desiredOutputValues: Generic
-}
-
-type WorkflowExecutionLogComment {
-  id: ID!
-  executionId: ID!
-  comment: String!
+  comment: String
 }
 
 type WorkflowExecutionLogConnection {
