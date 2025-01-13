@@ -2319,6 +2319,7 @@ type Query {
   answer(id: ID!): AssessmentAnswer
   conversationSummary(userId: ID!): ConversationSummary
   workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
+  workflowExecutionLogStatistics(workflowDeploymentId: String!, date: Datetime!): WorkflowExecutionLogStatistics!
 }
 
 enum QuestionProfileField {
@@ -3392,5 +3393,13 @@ input WorkflowExecutionLogFilterInput {
   assistantId: ID
   message: String
   output: String
+}
+
+type WorkflowExecutionLogStatistics {
+  totalMessagesSent: Int
+  totalErrorMessages: Int
+  averageLatency: Float
+  positiveFeedbackCount: Int
+  negativeFeedbackCount: Int
 }
 
