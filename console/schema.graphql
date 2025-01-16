@@ -2319,7 +2319,7 @@ type Query {
   answer(id: ID!): AssessmentAnswer
   conversationSummary(userId: ID!): ConversationSummary
   workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
-  workflowExecutionLogStatistics(workflowDeploymentId: String!, date: Datetime!): WorkflowExecutionLogStatistics!
+  workflowExecutionLogStatistics(workflowDeploymentId: String!, startDate: Datetime, endDate: Datetime): WorkflowExecutionLogStatistics!
 }
 
 enum QuestionProfileField {
