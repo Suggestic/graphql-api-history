@@ -3508,6 +3508,7 @@ enum MealType {
   BRANDED_FOOD
   COMMON_FOOD
   COMMON_NCC
+  EXPRESS_TRACK
   GENERIC_FOOD
   MEAL_PLAN_MEAL
   MENU_ITEM
@@ -3883,7 +3884,7 @@ type Mutation {
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
   updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
-  updateRefreshKnowledgeBase(input: UpdateRefreshRateKnowledgeBaseInput!): UpdateRefreshRateKnowledgeBase
+  updateRefreshRateKnowledgeBase(input: UpdateRefreshRateKnowledgeBaseInput!): UpdateRefreshRateKnowledgeBase
   updateShoppingListRecipeServings(numberOfServings: Int!, recipeId: String!): UpdateShoppingListRecipeServings
   updateSubscription(profileId: String, subscriptionId: String!, userId: String): UpdateSubscription
   updateSupplement(input: UpdateSupplementInput!): UpdateSupplement
