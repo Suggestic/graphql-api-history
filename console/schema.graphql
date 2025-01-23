@@ -1897,7 +1897,7 @@ type Mutation {
   createDayJourney(input: DayJourneyInput): CreateDayJourney
 
   """Create a new Knowledge Base belongs to an Assistant"""
-  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic, preProcess: Boolean): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, name: String!, url: String, pdfFile: Upload, txt: String, sitemapUrl: String, category: KnowledgeBaseCategory, metadata: Generic, preProcess: Boolean, refreshRate: KnowledgeBaseRefreshRate): CreateKnowledgeBase
 
   """update refresh rate knowledge base"""
   updateRefreshRateKnowledgeBase(input: UpdateRefreshRateKnowledgeBaseInput!): UpdateRefreshRateKnowledgeBase

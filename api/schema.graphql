@@ -3706,7 +3706,7 @@ type Mutation {
   createInteraction(dayJourneyId: ID!, deliveryTime: Time!, goal: String!, interaction: String!, order: Int!): CreateInteraction
   createJourney(input: JourneyInput!): CreateJourney
   createJourneyChat(assistantId: ID!, interactionId: ID!, userMessage: String!): CreateJourneyChat
-  createKnowledgeBase(assistantId: ID!, category: KnowledgeBaseCategory, metadata: GenericScalar, name: String!, pdfFile: Upload, preProcess: Boolean = true, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
+  createKnowledgeBase(assistantId: ID!, category: KnowledgeBaseCategory, metadata: GenericScalar, name: String!, pdfFile: Upload, preProcess: Boolean = true, refreshRate: KnowledgeBaseRefreshRate, sitemapUrl: String, txt: String, url: String): CreateKnowledgeBase
   createKnowledgeBaseChat(input: MessageInput!): CreateKnowledgeBaseChat
   createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
   createMealEntry(date: Date, mealId: ID!, timezone: String, value: MealTrackStatus): CreateMealEntry
@@ -3733,7 +3733,7 @@ type Mutation {
   createSupplementRecommended(input: CreateSupplementRecommendedInput!): CreateSupplementRecommended
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   createTwilioAccessToken: CreateTwilioAccessToken
-  createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, program: String, restrictions: [ID!], subscription: ID): CreateUser
+  createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, preferredCommunicationChannel: CommunicationChannel, program: String, restrictions: [ID!], subscription: ID): CreateUser
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteAnswer(id: ID!): DeleteAnswer
   deleteAppUserProfile(id: ID!): HardDeleteAppUserProfile
@@ -5588,6 +5588,7 @@ enum SitemapURLTaskStatus {
 type SitemapUrlType {
   id: ID
   knowledgeBase: ID
+  lastCrawledAt: DateTime!
   sitemapUrl: String!
   taskStatus: SitemapURLTaskStatus!
   url: String!
