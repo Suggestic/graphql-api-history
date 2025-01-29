@@ -1926,6 +1926,23 @@ enum MealTime {
   TREAT_DESSERT
 }
 
+enum MealType {
+  BRANDED_FOOD
+  COMMON_FOOD
+  COMMON_NCC
+  EXPRESS_TRACK
+  GENERIC_FOOD
+  MEAL_PLAN_MEAL
+  MENU_ITEM
+  MY_BRANDED_FOOD
+  MY_COMMON_FOOD
+  OWN_ITEM
+  OWN_RECIPE
+  RECIPE
+  USDA_MEAL
+  USER_RECIPE
+}
+
 """This is a client linked to a coach"""
 type Member implements Node {
   """The ID of the object"""
@@ -2754,6 +2771,7 @@ type Query {
   userAnswersByAssessment(memberId: ID!, assessmentId: ID!, filters: UserAnswersByAssessmentInput): Assessment
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
+  foodLogsByMember(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): UserMealLogConnection
   assistants: [Assistant!]
   flags: GenericScalar
 }
@@ -3794,6 +3812,35 @@ input UserInfo {
   birthdate: Date
   email: String
   preferredCommunicationChannel: CommunicationChannel
+}
+
+type UserMealLog implements Node {
+  id: ID!
+  date: Date!
+  mealTime: MealTime!
+  mealType: MealType
+  name: String
+  nutrients: Nutrients
+  grams: Float
+  servings: Float
+  recipe: Recipe
+}
+
+type UserMealLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserMealLogEdge]!
+}
+
+"""A Relay edge containing a `UserMealLog` and its cursor."""
+type UserMealLogEdge {
+  """The item at the end of the edge"""
+  node: UserMealLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """User's meal plan settings"""
