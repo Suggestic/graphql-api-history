@@ -3393,6 +3393,7 @@ input WorkflowExecutionLogFilterInput {
   assistantId: ID
   message: String
   output: String
+  channel: String
 }
 
 type WorkflowExecutionLogStatistics {
