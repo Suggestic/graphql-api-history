@@ -29,7 +29,6 @@ enum ActivityLevel {
 }
 
 type ActivityLog implements Node {
-  appUser: ProfileType
   createdAt: DateTime!
   eventName: String!
   id: ID!
@@ -39,6 +38,7 @@ type ActivityLog implements Node {
 }
 
 type ActivityLogConnection {
+  count: Int
   edges: [ActivityLogEdge]!
   pageInfo: PageInfo!
 }
@@ -990,6 +990,14 @@ type Coach implements Node {
   name: String!
   sendbirdId: String
   showAllMembers: Boolean!
+}
+
+input CoachActivityLogFiltersInput {
+  coachId: ID
+  end: DateTime
+  eventName: String
+  profileId: ID
+  start: DateTime
 }
 
 type CoachConnection {
@@ -4852,7 +4860,7 @@ type Query {
   allUsersAnswersByAssessment(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int, orderBy: UserAnswerOrderByInput): UserAnswerConnection
   answer(id: ID!): AssessmentAnswer
   answers(after: String, before: String, filters: AnswersFilterInput, first: Int, last: Int, offset: Int): AssessmentAnswerConnection
-  appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, offset: Int, start: DateTime): ActivityLogConnection
+  appUserActivities(after: String, before: String, coachId: ID!, end: DateTime, filters: AppUserActivityLogFiltersInput, first: Int, last: Int, start: DateTime): ActivityLogConnection
   appointmentCredits: AppointmentCredits!
   appointmentTypes(after: String, before: String, first: Int, last: Int, offset: Int): AppointmentTypeConnection
   articlesRecommended(after: String, before: String, first: Int, id: ID, last: Int, offset: Int): ArticleRecommendedConnection
@@ -4870,6 +4878,7 @@ type Query {
   bloodPressureLogs(after: String, end: DateTime!, first: Int, id: ID, source: SourceType, start: DateTime!): BloodPressureLogsConnnection!
   brandedFoods(after: String, barcode: String, before: String, filter: FoodFilter, first: Int, last: Int, query: String): BrandedFoodConnection @deprecated(reason: "This query will soon be deprecated. Please use food_search with the parameter is_branded=True instead.")
   checkedIntakes(category: IntakeCategory!, end: Date!, start: Date!): DailyChecklist @deprecated(reason: "No longer supported. Use intakesChecklist instead. This query doesn't support supplements on plan")
+  coachActivitiesLogs(after: String, before: String, coachId: ID!, filters: CoachActivityLogFiltersInput, first: Int, last: Int): ActivityLogConnection
   coachAvailability(appointmentType: ID!, coaches: [ID!], end: DateTime!, start: DateTime!): [TimePeriod!]!
   coachTeams(after: String, before: String, filters: CoachTeamsFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTeamConnection
   coachTypes(after: String, before: String, filters: CoachTypesFilterInput, first: Int, id: ID, last: Int, offset: Int): CoachTypeConnection
