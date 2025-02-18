@@ -21,12 +21,12 @@ enum ActivityLevel {
 }
 
 type ActivityLog implements Node {
-  eventName: String!
   id: ID!
+  eventName: String!
   userEmail: String
   userName: String
   payload: GenericScalar
-  createdAt: DateTime
+  createdAt: DateTime!
 }
 
 type ActivityLogConnection {
@@ -2742,8 +2742,8 @@ type Query {
   supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
-  coachActivitiesLogs(filters: CoachActivityLogFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
-  appUserActivities(start: DateTime, end: DateTime, filters: AppUserActivityLogFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  coachActivitiesLogs(filters: CoachActivityLogFiltersInput, before: String, after: String, first: Int, last: Int): ActivityLogConnection
+  appUserActivities(start: DateTime, end: DateTime, filters: AppUserActivityLogFiltersInput, before: String, after: String, first: Int, last: Int): ActivityLogConnection
   biomarkerCatalog(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
   biomarkers(id: ID, filters: BiomarkerFilterInput, before: String, after: String, first: Int, last: Int): BiomarkerConnection
   biomarkerCategories(id: ID, parentId: ID, orderBy: BiomarkerCategoryOrderBy, offset: Int, before: String, after: String, first: Int, last: Int): BiomarkerCategoryConnection
