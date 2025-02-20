@@ -3873,7 +3873,7 @@ type Mutation {
   updateDynamicQuestion(input: UpdateDynamicQuestionInput!): UpdateDynamicQuestion
   updateExpressTrack(calories: Float, carbs: Float, datetime: DateTime, fats: Float, id: ID!, mealTime: MealTime, proteins: Float): UpdateExpressTrack!
   updateGuardrail(input: UpdateGuardrailInput!): UpdateGuardrail
-  updateHydration(action: ActionType!, date: Date!, source: SourceType): UpdateHydration
+  updateHydration(action: ActionType!, date: Date!, quantity: Int, source: SourceType): UpdateHydration
   updateInteraction(deliveryTime: Time!, goal: String!, id: ID!, interaction: String!, order: Int!): UpdateInteraction
   updateJourney(input: UpdateJourneyInput!): UpdateJourney
   updateJourneyStatus(journeyId: String!, status: JourneyStatus!): UpdateJourneyStatus
