@@ -55,6 +55,7 @@ input AddBiomarkerInput {
   units: [ID!]!
   aliases: [BiomarkerAliasInput!]
   normalValues: [Generic!]
+  displayRange: Boolean
 }
 
 type AddCommentsWorkflowExecutionLogs {
@@ -353,6 +354,7 @@ type Biomarker {
   optimalRange: BiomarkerRange
   borderlineRange: BiomarkerRange
   normalValues: [Generic!]
+  displayRange: Boolean
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -2829,6 +2831,7 @@ input UpdateBiomarkerInput {
   units: [ID!]
   aliases: [BiomarkerAliasInput!]
   normalValues: [Generic!]
+  displayRange: Boolean
 }
 
 type UpdateConstraint {
