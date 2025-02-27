@@ -60,6 +60,7 @@ input AddBiomarkerInput {
   borderlineRange: BiomarkerRangeInput
   category: ID!
   description: String
+  displayRange: Boolean = true
   isVisible: Boolean = true
   method: String
   name: String!
@@ -645,6 +646,7 @@ type Biomarker {
   category: BiomarkerCategory!
   createdAt: DateTime!
   description: String
+  displayRange: Boolean
   id: ID!
   method: String
   name: String!
@@ -6439,6 +6441,7 @@ input UpdateBiomarkerInput {
   borderlineRange: BiomarkerRangeInput
   category: ID
   description: String
+  displayRange: Boolean = true
   id: ID!
   isVisible: Boolean = true
   method: String
