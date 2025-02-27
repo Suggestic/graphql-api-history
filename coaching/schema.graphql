@@ -3085,6 +3085,7 @@ enum SourceType {
   OMRONCONNECT
   OMRONWELLNESS
   HUAWEIHEALTH
+  HEALTHCONNECT
 }
 
 type SPFrequency {
