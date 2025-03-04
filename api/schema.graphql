@@ -861,6 +861,7 @@ type BrandedFoodNode implements Node {
   isActive: Boolean!
   isCore: Boolean!
   isGeneric: Boolean!
+  isOpenFoodFacts: Boolean
   name: String!
   nutrients: [Nutrient!]!
   servingSize: Float!
@@ -1079,6 +1080,7 @@ type CommonFoodNode implements Node {
   isActive: Boolean!
   isCore: Boolean!
   isGeneric: Boolean!
+  isOpenFoodFacts: Boolean
   name: String!
   nutrients: [Nutrient!]!
   portions: [Portion]
@@ -2651,6 +2653,7 @@ type GenericFoodNode implements Node {
   isCommon: Boolean
   isCore: Boolean!
   isGeneric: Boolean!
+  isOpenFoodFacts: Boolean
   name: String!
   nutrients: [Nutrient!]!
   portions: [Portion]
@@ -3924,6 +3927,7 @@ type MyBrandedFood implements Node {
   isActive: Boolean!
   isCore: Boolean!
   isGeneric: Boolean!
+  isOpenFoodFacts: Boolean
   name: String!
   nutrients: [Nutrient!]!
   profileId: String!
@@ -3997,6 +4001,7 @@ type MyCommonFood implements Node {
   isActive: Boolean!
   isCore: Boolean!
   isGeneric: Boolean!
+  isOpenFoodFacts: Boolean
   name: String!
   nutrients: [Nutrient!]!
   portions: [Portion]
