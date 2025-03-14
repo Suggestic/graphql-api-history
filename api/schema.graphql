@@ -2522,6 +2522,7 @@ input FoodFilter {
   ingredients: [String!]
   mealTime: MealTime
   must: [FoodFilter!]
+  mustNot: [FoodFilter!]
   name: String
   nutrients: [NutrientFilterInput!]
   should: [FoodFilter!]
