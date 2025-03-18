@@ -2763,6 +2763,7 @@ type Query {
     """Query search term"""
     query: String
     hasSendbirdId: Boolean
+    isClient: Boolean
     before: String
     after: String
     first: Int
