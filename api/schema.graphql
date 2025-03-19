@@ -6146,6 +6146,7 @@ input TermValuesByMealTimeInput {
 }
 
 type ThirdParty implements Node {
+  chatMaintenanceFlag: Boolean!
   clientId: UUID!
   defaultAssistant: Assistant
   id: ID!
