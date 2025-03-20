@@ -3479,6 +3479,8 @@ type UISections {
   profileAppointmentCredits: Boolean!
   profileCustomMacros: Boolean!
   profilePassword: Boolean!
+  profileProgram: Boolean!
+  profileSubscription: Boolean!
 }
 
 type UISettings implements Node {
