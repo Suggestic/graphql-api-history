@@ -940,7 +940,7 @@ input CreateQuestionInput {
   finalTitle: String
   assessmentId: ID!
   comment: String
-  isExist: Boolean = false
+  isExit: Boolean = false
   hasDynamicAnswers: Boolean = false
   dynamicQuestion: CreateDynamicQuestionInput
 }
@@ -3080,7 +3080,7 @@ input UpdateQuestionInput {
   finalTitle: String
   assessmentId: ID
   comment: String
-  isExist: Boolean = false
+  isExit: Boolean = false
   hasDynamicAnswers: Boolean = false
 }
 
