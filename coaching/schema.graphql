@@ -338,6 +338,13 @@ type Attendee {
   member: Member
 }
 
+enum AttrDataType {
+  STRING
+  INT
+  FLOAT
+  BOOLEAN
+}
+
 type AutoGenerateConversationMessage {
   success: Boolean!
   message: String!
@@ -1104,6 +1111,33 @@ type CreateMealPlanTemplate {
   mealPlan: MealPlanTemplate
 }
 
+input CreateMemberCustomAttributesInput {
+  memberId: ID!
+  attributes: [ProfileCustomAttribute!]!
+  append: Boolean = false
+  clientMutationId: String
+}
+
+type CreateMemberCustomAttributesPayload {
+  success: Boolean!
+  errors: [FormError!]
+  clientMutationId: String
+}
+
+input CreateMemberGoalInput {
+  memberId: ID!
+  goal: TrackerComponent!
+  value: Float!
+  clientMutationId: String
+}
+
+type CreateMemberGoalPayload {
+  success: Boolean!
+  message: String!
+  goal: UserGoal
+  clientMutationId: String
+}
+
 type CreateMembersTag {
   success: Boolean!
   message: String!
@@ -1313,6 +1347,19 @@ type DeleteMealPlanTemplate {
   success: Boolean!
   message: String!
   mealPlan: MealPlanTemplate
+}
+
+input DeleteMemberGoalInput {
+  memberId: ID!
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteMemberGoalPayload {
+  success: Boolean!
+  message: String!
+  goal: UserGoal
+  clientMutationId: String
 }
 
 type DeleteMembersTag {
@@ -2000,6 +2047,7 @@ type Member implements Node {
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
   bloodPressureLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): BloodPressureLogsConnection
   myRecipes(id: ID, before: String, after: String, first: Int, last: Int): UserRecipeConnection
+  myGoals: [UserGoal!]
   timezone: String!
   connectedSources: [ConnectedSource!]!
   appVersion: String
@@ -2181,6 +2229,7 @@ type Mutation {
   updateMemberProgram(input: UpdateMemberProgramInput!): UpdateMemberProgramPayload
   updateMemberRestrictions(input: UpdateMemberRestrictionsInput!): UpdateMemberRestrictionsPayload
   updateMemberPassword(input: UpdateMemberPasswordInput!): UpdateMemberPasswordPayload
+  createMemberCustomAttributes(input: CreateMemberCustomAttributesInput!): CreateMemberCustomAttributesPayload
   noteCreate(input: CreateNoteInput!): CreateNotePayload
   noteUpdate(input: UpdateNoteInput!): UpdateNotePayload
   noteDelete(input: DeleteNoteInput!): DeleteNotePayload
@@ -2251,6 +2300,9 @@ type Mutation {
   addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
   removeUserFromJourney(input: RemoveUserFromJourneyInput!): RemoveUserFromJourney
   unlockUserAccount(input: UnlockUserAccountInput!): UnlockUserAccount
+  createMemberGoal(input: CreateMemberGoalInput!): CreateMemberGoalPayload
+  updateMemberGoal(input: UpdateMemberGoalInput!): UpdateMemberGoalPayload
+  deleteMemberGoal(input: DeleteMemberGoalInput!): DeleteMemberGoalPayload
 }
 
 """An object with an ID"""
@@ -2632,6 +2684,14 @@ type ProfileBiomarkerResult {
   results(start: Date, end: Date, offset: Int, before: String, after: String, first: Int, last: Int): ProfileBiomarkerConnection
   articles(before: String, after: String, first: Int, last: Int): ContentLibraryConnection
   supplements(offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+}
+
+input ProfileCustomAttribute {
+  name: String!
+  dataType: AttrDataType!
+  value: GenericScalar!
+  category: String
+  timestamp: Float
 }
 
 type ProfileJourney {
@@ -3443,6 +3503,28 @@ enum TimeOfDay {
   AT_BEDTIME
 }
 
+enum TrackerComponent {
+  DAILY_RECAP
+  DAILY_MOOD
+  WEIGHT_TRACKER
+  MP_MEAL_TRACKER
+  HYDRATION_TRACKER
+  TODAY_FOOD
+  TODAY_SUPPLEMENT
+  FOOD_LOGS
+  STEPS_TRACKER
+  EXERCISE_TRACKER
+  PLAN_SUPPLEMENT
+  MY_CHECKLIST_TRACKER
+  SLEEP_TIME_TRACKER
+  SLEEP_QUALITY_SCORE_TRACKER
+  HRV_TRACKER
+  HEART_RATE_TRACKER
+  PLAN_SUPPLEMENTS_MY_CHECKLIST
+  FOOD_LOG_MEAL_TRACKER
+  BLOOD_PRESSURE_TRACKER
+}
+
 type UISections {
   menuMembers: Boolean!
   menuMealPlans: Boolean!
@@ -3624,6 +3706,20 @@ type UpdateMemberFieldsPayload {
   clientMutationId: String
 }
 
+input UpdateMemberGoalInput {
+  memberId: ID!
+  id: ID!
+  value: Float!
+  clientMutationId: String
+}
+
+type UpdateMemberGoalPayload {
+  success: Boolean!
+  message: String!
+  goal: UserGoal
+  clientMutationId: String
+}
+
 input UpdateMemberPasswordInput {
   memberId: ID!
   newPassword: String!
@@ -3797,6 +3893,12 @@ input UserAssessmentsFilterInput {
   title: String
   description: String
   status: AssessmentStatus
+}
+
+type UserGoal {
+  id: ID!
+  value: Float!
+  goal: TrackerComponent!
 }
 
 """User's goals"""
