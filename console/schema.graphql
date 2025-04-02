@@ -509,7 +509,6 @@ type ChatMessageEdge {
 }
 
 input ChatMessagesFilterInput {
-  userId: ID!
   threadId: ID!
 }
 
@@ -2367,7 +2366,11 @@ type Query {
   conversationSummary(userId: ID!): ConversationSummary
   workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
   workflowExecutionLogStatistics(workflowDeploymentId: String!, startDate: Datetime, endDate: Datetime): WorkflowExecutionLogStatistics!
-  chatThreads(first: Int, last: Int, after: String, before: String, userId: ID!): ChatThreadConnection!
+
+  """Get chat threads"""
+  chatThreads(first: Int, last: Int, after: String, before: String): ChatThreadConnection!
+
+  """Get chatbot messages"""
   chatMessages(first: Int, last: Int, after: String, before: String, filters: ChatMessagesFilterInput!): ChatMessageConnection!
 }
 
