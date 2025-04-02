@@ -65,8 +65,8 @@ type AddCommentsWorkflowExecutionLogs {
 }
 
 input AddCommentsWorkflowExecutionLogsInput {
-  comment: String
-  executionId: String
+  comment: String!
+  executionId: ID!
 }
 
 input AnswersFilterInput {
@@ -487,11 +487,54 @@ type ChangePassword {
   message: String!
 }
 
+type ChatMessage implements Node {
+  id: ID!
+  role: String!
+  message: String!
+  brand: String!
+  template: String!
+  isArchived: Boolean!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type ChatMessageConnection {
+  pageInfo: PageInfo!
+  edges: [ChatMessageEdge]!
+}
+
+type ChatMessageEdge {
+  cursor: String!
+  node: ChatMessage
+}
+
+input ChatMessagesFilterInput {
+  userId: ID!
+  threadId: ID!
+}
+
 type ChatResponse {
   id: ID!
   sender: String!
   content: String!
   createdAt: Datetime!
+}
+
+type ChatThread implements Node {
+  id: ID!
+  title: String!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type ChatThreadConnection {
+  pageInfo: PageInfo!
+  edges: [ChatThreadEdge]!
+}
+
+type ChatThreadEdge {
+  cursor: String!
+  node: ChatThread
 }
 
 type Condition {
@@ -2324,6 +2367,8 @@ type Query {
   conversationSummary(userId: ID!): ConversationSummary
   workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
   workflowExecutionLogStatistics(workflowDeploymentId: String!, startDate: Datetime, endDate: Datetime): WorkflowExecutionLogStatistics!
+  chatThreads(first: Int, last: Int, after: String, before: String, userId: ID!): ChatThreadConnection!
+  chatMessages(first: Int, last: Int, after: String, before: String, filters: ChatMessagesFilterInput!): ChatMessageConnection!
 }
 
 enum QuestionProfileField {
