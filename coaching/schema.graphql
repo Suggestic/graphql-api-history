@@ -2018,6 +2018,7 @@ type Member implements Node {
   sendbirdToken: String @deprecated(reason: "Renamed. Use sendbirdId instead")
   sendbirdId: String
   preferredCommunicationChannel: CommunicationChannel!
+  enabledTrackers: [TrackerComponent!]
   dailyRecaps(startDate: Date!, endDate: Date!, group: GroupQuestion): [DailyRecap!]!
   dailyMoodSummary(startDate: Date!, endDate: Date!): DailyMoodSummary!
   activityStreaks(startDate: Date!, endDate: Date!): [ActivityStreak!]!
@@ -3696,6 +3697,7 @@ input UpdateMemberFieldsInput {
   mealPlanSettings: UserMealPlanSettings = null
   phone: String
   timezone: String
+  enabledTrackers: [TrackerComponent!]
   clientMutationId: String
 }
 
