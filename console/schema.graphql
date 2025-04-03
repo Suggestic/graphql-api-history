@@ -493,7 +493,6 @@ type ChatMessage implements Node {
   message: String!
   brand: String!
   template: String!
-  isArchived: Boolean!
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -522,6 +521,7 @@ type ChatResponse {
 type ChatThread implements Node {
   id: ID!
   title: String!
+  isArchived: Boolean!
   createdAt: Datetime!
   updatedAt: Datetime!
 }
