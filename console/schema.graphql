@@ -1240,6 +1240,12 @@ type DeleteBiomarkerCategory {
   biomarkerCategory: BiomarkerCategory
 }
 
+type DeleteChatThread {
+  success: Boolean!
+  message: String!
+  thread: ChatThread
+}
+
 type DeleteConstraint {
   success: Boolean!
   message: String!
@@ -2035,6 +2041,12 @@ type Mutation {
   """Delete a answer"""
   deleteAnswer(id: ID!): DeleteAnswer
   addCommentsWorkflowExecutionLogs(input: AddCommentsWorkflowExecutionLogsInput!): AddCommentsWorkflowExecutionLogs!
+
+  """Update a chat thread"""
+  updateChatThread(input: UpdateChatThreadInput!): UpdateChatThread!
+
+  """Delete a chat thread"""
+  deleteChatThread(id: ID!): DeleteChatThread!
 }
 
 interface Node {
@@ -2884,6 +2896,18 @@ input UpdateBiomarkerInput {
   aliases: [BiomarkerAliasInput!]
   normalValues: [Generic!]
   displayRange: Boolean
+}
+
+type UpdateChatThread {
+  success: Boolean!
+  message: String!
+  thread: ChatThread
+}
+
+input UpdateChatThreadInput {
+  id: ID!
+  title: String
+  isArchived: Boolean
 }
 
 type UpdateConstraint {
