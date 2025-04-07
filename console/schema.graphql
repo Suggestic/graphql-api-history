@@ -493,8 +493,7 @@ type ChatMessage implements Node {
   message: String!
   brand: String!
   template: String!
-  createdAt: Datetime!
-  updatedAt: Datetime!
+  timestamp: Datetime!
 }
 
 type ChatMessageConnection {
