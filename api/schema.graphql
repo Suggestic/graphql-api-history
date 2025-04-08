@@ -3913,7 +3913,7 @@ type Mutation {
   updateNote(coach: ID, noteId: ID!, text: String, title: String): UpdateNote
   updateOwnMeal(barcode: String, brand: String, databaseId: String!, date: Date, mealTime: MealTime, mealType: MealType, name: String, ownNutrients: OwnNutrients!, ownServing: OwnServing!): UpdateOwnMealMutation
   updateOwnRecipe(databaseId: String!, ingredients: [OwnRecipeIngredient], quantity: Float, recipeName: String): UpdateOwnRecipe
-  updateProfile(birthdate: Date, country: String, currentSource: SourceType, dietPreferences: [ID!], email: String, favoriteCuisines: [String!], hasOnboarded: Boolean, isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, phone: String, preferredCommunicationChannel: CommunicationChannel, thryveAuthenticationToken: String, timezone: String): UpdateProfile
+  updateProfile(birthdate: Date, country: String, currentSource: SourceType, dietPreferences: [ID!], email: String, enabledTrackers: [TrackerComponent!], favoriteCuisines: [String!], hasOnboarded: Boolean, isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, phone: String, preferredCommunicationChannel: CommunicationChannel, thryveAuthenticationToken: String, timezone: String): UpdateProfile
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
   updateQuestion(input: UpdateQuestionInput!): UpdateQuestion
@@ -4720,6 +4720,7 @@ type ProfileType {
   debugMealPlanVariables: DebugMealPlanVariables!
   dietPreferences: [DietPreference!]!
   email: String!
+  enabledTrackers: [TrackerComponent!]
   encodedAttributes: String
   externalId: String
   extraData: JSONString
@@ -5016,7 +5017,7 @@ type Query {
   recipeSearch(after: String, before: String, cuisines: [String], dietaryTag: DietaryTag, filter: FoodFilter, first: Int, hasImage: Boolean, hasInstructions: Boolean, ingredients: [String], isPremium: Boolean, last: Int, macroNutrientsRange: MacroNutrientsRangeInput, maxPrepTime: Int, mealTime: RecipeMealTime, meals: [String], minPrepTime: Int, numberOfIngredients: Int, program: String, query: String, servingQuantity: Int, skillLevel: SkillLevel, tags: [String], totalTime: Float): RecipeConnection
   recipeSwapOptions(recipeId: String, serving: Int): RecipeSwapOptions
   recipeTags(after: String, before: String, first: Int, last: Int, name: String, offset: Int): RecipeTagConnection
-  recipesByMealTime(after: String, before: String, cuisines: [String!], dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, mealTime: RecipeMealTime, tags: [String!]): RecipeConnection
+  recipesByMealTime(after: String, before: String, cuisines: [String!], dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxNumberOfServings: Int, maxPrepTime: Int, mealTime: RecipeMealTime, minNumberOfServings: Int, tags: [String!]): RecipeConnection
   recipesByTag(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, tag: String): RecipeConnection
   recommendedMenuitems(lat: Float!, lon: Float!): [MenuItem]
   recommendedSwaps(forSimpleMealPlan: Boolean, mealTime: RecipeMealTime!): RecommendedSwaps
