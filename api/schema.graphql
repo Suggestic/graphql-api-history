@@ -1821,15 +1821,17 @@ type CreateUser {
   user: User
 }
 
-type CreateUserGoal {
-  goal: UserGoal
+type CreateUserTracker {
+  errors: [FormError!]
   message: String!
   success: Boolean!
+  tracker: UserTracker
 }
 
-input CreateUserGoalInput {
-  goal: TrackerComponent!
-  value: Float!
+input CreateUserTrackerInput {
+  goal: Float
+  source: SourceType
+  tracker: TrackerComponent!
 }
 
 type CreateWeightEntry {
@@ -2204,10 +2206,10 @@ type DeleteThirdPartyGoal {
   success: Boolean!
 }
 
-type DeleteUserGoal {
-  goal: UserGoal
+type DeleteUserTracker {
   message: String!
   success: Boolean!
+  tracker: UserTracker
 }
 
 type DeleteWeightEntry {
@@ -3765,7 +3767,7 @@ type Mutation {
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   createTwilioAccessToken: CreateTwilioAccessToken
   createUser(birthdate: Date, email: String!, emailPasswordNotification: Boolean, extraData: JSONString, name: String!, password: String, phone: String, preferredCommunicationChannel: CommunicationChannel, program: String, restrictions: [ID!], subscription: ID): CreateUser
-  createUserGoal(input: CreateUserGoalInput!): CreateUserGoal
+  createUserTracker(input: CreateUserTrackerInput!): CreateUserTracker
   createWeightEntry(date: Date!, source: SourceType, value: Float!): CreateWeightEntry
   deleteAnswer(id: ID!): DeleteAnswer
   deleteAppUserProfile(id: ID!): HardDeleteAppUserProfile
@@ -3821,7 +3823,7 @@ type Mutation {
   deleteStepsCount(id: ID!): DeleteStepsCount!
   deleteSupplementRecommended(id: ID!): DeleteSupplementRecommended
   deleteThirdPartyGoal(id: ID!): DeleteThirdPartyGoal
-  deleteUserGoal(id: ID!): DeleteUserGoal
+  deleteUserTracker(id: ID!): DeleteUserTracker
   deleteWeightEntry(date: Date!): DeleteWeightEntry
   duplicateMealPlanTemplate(id: ID!): DuplicateMealPlanTemplate
   generateMagicLink(email: String!): GenerateMagicLink
@@ -3926,9 +3928,9 @@ type Mutation {
   updateThirdPartyGoal(input: UpdateThirdPartyGoalInput!): UpdateThirdPartyGoal
   updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent
   updateUserAssessmentScore(input: UpdateUserAssessmentScoreInput!): UpdateUserAssessmentScore
-  updateUserGoal(input: UpdateUserGoalInput!): UpdateUserGoal
   updateUserProgram(programId: String!): UpdateUserProgram
   updateUserProgress(input: UpdateUserProgressInput!): UpdateUserProgress
+  updateUserTracker(input: UpdateUserTrackerInput!): UpdateUserTracker
   userFavoriteMenuitem(menuitemId: String!): UserFavoriteMenuItem
   userFavoriteRecipe(recipeId: String!): UserFavoriteRecipe
   userFavoriteRestaurant(restaurantId: String!): UserFavoriteRestaurant
@@ -4639,6 +4641,7 @@ enum ProfileField {
   BIOLOGICAL_SEX
   BIRTHDATE
   CUSTOM_ATTRIBUTES
+  FAMILY_SIZE
   FAVORITE_CUISINES
   HEIGHT
   IS_IMPERIAL
@@ -4724,6 +4727,7 @@ type ProfileType {
   encodedAttributes: String
   externalId: String
   extraData: JSONString
+  familySize: Int
   favoriteCuisines: [String!]
   gender: String
   glucoseLevel: Float
@@ -5000,7 +5004,7 @@ type Query {
   ownRecipe(id: ID!): MealLog
   ownRecipes(after: String, before: String, first: Int, fromDate: Date, last: Int, toDate: Date): MealLogConnection
   pastAppointments(after: String, before: String, end: DateTime, first: Int, last: Int, start: DateTime): AppointmentConnection
-  popularRecipes(after: String, before: String, cuisines: [String!], first: Int, hidePurchasable: Boolean = true, last: Int, tags: [String!]): RecipeConnection
+  popularRecipes(after: String, before: String, cuisines: [String!], first: Int, hidePurchasable: Boolean = true, last: Int, maxNumberOfServings: Int, minNumberOfServings: Int, tags: [String!]): RecipeConnection
   premiumProgramRecipes(after: String, before: String, first: Int, last: Int): RecipeConnection
   profileRecommendations: [ProfileRecommendationType]
   program(id: ID!): Program
@@ -5071,7 +5075,7 @@ type Query {
   userAssessmentHistory(after: String, assessmentId: ID!, before: String, first: Int, last: Int, offset: Int): UserAnswerHistoryConnection
   userAssessments(after: String, before: String, filters: UserAssessmentsFilterInput, first: Int, last: Int, offset: Int): AssessmentConnection
   userConsent(consentTypeId: ID, profileId: ID): [UserConsentType!]
-  userGoals(goal: TrackerComponent, id: ID): [UserGoal!]
+  userTrackers(id: ID, tracker: TrackerComponent): [UserTracker!]
   users(after: String, before: String, filters: UsersFiltersInput, first: Int, isTestUser: Boolean, last: Int, profileUUIDs: [String!], subscriptionId: ID, userEmails: [String!], userUUIDs: [String!]): UserConnection
   usersProgress(after: String, before: String, filters: UsersProgressFilterInput, first: Int, last: Int, offset: Int): UserProgressConnection
   weightTracker(endDate: Date!, source: SourceType, startDate: Date!): WeightTracker
@@ -5086,6 +5090,7 @@ enum QuestionProfileField {
   BIOLOGICAL_SEX
   BIRTHDATE
   CUSTOM_ATTRIBUTES
+  FAMILY_SIZE
   FAVORITE_CUISINES
   HEIGHT
   IS_IMPERIAL
@@ -6953,17 +6958,6 @@ input UpdateUserAssessmentScoreInput {
   score: Int
 }
 
-type UpdateUserGoal {
-  goal: UserGoal
-  message: String!
-  success: Boolean!
-}
-
-input UpdateUserGoalInput {
-  id: ID!
-  value: Float!
-}
-
 type UpdateUserProgram {
   message: String
   success: Boolean
@@ -6979,6 +6973,19 @@ type UpdateUserProgress {
 input UpdateUserProgressInput {
   id: ID!
   score: Int
+}
+
+type UpdateUserTracker {
+  errors: [FormError!]
+  message: String!
+  success: Boolean!
+  tracker: UserTracker
+}
+
+input UpdateUserTrackerInput {
+  goal: Float
+  id: ID!
+  source: SourceType
 }
 
 scalar Upload
@@ -7120,34 +7127,6 @@ type UserFavoriteRestaurant {
   success: Boolean
 }
 
-type UserGoal implements Node {
-  goal: UserGoalGoal!
-  id: ID!
-  value: Float!
-}
-
-enum UserGoalGoal {
-  BLOOD_PRESSURE_TRACKER
-  DAILY_MOOD
-  DAILY_RECAP
-  EXERCISE_TRACKER
-  FOOD_LOGS
-  FOOD_LOG_MEAL_TRACKER
-  HEART_RATE_TRACKER
-  HRV_TRACKER
-  HYDRATION_TRACKER
-  MP_MEAL_TRACKER
-  MY_CHECKLIST_TRACKER
-  PLAN_SUPPLEMENT
-  PLAN_SUPPLEMENTS_MY_CHECKLIST
-  SLEEP_QUALITY_SCORE_TRACKER
-  SLEEP_TIME_TRACKER
-  STEPS_TRACKER
-  TODAY_FOOD
-  TODAY_SUPPLEMENT
-  WEIGHT_TRACKER
-}
-
 type UserProgress implements Node {
   assessment: Assessment!
   createdAt: DateTime!
@@ -7221,6 +7200,15 @@ input UsersProgressFilterInput {
   currentQuestionId: ID
   profileId: ID
   scoreRange: RangeOperator
+}
+
+type UserTracker implements Node {
+  createdAt: DateTime!
+  goal: Float
+  id: ID!
+  source: SourceType
+  tracker: TrackerComponent!
+  updatedAt: DateTime!
 }
 
 scalar UUID

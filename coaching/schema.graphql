@@ -1124,20 +1124,6 @@ type CreateMemberCustomAttributesPayload {
   clientMutationId: String
 }
 
-input CreateMemberGoalInput {
-  memberId: ID!
-  goal: TrackerComponent!
-  value: Float!
-  clientMutationId: String
-}
-
-type CreateMemberGoalPayload {
-  success: Boolean!
-  message: String!
-  goal: UserGoal
-  clientMutationId: String
-}
-
 type CreateMembersTag {
   success: Boolean!
   message: String!
@@ -1147,6 +1133,21 @@ type CreateMembersTag {
 input CreateMemberTagInput {
   tag: String!
   color: String = ""
+}
+
+input CreateMemberTrackerInput {
+  memberId: ID!
+  tracker: TrackerComponent!
+  goal: Float
+  source: SourceType = null
+  clientMutationId: String
+}
+
+type CreateMemberTrackerPayload {
+  success: Boolean!
+  message: String!
+  tracker: UserTracker
+  clientMutationId: String
 }
 
 input CreateNoteInput {
@@ -1349,23 +1350,23 @@ type DeleteMealPlanTemplate {
   mealPlan: MealPlanTemplate
 }
 
-input DeleteMemberGoalInput {
+type DeleteMembersTag {
+  success: Boolean!
+  message: String!
+  tag: MemberTag
+}
+
+input DeleteMemberTrackerInput {
   memberId: ID!
   id: ID!
   clientMutationId: String
 }
 
-type DeleteMemberGoalPayload {
+type DeleteMemberTrackerPayload {
   success: Boolean!
   message: String!
-  goal: UserGoal
+  tracker: UserTracker
   clientMutationId: String
-}
-
-type DeleteMembersTag {
-  success: Boolean!
-  message: String!
-  tag: MemberTag
 }
 
 input DeleteNoteInput {
@@ -2048,7 +2049,7 @@ type Member implements Node {
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
   bloodPressureLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): BloodPressureLogsConnection
   myRecipes(id: ID, before: String, after: String, first: Int, last: Int): UserRecipeConnection
-  myGoals: [UserGoal!]
+  myTrackers: [UserTracker!]
   timezone: String!
   connectedSources: [ConnectedSource!]!
   appVersion: String
@@ -2301,9 +2302,9 @@ type Mutation {
   addUserToJourney(input: AddUserToJourneyInput!): AddUserToJourney
   removeUserFromJourney(input: RemoveUserFromJourneyInput!): RemoveUserFromJourney
   unlockUserAccount(input: UnlockUserAccountInput!): UnlockUserAccount
-  createMemberGoal(input: CreateMemberGoalInput!): CreateMemberGoalPayload
-  updateMemberGoal(input: UpdateMemberGoalInput!): UpdateMemberGoalPayload
-  deleteMemberGoal(input: DeleteMemberGoalInput!): DeleteMemberGoalPayload
+  createMemberTracker(input: CreateMemberTrackerInput!): CreateMemberTrackerPayload
+  updateMemberTracker(input: UpdateMemberTrackerInput!): UpdateMemberTrackerPayload
+  deleteMemberTracker(input: DeleteMemberTrackerInput!): DeleteMemberTrackerPayload
 }
 
 """An object with an ID"""
@@ -3708,20 +3709,6 @@ type UpdateMemberFieldsPayload {
   clientMutationId: String
 }
 
-input UpdateMemberGoalInput {
-  memberId: ID!
-  id: ID!
-  value: Float!
-  clientMutationId: String
-}
-
-type UpdateMemberGoalPayload {
-  success: Boolean!
-  message: String!
-  goal: UserGoal
-  clientMutationId: String
-}
-
 input UpdateMemberPasswordInput {
   memberId: ID!
   newPassword: String!
@@ -3770,6 +3757,21 @@ input UpdateMemberTagInput {
   id: ID!
   tag: String
   color: String
+}
+
+input UpdateMemberTrackerInput {
+  memberId: ID!
+  id: ID!
+  goal: Float
+  source: SourceType = null
+  clientMutationId: String
+}
+
+type UpdateMemberTrackerPayload {
+  success: Boolean!
+  message: String!
+  tracker: UserTracker
+  clientMutationId: String
 }
 
 input UpdateNoteInput {
@@ -3897,12 +3899,6 @@ input UserAssessmentsFilterInput {
   status: AssessmentStatus
 }
 
-type UserGoal {
-  id: ID!
-  value: Float!
-  goal: TrackerComponent!
-}
-
 """User's goals"""
 input UserGoals {
   biologicalSex: BiologicalSex!
@@ -3994,6 +3990,13 @@ type UserRecipeEdge {
 
 type UserRecipeProxy {
   userRecipe: UserRecipe
+}
+
+type UserTracker {
+  id: ID!
+  goal: Float
+  source: SourceType
+  tracker: TrackerComponent!
 }
 
 type Verify2faCode {
