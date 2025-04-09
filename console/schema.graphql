@@ -494,6 +494,8 @@ type ChatMessage implements Node {
   brand: String!
   template: String!
   timestamp: Datetime!
+  product: String
+  blogs: String
 }
 
 type ChatMessageConnection {
