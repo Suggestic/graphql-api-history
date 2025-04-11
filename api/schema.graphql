@@ -5024,7 +5024,7 @@ type Query {
   recipesByMealTime(after: String, before: String, cuisines: [String!], dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxNumberOfServings: Int, maxPrepTime: Int, mealTime: RecipeMealTime, minNumberOfServings: Int, tags: [String!]): RecipeConnection
   recipesByTag(after: String, before: String, dietaryTags: [DietaryTag], first: Int, hidePurchasable: Boolean = true, last: Int, maxPrepTime: Int, tag: String): RecipeConnection
   recommendedMenuitems(lat: Float!, lon: Float!): [MenuItem]
-  recommendedSwaps(forSimpleMealPlan: Boolean, mealTime: RecipeMealTime!): RecommendedSwaps
+  recommendedSwaps(forSimpleMealPlan: Boolean, maxNumberOfServings: Int, mealTime: RecipeMealTime!, minNumberOfServings: Int): RecommendedSwaps
   restaurant(id: ID!): Restaurant
   restaurantAutocomplete(lat: Float!, lon: Float!, query: String!): [Restaurant]
   restaurantRecommendedMenuitems(restaurantId: String!): [MenuItem]
