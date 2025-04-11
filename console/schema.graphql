@@ -1089,6 +1089,17 @@ input CreateThirdPartyAppCustomizationInput {
   selectedFeatures: [FeatureOption!]
 }
 
+type CreateThirdPartyGoal {
+  success: Boolean!
+  message: String!
+  goal: ThirdPartyGoal
+}
+
+input CreateThirdPartyGoalInput {
+  goal: TrackerComponent
+  value: Float
+}
+
 type CreateUser {
   success: Boolean!
   message: String!
@@ -1368,6 +1379,11 @@ type DeleteSupplementRecommended {
 }
 
 type DeleteThirdPartyAppCustomization {
+  success: Boolean!
+  message: String!
+}
+
+type DeleteThirdPartyGoal {
   success: Boolean!
   message: String!
 }
@@ -2048,6 +2064,15 @@ type Mutation {
 
   """Delete a chat thread"""
   deleteChatThread(id: ID!): DeleteChatThread!
+
+  """Create Third Party Goal"""
+  createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal!
+
+  """Update Third Party Goal"""
+  updateThirdPartyGoal(input: UpdateThirdPartyGoalInput!): UpdateThirdPartyGoal!
+
+  """Delete Third Party Goal"""
+  deleteThirdPartyGoal(id: ID!): DeleteThirdPartyGoal!
 }
 
 interface Node {
@@ -2385,6 +2410,9 @@ type Query {
 
   """Get chatbot messages"""
   chatMessages(first: Int, last: Int, after: String, before: String, filters: ChatMessagesFilterInput!): ChatMessageConnection!
+
+  """List all third party goals"""
+  thirdPartyGoals(id: ID, goal: TrackerComponent): [ThirdPartyGoal!]!
 }
 
 enum QuestionProfileField {
@@ -2738,6 +2766,12 @@ type ThirdPartyDailyRecapQuestionConnection {
 type ThirdPartyDailyRecapQuestionEdge {
   cursor: String!
   node: ThirdPartyDailyRecapQuestion
+}
+
+type ThirdPartyGoal {
+  id: ID!
+  goal: TrackerComponent!
+  value: Float!
 }
 
 """An ISO-8601 encoded UTC Time 15:29:03Z string."""
@@ -3288,6 +3322,17 @@ input UpdateThirdPartyAppInput {
   notificationUrl: String
   vellumMainWorkflow: String
   vellumJourneyWorkflow: String
+}
+
+type UpdateThirdPartyGoal {
+  success: Boolean!
+  message: String!
+  goal: ThirdPartyGoal
+}
+
+input UpdateThirdPartyGoalInput {
+  id: ID!
+  value: Float!
 }
 
 type UpdateThirdPartyTrackerComponent {
