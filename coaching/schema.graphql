@@ -74,6 +74,7 @@ enum ActivityType {
   FOOD_LOG_MEAL_TRACKER
   DAILY_MOOD
   BLOOD_PRESSURE_TRACKER
+  SYMPTOM_TRACKER
 }
 
 type AddAppointmentCredits {
@@ -145,6 +146,21 @@ type AnswerCounter {
   answer: DailyRecapAnswer!
 }
 
+"""An enumeration."""
+enum ApiConditionDataTypeChoices {
+  """Range"""
+  RANGE
+
+  """Float"""
+  FLOAT
+
+  """Term"""
+  TERM
+
+  """Bool"""
+  BOOL
+}
+
 type Appointment {
   id: ID!
   title: String!
@@ -163,9 +179,17 @@ type Appointment {
   availabilityTimezone: String!
   zoomSessionName: String
   zoomSessionPassword: String
+  zoomSessionId: String
   appointmentCredits: [AppointmentCredit]
   labTestReports(before: String, after: String, first: Int, last: Int): LabTestReportConnection
   postEventStatus: PostEventStatus
+  attachments: [AppointmentAttachment!]
+}
+
+type AppointmentAttachment {
+  id: ID!
+  name: String
+  url: String!
 }
 
 type AppointmentCredit {
@@ -679,6 +703,7 @@ type Coach implements Node {
   coachTeams(before: String, after: String, first: Int, last: Int): CoachTeamConnection
   sendbirdAppId: String!
   isAccountLocked: Boolean
+  virtualBackgrounds: [CoachVirtualBackground!]
 }
 
 input CoachActivityLogFiltersInput {
@@ -895,6 +920,14 @@ type CoachUpdatePayload {
   clientMutationId: String
 }
 
+type CoachVirtualBackground implements Node {
+  """The ID of the object"""
+  id: ID!
+  isDefault: Boolean!
+  uploadedAt: DateTime!
+  imageUrl: String!
+}
+
 type CommonFood {
   name: String
   dataType: String
@@ -911,6 +944,18 @@ enum CommunicationChannel {
   SMS
   CHAT
   WHATSAPP
+}
+
+type Condition implements Node {
+  """The ID of the object"""
+  id: ID!
+  attrName: String
+  dataType: ApiConditionDataTypeChoices
+  term: String
+  bool: Boolean
+  lte: Float
+  gte: Float
+  supplementSet(offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection!
 }
 
 enum ConferenceProviderName {
@@ -1247,6 +1292,31 @@ type CronofyElementToken {
   token: String
 }
 
+type CustomAttribute implements Node {
+  label: String!
+  dataType: DataType
+
+  """The ID of the object"""
+  id: ID!
+}
+
+type CustomAttributeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CustomAttributeEdge]!
+}
+
+"""A Relay edge containing a `CustomAttribute` and its cursor."""
+type CustomAttributeEdge {
+  """The item at the end of the edge"""
+  node: CustomAttribute
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type DailyChecklist {
   name: String!
   icon: String
@@ -1277,6 +1347,13 @@ type DailyRecapQuestion {
   answers: [DailyRecapAnswer]
 }
 
+enum DataType {
+  RANGE
+  NUMBER
+  TERM
+  BOOL
+}
+
 """
 The `Date` scalar type represents a Date
 value as specified by
@@ -1303,6 +1380,11 @@ enum DayStatus {
   EMPTY_DAY
 }
 
+type DeleteAppointmentAttachment {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteAppointmentEvent {
   success: Boolean!
   message: String!
@@ -1325,6 +1407,12 @@ type DeleteCoachType {
   success: Boolean!
   message: String!
   coachType: CoachType
+}
+
+type DeleteCoachVirtualBackground {
+  success: Boolean!
+  message: String!
+  virtualBackground: CoachVirtualBackground
 }
 
 input DeleteConversationInput {
@@ -2048,6 +2136,7 @@ type Member implements Node {
   hrvLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HrvLogsConnection
   heartRateLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): HeartRateLogsConnection
   bloodPressureLogs(start: DateTime!, end: DateTime!, id: ID, source: SourceType, before: String, after: String, first: Int, last: Int): BloodPressureLogsConnection
+  symptomHistory(start: DateTime!, end: DateTime!, id: ID, before: String, after: String, first: Int, last: Int): SymptomLogsConnection
   myRecipes(id: ID, before: String, after: String, first: Int, last: Int): UserRecipeConnection
   myTrackers: [UserTracker!]
   timezone: String!
@@ -2305,6 +2394,11 @@ type Mutation {
   createMemberTracker(input: CreateMemberTrackerInput!): CreateMemberTrackerPayload
   updateMemberTracker(input: UpdateMemberTrackerInput!): UpdateMemberTrackerPayload
   deleteMemberTracker(input: DeleteMemberTrackerInput!): DeleteMemberTrackerPayload
+  uploadAppointmentAttachment(input: UploadAppointmentAttachmentInput!): UploadAppointmentAttachment
+  deleteAppointmentAttachment(id: ID!): DeleteAppointmentAttachment
+  uploadCoachVirtualBackground(input: UploadCoachVirtualBackgroundInput!): UploadCoachVirtualBackgroundPayload
+  deleteCoachVirtualBackground(id: ID!): DeleteCoachVirtualBackground
+  setDefaultCoachVirtualBackground(id: ID!): SetDefaultCoachVirtualBackground
 }
 
 """An object with an ID"""
@@ -2734,6 +2828,10 @@ type ProgramEdge {
   cursor: String!
 }
 
+input ProgramFilterInput {
+  isActive: Boolean
+}
+
 type Protocol implements Node {
   name: String!
   length: Int!
@@ -2781,7 +2879,7 @@ type Query {
     id: ID!
   ): Coach
   coaches(sendbirdHasEverLoggedIn: Boolean, ids: [ID!], filters: CoachFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): CoachConnection
-  programs(before: String, after: String, first: Int, last: Int): ProgramConnection
+  programs(filters: ProgramFilterInput, before: String, after: String, first: Int, last: Int): ProgramConnection
   member(
     """The ID of the object"""
     id: ID!
@@ -2801,7 +2899,7 @@ type Query {
   subscriptions(before: String, after: String, first: Int, last: Int): SubscriptionConnection
   protocols: AvailableProtocols
   supplementPlanTemplates: AvailableSupplementPlanTemplates
-  supplements(id: ID, name: String, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+  supplements(id: ID, name: String, type: SupplementType, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
   coachActivitiesLogs(filters: CoachActivityLogFiltersInput, before: String, after: String, first: Int, last: Int): ActivityLogConnection
@@ -2826,6 +2924,7 @@ type Query {
     query: String
     hasSendbirdId: Boolean
     isClient: Boolean
+    subscriptionIds: [ID!]
     before: String
     after: String
     first: Int
@@ -2836,7 +2935,10 @@ type Query {
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
   foodLogsByMember(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): UserMealLogConnection
   assistants: [Assistant!]
+  customAttributes(search: String, offset: Int, before: String, after: String, first: Int, last: Int): CustomAttributeConnection
   flags: GenericScalar
+  zoomSessionRecordings(sessionId: String!): ZoomRecording
+  thirdPartyTrackers: [ThirdPartyTracker]
 }
 
 type QuestionConnection {
@@ -3002,6 +3104,12 @@ input SaveZoomSessionForAppointmentInput {
 type SetCoachAutoResponse {
   success: Boolean!
   message: String!
+}
+
+type SetDefaultCoachVirtualBackground {
+  success: Boolean!
+  message: String!
+  virtualBackground: CoachVirtualBackground
 }
 
 type SetMealPlanToTemplate {
@@ -3318,6 +3426,8 @@ type Supplement implements Node {
   instructions: String
   ingredients: String
   supplementFacts: String
+  type: SupplementType!
+  conditions: [Condition]
   createdAt: DateTime!
   updatedAt: DateTime!
   protocolBundle(offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection!
@@ -3475,6 +3585,13 @@ input SupplementProtocolInput {
   directionsOfUse: [DirectionsOfUseInput!]
 }
 
+enum SupplementType {
+  PRODUCT
+  INTERVENTION
+  SUPPLEMENT
+  MEDICATION
+}
+
 input SwapMealPlanRecipeInput {
   memberId: ID!
   recipeId: ID!
@@ -3490,6 +3607,43 @@ type SwapMealPlanRecipePayload {
   clientMutationId: String
 }
 
+type Symptom {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type SymptomLog {
+  id: ID!
+  symptomId: ID!
+  intensity: Int!
+  timestamp: DateTime!
+  symptom: Symptom!
+  notes: String
+}
+
+type SymptomLogsConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [SymptomLogsEdge]!
+}
+
+"""A Relay edge containing a `SymptomLogs` and its cursor."""
+type SymptomLogsEdge {
+  """The item at the end of the edge"""
+  node: SymptomLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ThirdPartyTracker {
+  goal: Float
+  tracker: TrackerComponent!
+}
+
 """
 The `Time` scalar type represents a Time value as
 specified by
@@ -3503,6 +3657,7 @@ enum TimeOfDay {
   WITH_LUNCH
   WITH_DINNER
   AT_BEDTIME
+  ANYTIME
 }
 
 enum TrackerComponent {
@@ -3525,6 +3680,7 @@ enum TrackerComponent {
   PLAN_SUPPLEMENTS_MY_CHECKLIST
   FOOD_LOG_MEAL_TRACKER
   BLOOD_PRESSURE_TRACKER
+  SYMPTOM_TRACKER
 }
 
 type UISections {
@@ -3889,6 +4045,31 @@ https://github.com/lmcgartland/graphene-file-upload/blob/master/graphene_file_up
 """
 scalar Upload
 
+type UploadAppointmentAttachment {
+  success: Boolean!
+  message: String!
+  attachment: AppointmentAttachment
+}
+
+input UploadAppointmentAttachmentInput {
+  appointment: ID!
+  attachment: Upload!
+  name: String!
+}
+
+input UploadCoachVirtualBackgroundInput {
+  image: Upload!
+  isDefault: Boolean
+  clientMutationId: String
+}
+
+type UploadCoachVirtualBackgroundPayload {
+  success: Boolean!
+  message: String!
+  virtualBackground: CoachVirtualBackground
+  clientMutationId: String
+}
+
 input UserAnswersByAssessmentInput {
   questionIds: [ID!]
 }
@@ -4039,10 +4220,10 @@ type WeeklyRules implements Node {
 
 enum WeeklyWeightGoal {
   MAINTAIN
-  GOAL_0_5
-  GOAL_1_0
-  GOAL_1_5
-  GOAL_2_0
+  GOAL_1
+  GOAL_2
+  GOAL_3
+  GOAL_4
 }
 
 """An user's weight log from the tracking service"""
@@ -4067,5 +4248,57 @@ type WeightLogsTendency {
 enum WeightLogsTendencyType {
   DOWN
   UP
+}
+
+type ZoomParticipantAudioFile {
+  id: String!
+  recordingStart: String!
+  recordingEnd: String!
+  fileName: String!
+  fileType: String!
+  fileExtension: String!
+  fileSize: Int!
+  downloadUrl: String!
+  status: String!
+}
+
+type ZoomParticipantVideoFile {
+  id: String!
+  recordingStart: String!
+  recordingEnd: String!
+  fileName: String!
+  fileType: String!
+  fileExtension: String!
+  fileSize: Int!
+  downloadUrl: String!
+  status: String!
+  recordingType: String!
+}
+
+type ZoomRecodingFile {
+  id: String!
+  status: String!
+  recordingStart: String!
+  recordingEnd: String!
+  fileType: String!
+  fileSize: Float!
+  downloadUrl: String!
+  recordingType: String!
+  deletedTime: String
+  fileExtension: String!
+}
+
+type ZoomRecording {
+  timezone: String
+  duration: Int!
+  sessionName: String!
+  sessionId: String!
+  startTime: String!
+  totalSize: Int!
+  recordingCount: Int!
+  recordingFiles: [ZoomRecodingFile!]
+  participantAudioFiles: [ZoomParticipantAudioFile!]
+  participantVideoFiles: [ZoomParticipantVideoFile!]
+  downloadAccessToken: String
 }
 

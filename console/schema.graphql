@@ -127,6 +127,18 @@ type ArticleRecommendedEdge {
   cursor: String!
 }
 
+type ArtifactContent {
+  title: String!
+  body: String!
+  footer: String
+}
+
+input ArtifactContentInput {
+  title: String!
+  body: String!
+  footer: String
+}
+
 type Assessment implements Node {
   id: ID!
   title: String!
@@ -237,6 +249,16 @@ type AssessmentQuestionAttribute {
   value: String!
 }
 
+type AssessmentQuestionAttributeConnection {
+  pageInfo: PageInfo!
+  edges: [AssessmentQuestionAttributeEdge]!
+}
+
+type AssessmentQuestionAttributeEdge {
+  cursor: String!
+  node: AssessmentQuestionAttribute
+}
+
 type AssessmentQuestionConnection {
   pageInfo: PageInfo!
   edges: [AssessmentQuestionEdge]!
@@ -255,10 +277,10 @@ input AssessmentsFilterInput {
 }
 
 enum AssessmentStatus {
-  DONE
-  IN_PROGRESS
-  NEEDS_UPDATE
   TODO
+  DONE
+  NEEDS_UPDATE
+  IN_PROGRESS
 }
 
 enum AssessmentType {
@@ -482,9 +504,31 @@ type BiomarkerUnitEdge {
   node: BiomarkerUnit
 }
 
+type CancelPodcast {
+  success: Boolean!
+  message: String!
+  podcast: Podcast
+}
+
 type ChangePassword {
   success: Boolean!
   message: String!
+}
+
+type ChatFile {
+  id: ID!
+  pdfFile: String!
+  status: ChatFileStatus!
+  result: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+enum ChatFileStatus {
+  IN_PROGRESS
+  DONE
+  ERROR
+  CANCELLED
 }
 
 type ChatMessage implements Node {
@@ -496,11 +540,24 @@ type ChatMessage implements Node {
   timestamp: Datetime!
   product: String
   blogs: String
+  region: String
+  image: String
+  language: String
+  audioStyle: String
+  pdfFile: String
+  content: [MessageContent!]
+  edits: [MessageHistory!]
 }
 
 type ChatMessageConnection {
   pageInfo: PageInfo!
   edges: [ChatMessageEdge]!
+}
+
+input ChatMessageContentInput {
+  type: MessageContentType!
+  value: String!
+  artifact: ArtifactContentInput
 }
 
 type ChatMessageEdge {
@@ -535,6 +592,13 @@ type ChatThreadConnection {
 type ChatThreadEdge {
   cursor: String!
   node: ChatThread
+}
+
+type ChatUsageStats {
+  totalMessages: Int
+  totalImages: Int
+  totalScripts: Int
+  totalPodcasts: Int
 }
 
 type Condition {
@@ -688,8 +752,6 @@ input CreateAnswerInput {
   blockOtherAnswers: Boolean
   icon: Upload
   triggerEvent: String
-  isSelected: String
-  rankingOrder: Int
   supplements: [AnswerSupplementInput!]
 }
 
@@ -903,6 +965,34 @@ type CreateKnowledgeBase {
   knowledgeBase: KnowledgeBase
 }
 
+type CreateMessageHistoryEntry {
+  success: Boolean!
+  message: String!
+  messageHistory: MessageHistory
+}
+
+input CreateMessageHistoryEntryInput {
+  message: ID!
+  changes: [ChatMessageContentInput!]!
+}
+
+type CreatePodcast {
+  success: Boolean!
+  message: String!
+  podcast: Podcast
+}
+
+input CreatePodcastInput {
+  message: ID!
+  hostName: String!
+  guestName: String!
+  hostVoice: String!
+  guestVoice: String!
+  language: String!
+  script: String!
+  audioStyle: String
+}
+
 type CreateProgram {
   success: Boolean!
   message: String!
@@ -1058,6 +1148,9 @@ input CreateSupplementInput {
   instructions: String
   ingredients: String
   supplementFacts: String
+  type: SupplementType
+  conditions: [ID!]
+  createConditions: [CreateSegmentConditionInput!]
 }
 
 type CreateSupplementRecommended {
@@ -1146,6 +1239,17 @@ input CreateUserSegmentInput {
   rules: [ID!]!
 }
 
+type CreateWebhookEndpoint {
+  success: Boolean!
+  message: String!
+  endpoint: WebhookEndpoint
+}
+
+input CreateWebhookEndpointInput {
+  url: String!
+  eventTypes: [WebhookEventType!]!
+}
+
 type Cuisine {
   name: String!
 }
@@ -1174,6 +1278,39 @@ type CustomAttributeConnection {
 type CustomAttributeEdge {
   cursor: String!
   node: CustomAttribute
+}
+
+type CustomReport {
+  id: ID!
+  workflowDeploymentId: String
+  reportType: CustomReportType!
+  workflowName: String
+  startDate: Datetime!
+  endDate: Datetime!
+  reportData: Generic!
+  totalExecutions: Int!
+  generatedBy: String!
+  notes: String
+}
+
+type CustomReportConnection {
+  pageInfo: PageInfo!
+  edges: [CustomReportEdge]
+}
+
+type CustomReportEdge {
+  cursor: String!
+  node: CustomReport
+}
+
+input CustomReportFiltersInput {
+  startDate: Datetime
+  endDate: Datetime
+  workflowDeploymentId: String
+}
+
+enum CustomReportType {
+  CHATBRARIAN_CONTENT
 }
 
 type DailyRecapAnswer {
@@ -1400,6 +1537,12 @@ type DeleteUserSegment {
   deleted: UserSegment
 }
 
+type DeleteWebhookEndpoint {
+  success: Boolean!
+  message: String!
+  endpoint: WebhookEndpoint
+}
+
 input DependOnAnswerInput {
   questionId: ID!
   answerId: ID!
@@ -1411,6 +1554,36 @@ input DirectionsOfUseInput {
 }
 
 scalar Email
+
+type EmailCustomFields {
+  id: ID!
+  inviteCoachSubject: String
+  inviteCoachSignature: String
+  inviteCoachHtml: String
+  inviteCoachText: String
+  inviteMemberSubject: String
+  inviteMemberHtml: String
+  inviteMemberText: String
+  coachingBaseUrl: String
+  appointmentConfirmationSubject: String
+  appointmentConfirmationHtml: String
+  appointmentConfirmationText: String
+  appointmentUpdatedSubject: String
+  appointmentUpdatedHtml: String
+  appointmentUpdatedText: String
+  appointmentCanceledSubject: String
+  appointmentCanceledHtml: String
+  appointmentCanceledText: String
+  magicLinkSubject: String
+  magicLinkHtml: String
+  magicLinkText: String
+  resetPasswordSubject: String
+  resetPasswordText: String
+  resetPasswordHtml: String
+  autoReplyFeedbackSubject: String
+  autoReplyFeedbackText: String
+  autoReplyFeedbackHtml: String
+}
 
 enum Equation {
   HARRIS_BENEDICT
@@ -1696,6 +1869,23 @@ input MakeCoachInput {
   email: String!
   name: String!
   isCoachAdmin: Boolean!
+}
+
+type MessageContent {
+  type: MessageContentType!
+  value: String!
+  artifact: ArtifactContent
+}
+
+enum MessageContentType {
+  TEXT
+  ARTIFACT
+}
+
+type MessageHistory {
+  editedAt: Datetime!
+  editor: String!
+  changes: [MessageContent!]!
 }
 
 input MessageInput {
@@ -2073,6 +2263,29 @@ type Mutation {
 
   """Delete Third Party Goal"""
   deleteThirdPartyGoal(id: ID!): DeleteThirdPartyGoal!
+
+  """Create webhook endpoint"""
+  createWebhookEndpoint(input: CreateWebhookEndpointInput!): CreateWebhookEndpoint!
+
+  """Update webhook endpoint"""
+  updateWebhookEndpoint(input: UpdateWebhookEndpointInput!): UpdateWebhookEndpoint!
+
+  """delete webhook endpoint"""
+  deleteWebhookEndpoint(id: ID!): DeleteWebhookEndpoint!
+
+  """update email custom fields"""
+  updateEmailCustomFields(input: UpdateEmailCustomFieldsInput!): UpdateEmailCustomFields
+  oauthSignIn(provider: OAuthProvider!, accessToken: String!): OauthSignIn!
+  createMessageHistoryEntry(input: CreateMessageHistoryEntryInput!): CreateMessageHistoryEntry!
+
+  """create a podcast"""
+  createPodcast(input: CreatePodcastInput!): CreatePodcast!
+
+  """cancel a podcast"""
+  cancelPodcast(id: ID!): CancelPodcast!
+
+  """process a chat file"""
+  processChatFile(input: ProcessChatFileInput!): ProcessChatFile!
 }
 
 interface Node {
@@ -2144,6 +2357,17 @@ enum NutrientUnit {
   MICROGRAM
 }
 
+enum OAuthProvider {
+  MICROSOFT
+}
+
+type OauthSignIn {
+  success: Boolean!
+  message: String!
+  accessToken: String
+  refreshToken: String
+}
+
 enum Operation {
   ADD
   REMOVE
@@ -2155,6 +2379,60 @@ type PageInfo {
   hasPreviousPage: Boolean!
   startCursor: String
   endCursor: String
+}
+
+type Podcast {
+  id: ID!
+  hostName: String!
+  guestName: String!
+  hostVoice: String!
+  guestVoice: String!
+  language: String!
+  script: String!
+  name: String
+  outputValue: String
+  outputType: PodcastOutputType
+  status: PodcastStatus!
+  audioStyle: String
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type PodcastConnection {
+  pageInfo: PageInfo!
+  edges: [PodcastEdge]!
+}
+
+type PodcastEdge {
+  cursor: String!
+  node: Podcast
+}
+
+input PodcastFiltersInput {
+  id: ID
+  message: ID
+}
+
+enum PodcastOutputType {
+  AUDIO_URL
+}
+
+enum PodcastStatus {
+  IN_PROGRESS
+  COMPLETED
+  ERROR
+  CANCELLED
+}
+
+type ProcessChatFile {
+  success: Boolean!
+  message: String!
+  chatFile: ChatFile
+}
+
+input ProcessChatFileInput {
+  pdfFile: Upload!
+  message: ID
 }
 
 type Profile {
@@ -2378,7 +2656,7 @@ type Query {
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
 
   """List all Supplements"""
-  supplements(id: ID, name: String, first: Int, last: Int, after: String, before: String): SupplementConnection!
+  supplements(id: ID, name: String, types: [SupplementType!], first: Int, last: Int, after: String, before: String): SupplementConnection!
 
   """ List all profiles"""
   wellnessProfile(id: ID!): WellnessProfileResult!
@@ -2403,7 +2681,7 @@ type Query {
   answer(id: ID!): AssessmentAnswer
   conversationSummary(userId: ID!): ConversationSummary
   workflowExecutionLogs(first: Int, last: Int, after: String, before: String, filters: WorkflowExecutionLogFilterInput!): WorkflowExecutionLogConnection!
-  workflowExecutionLogStatistics(workflowDeploymentId: String!, startDate: Datetime, endDate: Datetime): WorkflowExecutionLogStatistics!
+  workflowExecutionLogStatistics(assistantId: ID!, workflowDeploymentId: String, startDate: Datetime, endDate: Datetime): WorkflowExecutionLogStatistics!
 
   """Get chat threads"""
   chatThreads(first: Int, last: Int, after: String, before: String): ChatThreadConnection!
@@ -2413,6 +2691,18 @@ type Query {
 
   """List all third party goals"""
   thirdPartyGoals(id: ID, goal: TrackerComponent): [ThirdPartyGoal!]!
+
+  """List all webhook endpoints"""
+  webhookEndpoints: WebhookEndpointConnection!
+
+  """List question attributes"""
+  questionAttributes(first: Int, last: Int, after: String, before: String): AssessmentQuestionAttributeConnection!
+  emailCustomFields: EmailCustomFields
+
+  """List podcasts"""
+  podcasts(first: Int, last: Int, after: String, before: String, filters: PodcastFiltersInput): PodcastConnection!
+  chatUsageStats(userId: ID!, startDate: Datetime!, endDate: Datetime!): ChatUsageStats!
+  customReports(first: Int, last: Int, after: String, before: String, filters: CustomReportFiltersInput!): CustomReportConnection
 }
 
 enum QuestionProfileField {
@@ -2671,6 +2961,8 @@ type Supplement implements Node {
   ingredients: String
   supplementFacts: String
   productUrl: String
+  type: SupplementType!
+  conditions: [Condition!]
   createdAt: Datetime!
   updatedAt: Datetime!
 }
@@ -2712,6 +3004,13 @@ type SupplementRecommendedConnection {
 type SupplementRecommendedEdge {
   node: SupplementRecommended
   cursor: String!
+}
+
+enum SupplementType {
+  PRODUCT
+  INTERVENTION
+  SUPPLEMENT
+  MEDICATION
 }
 
 enum TaskStatus {
@@ -2783,6 +3082,7 @@ enum TimeOfDay {
   WITH_LUNCH
   WITH_DINNER
   AT_BEDTIME
+  ANYTIME
 }
 
 enum TrackerComponent {
@@ -2805,6 +3105,7 @@ enum TrackerComponent {
   PLAN_SUPPLEMENTS_MY_CHECKLIST
   FOOD_LOG_MEAL_TRACKER
   BLOOD_PRESSURE_TRACKER
+  SYMPTOM_TRACKER
 }
 
 type UpdateAnswer {
@@ -2826,8 +3127,6 @@ input UpdateAnswerInput {
   blockOtherAnswers: Boolean
   icon: Upload
   triggerEvent: String
-  isSelected: String
-  rankingOrder: Int
   supplements: [AnswerSupplementInput!]
 }
 
@@ -3058,6 +3357,41 @@ input UpdateDynamicQuestionInput {
   parentQuestionId: ID
 }
 
+type UpdateEmailCustomFields {
+  success: Boolean!
+  message: String!
+  emailCustomFields: EmailCustomFields
+}
+
+input UpdateEmailCustomFieldsInput {
+  inviteCoachSubject: String
+  inviteCoachSignature: String
+  inviteCoachHtml: String
+  inviteCoachText: String
+  inviteMemberSubject: String
+  inviteMemberHtml: String
+  inviteMemberText: String
+  coachingBaseUrl: String
+  appointmentConfirmationSubject: String
+  appointmentConfirmationHtml: String
+  appointmentConfirmationText: String
+  appointmentUpdatedSubject: String
+  appointmentUpdatedHtml: String
+  appointmentUpdatedText: String
+  appointmentCanceledSubject: String
+  appointmentCanceledHtml: String
+  appointmentCanceledText: String
+  magicLinkSubject: String
+  magicLinkHtml: String
+  magicLinkText: String
+  resetPasswordSubject: String
+  resetPasswordText: String
+  resetPasswordHtml: String
+  autoReplyFeedbackSubject: String
+  autoReplyFeedbackText: String
+  autoReplyFeedbackHtml: String
+}
+
 type UpdateGuardrail {
   success: Boolean!
   message: String!
@@ -3277,6 +3611,9 @@ input UpdateSupplementInput {
   instructions: String
   ingredients: String
   supplementFacts: String
+  type: SupplementType
+  conditions: [ID!]
+  createConditions: [CreateSegmentConditionInput!]
 }
 
 type UpdateSupplementRecommended {
@@ -3395,6 +3732,18 @@ input UpdateUserSegmentInput {
   rules: [ID!]
 }
 
+type UpdateWebhookEndpoint {
+  success: Boolean!
+  message: String!
+  endpoint: WebhookEndpoint
+}
+
+input UpdateWebhookEndpointInput {
+  id: ID!
+  url: String
+  eventTypes: [WebhookEventType!]
+}
+
 scalar Upload
 
 """An RFC 3986, RFC 3987, and RFC 6570 (level 4) compliant URI string."""
@@ -3458,6 +3807,59 @@ type VerifyDeveloperEmail {
   profile: Profile
 }
 
+type WebhookEndpoint {
+  id: ID!
+  url: String!
+  eventTypes: [WebhookEventType!]!
+}
+
+type WebhookEndpointConnection {
+  pageInfo: PageInfo!
+  edges: [WebhookEndpointEdge]!
+}
+
+type WebhookEndpointEdge {
+  cursor: String!
+  node: WebhookEndpoint
+}
+
+enum WebhookEventType {
+  PROFILE_UPDATED
+  APPOINTMENT_CREATED
+  APPOINTMENT_UPDATED
+  APPOINTMENT_CANCELLED
+  EXERCISE_TRACKER_CREATED
+  EXERCISE_TRACKER_UPDATED
+  EXERCISE_TRACKER_DELETED
+  STEPS_TRACKER_CREATED
+  STEPS_TRACKER_UPDATED
+  STEPS_TRACKER_DELETED
+  SLEEP_TIME_TRACKER_CREATED
+  SLEEP_TIME_TRACKER_UPDATED
+  SLEEP_TIME_TRACKER_DELETED
+  WEIGHT_TRACKER_CREATED
+  WEIGHT_TRACKER_UPDATED
+  WEIGHT_TRACKER_DELETED
+  HYDRATION_TRACKER_UPDATED
+  HYDRATION_TRACKER_CREATED
+  USER_SUBSCRIPTION_UPDATED
+  MY_RECIPE_CREATED
+  MY_RECIPE_UPDATED
+  MY_RECIPE_DELETED
+  MY_BRANDED_FOOD_CREATED
+  MY_BRANDED_FOOD_UPDATED
+  MY_BRANDED_FOOD_DELETED
+  MY_COMMON_FOOD_CREATED
+  MY_COMMON_FOOD_UPDATED
+  MY_COMMON_FOOD_DELETED
+  EXPRESS_TRACK_CREATED
+  EXPRESS_TRACK_UPDATED
+  EXPRESS_TRACK_DELETED
+  FOOD_LOG_CREATED
+  FOOD_LOG_UPDATED
+  FOOD_LOG_DELETED
+}
+
 type WellnessProfile {
   id: ID!
   age: Int
@@ -3494,6 +3896,7 @@ type WorkflowExecutionLog implements Node {
   metadata: Generic
   desiredOutputValues: Generic
   comment: String
+  rating: WorkflowExecutionLogRating
 }
 
 type WorkflowExecutionLogConnection {
@@ -3521,11 +3924,17 @@ input WorkflowExecutionLogFilterInput {
   channel: String
 }
 
+enum WorkflowExecutionLogRating {
+  THUMBS_UP
+  THUMBS_DOWN
+}
+
 type WorkflowExecutionLogStatistics {
   totalMessagesSent: Int
   totalErrorMessages: Int
   averageLatency: Float
   positiveFeedbackCount: Int
   negativeFeedbackCount: Int
+  totalSessions: Int
 }
 
