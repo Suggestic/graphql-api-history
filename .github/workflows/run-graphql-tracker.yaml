@@ -12,11 +12,12 @@ jobs:
         with:
           fetch-depth: 0
       - name: Ensure npx uses a cache
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
+        continue-on-error: true
         with:
-          node-version: '23.1.0'
+          node-version: '23.x'
           cache: 'npm'
-          cache-dependency-path: '**/.github/workflows/*.yaml'
+          cache-dependency-path: package-lock.json
       - name: Configure Git for commits
         run: |
           git config user.name "Automated"
