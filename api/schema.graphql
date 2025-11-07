@@ -5927,7 +5927,7 @@ type ProfileType {
   email: String!
   thryvePartnerId: String!
   encodedAttributes: String
-  sendbirdAccessToken: String
+  sendbirdAccessToken: String!
   sendbirdId: String!
   biologicalSex: BiologicalSex
   mealPlan(
