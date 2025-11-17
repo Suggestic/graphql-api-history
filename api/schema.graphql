@@ -4748,7 +4748,7 @@ type Mutation {
   clearShoppingListCheckedItems: ClearShoppingListCheckedItems
   updateShoppingListRecipeServings(numberOfServings: Int!, recipeId: String!): UpdateShoppingListRecipeServings
   purchaseMealRecipe(externalId: String, profileId: String!, recipeId: ID!): PurchaseMealRecipe
-  createMealLog(customServingEquivalent: Float, date: Date, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time): CreateMealLogMutation
+  createMealLog(customServingEquivalent: Float, mealDatabaseId: String!, mealTime: MealTime!, mealType: MealType!, quantity: Float!, serving: Float, time: Time, timestamp: DateTime): CreateMealLogMutation
   updateMealLog(customServingEquivalent: Float, databaseId: String!, date: Date, mealTime: MealTime, quantity: Float, serving: Float, time: Time): UpdateMealLogMutation
   removeMealLog(databaseId: String!): RemoveMealLogMutation
   createOwnMealLog(barcode: String, brand: String, date: Date, logAfterCreation: Boolean, mealTime: MealTime, mealTimes: [MealTime], mealType: MealType!, name: String!, ownNutrients: OwnNutrients!, ownServing: OwnServing!): CreateOwnMealLogMutation
@@ -6261,7 +6261,7 @@ type Query {
   flags: GenericScalar
   ownMealLogs: [MealLog]
   ownFoodItems(fromDate: Date, toDate: Date, before: String, after: String, first: Int, last: Int): MealLogConnection
-  mealLogMacroAggs(fromDate: Date!, toDate: Date!): MealLogMacroAggs
+  mealLogMacroAggs(start: DateTime, end: DateTime): MealLogMacroAggs
   ownMealLog(id: ID!): MealLog
   ownFoodItem(id: ID!): MealLog
   ownRecipes(fromDate: Date, toDate: Date, before: String, after: String, first: Int, last: Int): MealLogConnection
