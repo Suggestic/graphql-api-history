@@ -8885,7 +8885,7 @@ type UsdaFood implements Node {
 type User implements Node {
   email: String
   name: String
-  phone: String
+  phone: String!
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
