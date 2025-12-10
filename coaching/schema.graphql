@@ -286,7 +286,7 @@ type AssessmentAnswer {
   score: Int
   nextQuestion: String
   text: String
-  attribute: String
+  attribute: GenericScalar
   createdAt: String
   updatedAt: String
 }
