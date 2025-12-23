@@ -116,6 +116,18 @@ input AddBiomarkerResultsInput {
   biomarkers: [BiomarkerResultInput!]!
 }
 
+input AddCoachToPoolInput {
+  coach: ID!
+  appointmentType: ID!
+  clientMutationId: String
+}
+
+type AddCoachToPoolPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
+}
+
 type AddUserToJourney {
   success: Boolean!
   message: String!
@@ -2401,6 +2413,8 @@ type Mutation {
   uploadCoachVirtualBackground(input: UploadCoachVirtualBackgroundInput!): UploadCoachVirtualBackgroundPayload
   deleteCoachVirtualBackground(id: ID!): DeleteCoachVirtualBackground
   setDefaultCoachVirtualBackground(id: ID!): SetDefaultCoachVirtualBackground
+  addCoachToPool(input: AddCoachToPoolInput!): AddCoachToPoolPayload
+  removeCoachFromPool(input: RemoveCoachFromPoolInput!): RemoveCoachFromPoolPayload
 }
 
 """An object with an ID"""
@@ -3010,6 +3024,18 @@ type RecipeProxy {
 type RecommendedSwaps {
   meals: [Recipe]
   recipes: [Recipe]
+}
+
+input RemoveCoachFromPoolInput {
+  coach: ID!
+  appointmentType: ID!
+  clientMutationId: String
+}
+
+type RemoveCoachFromPoolPayload {
+  success: Boolean!
+  message: String!
+  clientMutationId: String
 }
 
 type RemoveUserFromJourney {
