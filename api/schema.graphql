@@ -8048,8 +8048,8 @@ enum TimeOfDay {
 type TimePeriod {
   """These are the coaches available in this TimePeriod"""
   coaches: [Coach!]!
-  start: DateTime
-  end: DateTime
+  start: DateTime!
+  end: DateTime!
 }
 
 type ToggleShoppingListItem {
