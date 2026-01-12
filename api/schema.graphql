@@ -3172,7 +3172,7 @@ input FeedbackInput {
   comment: String
 }
 
-union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | GenericFoodNodeProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy | MealProxy
+union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | GenericFoodNodeProxy | MyBrandedFoodProxy | MyCommonFoodProxy | RecipeProxy | UserRecipeProxy | MealProxy | MenuItemProxy
 
 type FoodAnalysis implements Node {
   """The ID of the object"""
@@ -3198,6 +3198,7 @@ enum FoodCategory {
   RECIPE
   COMMON_NCC
   GENERIC_FOOD
+  MENU_ITEM
 }
 
 input FoodFilter {
@@ -4493,6 +4494,10 @@ type MenuItemEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+type MenuItemProxy {
+  menuItem: MenuItem!
 }
 
 type MergeUser {
@@ -8048,8 +8053,8 @@ enum TimeOfDay {
 type TimePeriod {
   """These are the coaches available in this TimePeriod"""
   coaches: [Coach!]!
-  start: DateTime!
-  end: DateTime!
+  start: DateTime
+  end: DateTime
 }
 
 type ToggleShoppingListItem {
