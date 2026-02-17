@@ -2955,6 +2955,7 @@ type Query {
   flags: GenericScalar
   zoomSessionRecordings(sessionId: String!): ZoomRecording
   thirdPartyTrackers: [ThirdPartyTracker]
+  appointment(id: ID!): Appointment
 }
 
 type QuestionConnection {
