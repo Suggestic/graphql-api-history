@@ -2949,7 +2949,7 @@ type Query {
   userAnswersByAssessment(memberId: ID!, assessmentId: ID!, filters: UserAnswersByAssessmentInput): Assessment
   userAssessments(memberId: ID!, filters: UserAssessmentsFilterInput, before: String, after: String, first: Int, last: Int): AssessmentConnection
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
-  foodLogsByMember(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): UserMealLogConnection
+  foodLogsByMember(memberId: ID!, start: DateTime, end: DateTime, before: String, after: String, first: Int, last: Int): UserMealLogConnection
   assistants: [Assistant!]
   customAttributes(search: String, offset: Int, before: String, after: String, first: Int, last: Int): CustomAttributeConnection
   flags: GenericScalar
@@ -4130,7 +4130,8 @@ input UserInfo {
 
 type UserMealLog implements Node {
   id: ID!
-  date: Date!
+  date: Date @deprecated(reason: "The `date` field does not include timezone information and may cause inconsistencies. Use `dateTime` instead.")
+  dateTime: DateTime
   mealTime: MealTime!
   mealType: MealType
   name: String
