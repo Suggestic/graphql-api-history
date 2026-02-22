@@ -4247,8 +4247,7 @@ type MealLog implements Node {
   """The ID of the object"""
   id: ID!
   databaseId: String
-  date: Date @deprecated(reason: "The `date` field does not include timezone information and may cause inconsistencies. Use `dateTime` instead.")
-  dateTime: DateTime
+  date: Date
   userPid: String
   mealType: MealType
   mealTime: MealTime
@@ -6261,7 +6260,7 @@ type Query {
   myCommonFoods(id: String, before: String, after: String, first: Int, last: Int): MyCommonFoodConnection
   foodSearch(query: String, barcode: String, filter: FoodFilter, isCommon: Boolean, isBranded: Boolean, before: String, after: String, first: Int, last: Int): GenericFoodConnection
   searchProfile(email: String!): ProfileType
-  mealLog(start: DateTime, end: DateTime, before: String, after: String, first: Int, last: Int): MealLogConnection
+  mealLog(fromDate: Date!, toDate: Date!, before: String, after: String, first: Int, last: Int): MealLogConnection
   recentMealLogs: [MealLog]
   frequentMealLogs: [MealLog]
   flags: GenericScalar
