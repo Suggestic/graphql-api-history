@@ -2383,27 +2383,6 @@ type CuisineEdge {
   cursor: String!
 }
 
-type DailyCheckIn {
-  greeting: String
-  yesterdaySummary: YesterdaySummary
-  todayFocus: TodayFocus
-  dailyInsight: DailyInsight
-  engagementQuestion: String
-}
-
-type DailyCheckInMetric {
-  label: String!
-  value: String
-  note: String
-  goal: String
-}
-
-type DailyCheckInMutation {
-  success: Boolean!
-  message: String!
-  checkIn: DailyCheckIn
-}
-
 type DailyChecklist {
   name: String!
   icon: String
@@ -2414,11 +2393,6 @@ type DailyExerciseTime {
   type: String
   totalTime: Int! @deprecated
   floatTotalTime: Float!
-}
-
-type DailyInsight {
-  intro: String
-  content: String
 }
 
 type DailyMoodSummary {
@@ -4637,8 +4611,6 @@ type Mutation {
   submitFeedback(input: FeedbackInput!): SubmitFeedback
   createMessageHistoryEntry(input: CreateMessageHistoryEntryInput!): CreateMessageHistoryEntry
   processChatFile(input: ProcessChatFileInput!): ProcessChatFile
-  dailyCheckIn: DailyCheckInMutation
-  sendDailyCheckIn: SendDailyCheckInMutation
   createMyBrandedFoods(input: CreateMyBrandedFoodInput!): CreateMyBrandedFood
   createMyCommonFoods(input: CreateMyCommonFoodInput!): CreateMyCommonFood
   updateMyBrandedFood(id: ID!, input: UpdateMyBrandedFoodInput!): UpdateMyBrandedFood
@@ -7179,13 +7151,6 @@ type SelectDailyRecapQuestions {
   message: String!
 }
 
-type SendDailyCheckInMutation {
-  success: Boolean!
-  message: String!
-  text: String
-  conversationSid: String
-}
-
 type SendFeedback {
   success: Boolean
   message: String
@@ -8091,11 +8056,6 @@ type TimePeriod {
   coaches: [Coach!]!
   start: DateTime
   end: DateTime
-}
-
-type TodayFocus {
-  intro: String
-  priorities: [String]
 }
 
 type ToggleShoppingListItem {
@@ -9375,11 +9335,6 @@ type WorkflowExecutionLogComment implements Node {
 enum WorkflowExecutionLogRating {
   THUMBS_UP
   THUMBS_DOWN
-}
-
-type YesterdaySummary {
-  intro: String
-  metrics: [DailyCheckInMetric]
 }
 
 type ZoomParticipantAudioFile {
