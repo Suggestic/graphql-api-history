@@ -1149,6 +1149,8 @@ input CreateSupplementInput {
   ingredients: String
   supplementFacts: String
   type: SupplementType
+  linkedFeature: FeatureType
+  linkedContentId: ID
   conditions: [ID!]
   createConditions: [CreateSegmentConditionInput!]
 }
@@ -1641,6 +1643,15 @@ enum FeatureOption {
   NUTRITION_DASHBOARD
   LAB_TESTS
   ONBOARDING
+}
+
+enum FeatureType {
+  CONTENT
+  FOOD_LOG
+  STEPS
+  WEIGHT
+  MOOD
+  JOURNAL
 }
 
 type FormError {
@@ -2656,7 +2667,7 @@ type Query {
   appUsers(first: Int, last: Int, after: String, before: String, userUUIDs: [String!], profileUUIDs: [String!], userEmails: [String!], isTestUser: Boolean): AppUserConnection!
 
   """List all Supplements"""
-  supplements(id: ID, name: String, types: [SupplementType!], first: Int, last: Int, after: String, before: String): SupplementConnection!
+  supplements(id: ID, name: String, types: [SupplementType!], features: [FeatureType!], first: Int, last: Int, after: String, before: String): SupplementConnection!
 
   """ List all profiles"""
   wellnessProfile(id: ID!): WellnessProfileResult!
@@ -2962,6 +2973,8 @@ type Supplement implements Node {
   supplementFacts: String
   productUrl: String
   type: SupplementType!
+  linkedFeature: FeatureType
+  linkedContentId: ID
   conditions: [Condition!]
   createdAt: Datetime!
   updatedAt: Datetime!
@@ -3612,6 +3625,8 @@ input UpdateSupplementInput {
   ingredients: String
   supplementFacts: String
   type: SupplementType
+  linkedFeature: FeatureType
+  linkedContentId: ID
   conditions: [ID!]
   createConditions: [CreateSegmentConditionInput!]
 }

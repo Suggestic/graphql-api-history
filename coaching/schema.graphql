@@ -1611,6 +1611,15 @@ type ExternalCalendarEventsInDate {
   events: [ExternalCalendarEvent!]!
 }
 
+enum FeatureType {
+  CONTENT
+  FOOD_LOG
+  STEPS
+  WEIGHT
+  MOOD
+  JOURNAL
+}
+
 union Food = BrandedFoodNodeProxy | CommonFoodNodeProxy | UserRecipeProxy | RecipeProxy
 
 type FoodLog implements Node {
@@ -1895,6 +1904,7 @@ type LabTestReport {
   testDate: DateTime
   labName: String!
   reportPdf: String
+  reportHtml: String
   title: String
   isVisible: Boolean!
   createdAt: DateTime!
@@ -2350,8 +2360,8 @@ type Mutation {
   generate2faUri(email: String!): Generate2faUri
   verify2faCode(code: String!, email: String!): Verify2faCode
   deleteLabTestReport(id: ID!, memberId: ID!): DeleteLabTestReport
-  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, videoUrl: String): CreateLabTestReport
-  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
+  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportHtml: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, videoUrl: String): CreateLabTestReport
+  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, memberId: ID!, orderId: String, orderingPhysician: String, productId: String, reportHtml: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, videoUrl: String): UpdateLabTestReport
   cronofyAuthRevoke: CronofyAuthRevoke
   cronofyAuthToken(code: String!, redirectUri: String!): CronofyAuthToken
   cronofyElementToken(permissions: [String]!): CronofyElementToken
@@ -2915,7 +2925,7 @@ type Query {
   subscriptions(before: String, after: String, first: Int, last: Int): SubscriptionConnection
   protocols: AvailableProtocols
   supplementPlanTemplates: AvailableSupplementPlanTemplates
-  supplements(id: ID, name: String, type: SupplementType, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+  supplements(id: ID, name: String, type: SupplementType, linkedFeature: FeatureType, offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   memberTags(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MemberTagConnection
   uiSettings(slug: String): UISettings
   coachActivitiesLogs(filters: CoachActivityLogFiltersInput, before: String, after: String, first: Int, last: Int): ActivityLogConnection
@@ -3457,6 +3467,8 @@ type Supplement implements Node {
   supplementFacts: String
   type: SupplementType!
   conditions: [Condition]
+  linkedFeature: FeatureType
+  linkedContentId: ID
   createdAt: DateTime!
   updatedAt: DateTime!
   protocolBundle(offset: Int, before: String, after: String, first: Int, last: Int): ProtocolConnection!
