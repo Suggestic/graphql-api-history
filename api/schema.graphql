@@ -2280,6 +2280,8 @@ input CreateSupplementInput {
   servingName: String!
   directionsOfUse: [DirectionsOfUseInput!]
   type: SupplementType
+  linkedFeature: FeatureType
+  linkedContentId: ID
   conditions: [ID!]
   createConditions: [CreateSupplementConditionInput!]
 }
@@ -3192,6 +3194,15 @@ type ExpressMealTrackEdge {
   cursor: String!
 }
 
+enum FeatureType {
+  CONTENT
+  FOOD_LOG
+  STEPS
+  WEIGHT
+  MOOD
+  JOURNAL
+}
+
 input FeedbackInput {
   executionId: ID!
   rating: WorkflowExecutionLogRating!
@@ -3914,6 +3925,7 @@ type LabTestReport {
   testDate: DateTime
   labName: String!
   reportPdf: String
+  reportHtml: String
   title: String
   isVisible: Boolean!
   createdAt: DateTime!
@@ -4807,9 +4819,9 @@ type Mutation {
   updateProfile(birthdate: Date, country: String, currentSource: SourceType, dietPreferences: [ID!], email: String, enabledTrackers: [TrackerComponent!], familySize: Int, favoriteCuisines: [String!], hasOnboarded: Boolean, isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, phone: String, preferredCommunicationChannel: CommunicationChannel, thryveAuthenticationToken: String, timezone: String): UpdateProfile
   createProfileCustomAttributes(append: Boolean, attributes: [ProfileCustomAttribute!]!): CreateProfileCustomAttributes
   sensitiveProfileAttributes(attributes: String, signingPublicKey: String): SensitiveProfileAttributes
-  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
+  createLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, image: Upload, imageUrl: String, isVisible: Boolean, labName: String!, orderId: String, orderingPhysician: String, productId: String, reportHtml: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String!, title: String, userEmail: String, videoUrl: String): CreateLabTestReport
   deleteLabTestReport(id: ID!): DeleteLabTestReport
-  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, userEmail: String, videoUrl: String): UpdateLabTestReport
+  updateLabTestReport(alert: Boolean, alertAction: AlertAction, alertStatus: AlertStatus, alertText: String, description: String, externalId: String, id: ID!, image: Upload, imageUrl: String, isVisible: Boolean, labName: String, orderId: String, orderingPhysician: String, productId: String, reportHtml: String, reportPdf: Upload, requisitionId: String, sampleCollectionDate: Date, status: LabTestReportStatus, testDate: DateTime, testName: String, title: String, userEmail: String, videoUrl: String): UpdateLabTestReport
   createMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String!, tags: [String!], text: String): CreateMyChecklistItem
   updateMyChecklistItem(directionsOfUse: [ItemDirectionsOfUseInput!], header: String, id: ID!, tags: [String!], text: String): UpdateMyChecklistItem
   deleteMyChecklistItem(id: ID!): DeleteMyChecklistItem
@@ -6126,7 +6138,7 @@ type Query {
   drugNutrientInteractions(filters: DrugNutrientInteractionsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): DrugGroupConnection
   currentJourneys(journeyId: ID, id: UUID, offset: Int, before: String, after: String, first: Int, last: Int): JourneyProfileTypeConnection
   supplementPlans(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): SupplementPlanConnection
-  supplements(id: ID, name: String, types: [SupplementType!], offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
+  supplements(id: ID, name: String, types: [SupplementType!], features: [FeatureType!], offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection
   supplementParent(supplementId: ID!): SupplementParent
   supplement(
     """The ID of the object"""
@@ -6397,6 +6409,7 @@ type Query {
     query: String
     cuisines: [String!]
     tags: [String!]
+    servingQuantity: Int
   ): RecipeSearchResult
   searchRecipesByIngredients(
     """List of ingredients recipe must contain"""
@@ -7707,6 +7720,8 @@ type Supplement implements Node {
   ownerParty: ThirdParty
   type: SupplementType!
   conditions: [Condition!]
+  linkedFeature: FeatureType
+  linkedContentId: ID
   createdAt: DateTime!
   updatedAt: DateTime!
   answerSet(offset: Int, before: String, after: String, first: Int, last: Int): AssessmentAnswerConnection!
@@ -8791,6 +8806,8 @@ input UpdateSupplementInput {
   servingName: String
   directionsOfUse: [DirectionsOfUseInput!]
   type: SupplementType
+  linkedFeature: FeatureType
+  linkedContentId: ID
   conditions: [ID!]
   createConditions: [CreateSupplementConditionInput!]
 }
