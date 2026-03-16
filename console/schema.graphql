@@ -680,6 +680,8 @@ type ContentLibrary implements Node {
   categories: [ContentCategory!]!
   tags: [ContentTag!]!
   programs: [Program!]
+  unlockAfterDays: Int
+  isContentAvailable: Boolean
 }
 
 type ContentLibraryConnection {
@@ -857,6 +859,7 @@ input CreateContentLibraryInput {
   categories: [ID!]
   tags: [ID!]
   programs: [ID!]
+  unlockAfterDays: Int
 }
 
 type CreateContentTag {
@@ -3301,6 +3304,7 @@ input UpdateContentLibraryInput {
   categories: [ID!]
   tags: [ID!]
   programs: [ID!]
+  unlockAfterDays: Int
 }
 
 type UpdateContentTag {
