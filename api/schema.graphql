@@ -1621,6 +1621,7 @@ type ContentLibraryType implements Node {
   order: Int!
   isFeatured: Boolean!
   lang: JSONString!
+  unlockAfterDays: Int
   id: ID!
   databaseId: String
   isFavorite: Boolean!
@@ -1633,6 +1634,7 @@ type ContentLibraryType implements Node {
   sourceUrl: String
   isRead: Boolean
   personalizedContent: Boolean
+  isContentAvailable: Boolean
 }
 
 type ContentLibraryTypeConnection {
@@ -1910,6 +1912,7 @@ input CreateContentLibraryInput {
   """Programs IDs."""
   programs: [ID]
   lang: GenericScalar = "{}"
+  unlockAfterDays: Int
 }
 
 type CreateContentTag {
@@ -7317,7 +7320,8 @@ type SleepQualityScore {
   value: Int! @deprecated
   floatValue: Float!
   source: SourceType!
-  date: Date!
+  date: Date! @deprecated
+  timestamp: DateTime!
 
   """field only relevant for sources other than Suggestic"""
   timezoneOffset: Int
@@ -7342,7 +7346,8 @@ type SleepTime {
   value: Int! @deprecated
   floatValue: Float!
   source: SourceType!
-  date: Date!
+  date: Date! @deprecated
+  timestamp: DateTime!
   createdAt: DateTime!
 
   """field only relevant for sources other than Suggestic"""
@@ -8412,6 +8417,7 @@ input UpdateContentLibraryInput {
 
   """Programs IDs."""
   programs: [ID!]
+  unlockAfterDays: Int
 }
 
 type UpdateContentTag {
