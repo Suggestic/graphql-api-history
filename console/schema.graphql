@@ -913,6 +913,25 @@ input CreateDynamicQuestionInput {
   parentQuestionId: ID
 }
 
+input CreateEscalatedConversationInput {
+  executionId: String!
+  sessionId: String!
+  workflowDeploymentId: String!
+  assistantId: ID!
+  reason: EscalatedConversationReason!
+  summary: String!
+  userName: String
+  userEmail: String
+  notificationEmail: String
+}
+
+type CreateEscalatedConversationResult {
+  success: Boolean!
+  message: String!
+  escalatedConversation: EscalatedConversation
+  shareableUrl: String
+}
+
 type CreateEscalation {
   success: Boolean!
   message: String!
@@ -1595,6 +1614,53 @@ enum Equation {
   ONCOLOGY
 }
 
+type EscalatedConversation {
+  id: ID!
+  executionId: String!
+  sessionId: String!
+  workflowDeploymentId: String!
+  reason: EscalatedConversationReason!
+  summary: String!
+  status: EscalatedConversationStatus!
+  userName: String
+  userEmail: String
+  acknowledgedBy: String
+  acknowledgedAt: Datetime
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+type EscalatedConversationConnection {
+  edges: [EscalatedConversationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type EscalatedConversationEdge {
+  node: EscalatedConversation!
+  cursor: String!
+}
+
+enum EscalatedConversationReason {
+  ACCOUNT_BILLING
+  CLINICAL_JUDGMENT
+  USER_REQUEST
+  FRUSTRATION
+  REPEATED_FAILURE
+  OTHER
+}
+
+type EscalatedConversationResult {
+  success: Boolean!
+  message: String!
+  escalatedConversation: EscalatedConversation
+}
+
+enum EscalatedConversationStatus {
+  OPEN
+  ACKNOWLEDGED
+  RESOLVED
+}
+
 type Escalation {
   id: ID!
   name: String!
@@ -2181,6 +2247,12 @@ type Mutation {
   """Create a Escalation belongs to an Assistant"""
   createEscalation(input: EscalationInput): CreateEscalation
 
+  """Create an escalated conversation record and send notification email"""
+  createEscalatedConversation(input: CreateEscalatedConversationInput!): CreateEscalatedConversationResult!
+
+  """Update the status of an escalated conversation"""
+  updateEscalatedConversationStatus(id: ID!, status: EscalatedConversationStatus!): UpdateEscalatedConversationResult!
+
   """Create a Constraint belongs to an Assistant"""
   createConstraint(input: ConstraintInput): CreateConstraint
 
@@ -2656,6 +2728,12 @@ type Query {
 
   """List all Escalations  belongs to Assistant ID"""
   escalations(assistantId: ID!): [Escalation]
+
+  """Retrieve an escalated conversation by ID"""
+  escalatedConversation(id: ID!): EscalatedConversationResult!
+
+  """List escalated conversations for the current tenant"""
+  escalatedConversations(status: EscalatedConversationStatus, first: Int, after: String): EscalatedConversationConnection!
 
   """List Constraint"""
   constraint(id: ID!): ConstraintResult!
@@ -3407,6 +3485,12 @@ input UpdateEmailCustomFieldsInput {
   autoReplyFeedbackSubject: String
   autoReplyFeedbackText: String
   autoReplyFeedbackHtml: String
+}
+
+type UpdateEscalatedConversationResult {
+  success: Boolean!
+  message: String!
+  escalatedConversation: EscalatedConversation
 }
 
 type UpdateGuardrail {
