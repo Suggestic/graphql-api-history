@@ -1616,6 +1616,7 @@ enum Equation {
 
 type EscalatedConversation {
   id: ID!
+  assistantId: ID!
   executionId: String!
   sessionId: String!
   workflowDeploymentId: String!
