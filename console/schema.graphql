@@ -922,6 +922,7 @@ input CreateEscalatedConversationInput {
   summary: String!
   userName: String
   userEmail: String
+  userRole: String
   notificationEmail: String
 }
 
@@ -1626,6 +1627,7 @@ type EscalatedConversation {
   status: EscalatedConversationStatus!
   userName: String
   userEmail: String
+  userRole: String
   acknowledgedBy: String
   acknowledgedAt: Datetime
   createdAt: Datetime!
