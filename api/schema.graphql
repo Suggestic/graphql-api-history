@@ -1986,6 +1986,26 @@ input CreateDynamicQuestionInput {
   parentQuestionId: ID
 }
 
+type CreateEscalatedConversation {
+  success: Boolean!
+  message: String!
+  escalatedConversation: EscalatedConversation
+  shareableUrl: String
+}
+
+input CreateEscalatedConversationInput {
+  executionId: String!
+  sessionId: String!
+  workflowDeploymentId: String!
+  assistantId: ID!
+  reason: EscalatedConversationReason!
+  summary: String!
+  userName: String
+  userEmail: String
+  userRole: String
+  notificationEmail: String
+}
+
 type CreateExpressTrack {
   success: Boolean!
   message: String!
@@ -3046,6 +3066,33 @@ type ErrorType {
   messages: [String!]!
 }
 
+type EscalatedConversation {
+  recordNumber: Int
+  executionId: String!
+  sessionId: String!
+  workflowDeploymentId: String!
+  reason: EscalatedConversationReason
+  summary: String!
+  status: WellnessgptEscalatedConversationStatusChoices!
+  userName: String
+  userEmail: String
+  userRole: String
+  acknowledgedBy: String
+  acknowledgedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  id: ID
+}
+
+enum EscalatedConversationReason {
+  ACCOUNT_BILLING
+  CLINICAL_JUDGMENT
+  USER_REQUEST
+  FRUSTRATION
+  REPEATED_FAILURE
+  OTHER
+}
+
 type EscalationConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -3195,6 +3242,81 @@ type ExpressMealTrackConnection {
 type ExpressMealTrackEdge {
   node: ExpressMealTrack
   cursor: String!
+}
+
+"""
+Proxy mutation that forwards a lab PDF or images to the Modal AI
+extraction service and returns structured biomarker data enriched with
+local ``biomarker_id`` matches — ready to review in the UI before saving.
+
+Accepted files (at least one required):
+  - ``pdfFile``  — a single PDF (digital or scanned).
+  - ``images``   — one or more image files (JPG, PNG, …).
+
+Optional controls:
+  - ``mode``               — "auto" (default) | "vision" | "text"
+  - ``requiredBiomarkers`` — JSON string: [{name, unit?}, …]
+  - ``extraInstructions``  — free-text hint for the AI model.
+
+The mutation itself always succeeds at the transport level.
+Check ``result.status`` ("success" | "partial" | "error") and
+``result.error`` for AI-level failures.
+"""
+type ExtractBiomarkersFromLabReport {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  result: ExtractBiomarkersFromLabReportResult
+}
+
+input ExtractBiomarkersFromLabReportInput {
+  pdfFile: Upload
+  images: [Upload]
+  mode: ExtractBiomarkersFromLabReportMode = AUTO
+  requiredBiomarkers: JSONString
+  extraInstructions: String
+}
+
+enum ExtractBiomarkersFromLabReportMode {
+  AUTO
+  VISION
+  TEXT
+}
+
+"""
+Top-level result from the AI extraction service.
+
+``status`` mirrors the Modal API: "success" | "partial" | "error".
+On "error", ``biomarkers`` is always empty and ``error`` contains
+the structured failure reason.  On "partial", ``warnings`` explains
+which pages or biomarkers could not be processed.
+"""
+type ExtractBiomarkersFromLabReportResult {
+  status: String!
+  biomarkers: [ExtractedBiomarkerResult!]
+  metadata: LabReportMetadata
+  warnings: [String!]
+  unmatchedBiomarkers: [String!]
+  error: LabReportError
+}
+
+"""
+Single biomarker result returned by the Modal AI extraction service.
+
+``biomarker_id`` is populated when a local Biomarker record is matched
+by name or alias (Relay-encoded ID, ready to use in addBiomarkerToPatient).
+Both ``value`` and ``qualitative_value`` are exposed so that results like
+"Negative" or "<0.01" are not silently dropped.
+"""
+type ExtractedBiomarkerResult {
+  name: String!
+  value: Float
+  qualitativeValue: String
+  unit: String
+  referenceRange: String
+  category: String
+  flags: [String!]
+  biomarkerId: ID
 }
 
 enum FeatureType {
@@ -3920,6 +4042,19 @@ type KnowledgeBaseType {
   sitemapUrls: [SitemapUrlType]
   category: KnowledgeBaseCategory
   refreshRate: KnowledgeBaseRefreshRate
+}
+
+type LabReportError {
+  code: String
+  message: String
+}
+
+type LabReportMetadata {
+  labName: String
+  reportDate: String
+  patientName: String
+  totalPagesProcessed: Int
+  languageDetected: String
 }
 
 type LabTestReport {
@@ -4653,6 +4788,7 @@ type Mutation {
   createMessageHistoryEntry(input: CreateMessageHistoryEntryInput!): CreateMessageHistoryEntry
   processChatFile(input: ProcessChatFileInput!): ProcessChatFile
   dailyCheckIn: DailyCheckInMutation
+  createEscalatedConversation(input: CreateEscalatedConversationInput!): CreateEscalatedConversation
   sendDailyCheckIn: SendDailyCheckInMutation
   createMyBrandedFoods(input: CreateMyBrandedFoodInput!): CreateMyBrandedFood
   createMyCommonFoods(input: CreateMyCommonFoodInput!): CreateMyCommonFood
@@ -4883,6 +5019,26 @@ type Mutation {
   createBiomarkerCategory(input: CreateBiomarkerCategoryInput!): CreateBiomarkerCategory
   updateBiomarkerCategory(input: UpdateBiomarkerCategoryInput!): UpdateBiomarkerCategory
   deleteBiomarkerCategory(id: ID!): DeleteBiomarkerCategory
+
+  """
+  Proxy mutation that forwards a lab PDF or images to the Modal AI
+  extraction service and returns structured biomarker data enriched with
+  local ``biomarker_id`` matches — ready to review in the UI before saving.
+  
+  Accepted files (at least one required):
+    - ``pdfFile``  — a single PDF (digital or scanned).
+    - ``images``   — one or more image files (JPG, PNG, …).
+  
+  Optional controls:
+    - ``mode``               — "auto" (default) | "vision" | "text"
+    - ``requiredBiomarkers`` — JSON string: [{name, unit?}, …]
+    - ``extraInstructions``  — free-text hint for the AI model.
+  
+  The mutation itself always succeeds at the transport level.
+  Check ``result.status`` ("success" | "partial" | "error") and
+  ``result.error`` for AI-level failures.
+  """
+  extractBiomarkersFromLabReport(input: ExtractBiomarkersFromLabReportInput!): ExtractBiomarkersFromLabReport
   selectDailyRecapQuestions(questions: [ID!]!): SelectDailyRecapQuestions!
   createDailyRecapEntry(date: Date!, questionId: String!, answerId: String!): CreateDailyRecapEntry
   deleteDailyRecapEntry(date: Date!, questionId: String!): DeleteDailyRecapEntry
@@ -9314,6 +9470,18 @@ type WeightTracker {
   tendency: Tendency
   entries: [Entry]
   latestEntry: DateTime
+}
+
+"""An enumeration."""
+enum WellnessgptEscalatedConversationStatusChoices {
+  """Open"""
+  OPEN
+
+  """Acknowledged"""
+  ACKNOWLEDGED
+
+  """Resolved"""
+  RESOLVED
 }
 
 """An enumeration."""
