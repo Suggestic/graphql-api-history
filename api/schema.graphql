@@ -3230,6 +3230,7 @@ type ExpressMealTrack {
   fibers: Float
   imageUrl: String
   foodName: String
+  foodDescription: String
   datetime: DateTime!
   createdAt: DateTime!
 }
@@ -5105,7 +5106,7 @@ type Mutation {
   addBloodPressureLog(systolicValue: PositiveInt!, diastolicValue: PositiveInt!, datetime: DateTime!, source: SourceType): AddBloodPressureLog!
   updateBloodPressureLog(id: ID!, systolicValue: PositiveInt, diastolicValue: PositiveInt): UpdateBloodPressureLog!
   deleteBloodPressureLog(id: ID!): DeleteBloodPressureLog!
-  createExpressTrack(mealTime: MealTime!, calories: Float!, proteins: Float!, carbs: Float!, fats: Float!, fibers: Float, datetime: DateTime, foodName: String, imageUrl: String): CreateExpressTrack!
+  createExpressTrack(mealTime: MealTime!, calories: Float!, proteins: Float!, carbs: Float!, fats: Float!, fibers: Float, datetime: DateTime, foodName: String, imageUrl: String, foodDescription: String): CreateExpressTrack!
   updateExpressTrack(id: ID!, mealTime: MealTime, calories: Float, proteins: Float, carbs: Float, fats: Float, fibers: Float, datetime: DateTime, foodName: String, imageUrl: String): UpdateExpressTrack!
   deleteExpressTrack(id: ID!): DeleteExpressTrack!
   createSymptomLog(symptomId: ID!, timestamp: DateTime!, intensity: Int!, notes: String): CreateSymptomLog!
