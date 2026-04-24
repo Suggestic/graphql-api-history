@@ -3090,6 +3090,7 @@ enum EscalatedConversationReason {
   USER_REQUEST
   FRUSTRATION
   REPEATED_FAILURE
+  TEST_RESULTS
   OTHER
 }
 
