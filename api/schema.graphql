@@ -1585,6 +1585,7 @@ type ContentCategoryType implements Node {
   tags: [ContentTagType!]
   contentLibrary(offset: Int, before: String, after: String, first: Int, last: Int): ContentLibraryTypeConnection!
   name: String
+  programs: [Program!]
 }
 
 type ContentCategoryTypeConnection {
@@ -1885,6 +1886,9 @@ input CreateContentCategoryInput {
   tags: [ID]
   lang: GenericScalar
   subtitle: String
+
+  """Programs IDs."""
+  programs: [ID]
 }
 
 type CreateContentLibrary {
@@ -3463,16 +3467,6 @@ type GenerateMealPlan {
   message: String
 }
 
-type GenerateShopifyMultipassUrl {
-  success: Boolean!
-  message: String!
-  url: String
-}
-
-input GenerateShopifyMultipassUrlInput {
-  returnTo: String
-}
-
 type GenerateSimpleMealPlan {
   """True if the meal plan was successfully generated"""
   success: Boolean
@@ -4856,7 +4850,6 @@ type Mutation {
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeam
   deleteCoachTeam(id: ID!): DeleteCoachTeam
   updateThirdPartyTrackerComponent(input: UpdateThirdPartyTrackerComponentInput!): UpdateThirdPartyTrackerComponent
-  generateShopifyMultipassUrl(input: GenerateShopifyMultipassUrlInput): GenerateShopifyMultipassUrl
   createThirdPartyGoal(input: CreateThirdPartyGoalInput!): CreateThirdPartyGoal
   updateThirdPartyGoal(input: UpdateThirdPartyGoalInput!): UpdateThirdPartyGoal
   deleteThirdPartyGoal(id: ID!): DeleteThirdPartyGoal
@@ -6177,6 +6170,7 @@ type Program implements Node {
   videoUrl: String
   thirdParties(offset: Int, before: String, after: String, first: Int, last: Int): ThirdPartyConnection!
   thirdPartiesDefault(offset: Int, before: String, after: String, first: Int, last: Int): ThirdPartyConnection!
+  contentcategorySet(offset: Int, before: String, after: String, first: Int, last: Int): ContentCategoryTypeConnection!
   contentlibrarySet(offset: Int, before: String, after: String, first: Int, last: Int): ContentLibraryTypeConnection!
   thirdpartydailyrecapquestionSet(offset: Int, before: String, after: String, first: Int, last: Int): ThirdPartyDailyRecapQuestionConnection!
   assistantSet: [Assistant!]!
@@ -8547,6 +8541,9 @@ input UpdateContentCategoryInput {
   tags: [ID]
   lang: GenericScalar
   subtitle: String
+
+  """Programs IDs."""
+  programs: [ID!]
 }
 
 type UpdateContentLibrary {
