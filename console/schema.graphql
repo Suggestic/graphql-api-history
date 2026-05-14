@@ -651,6 +651,7 @@ type ContentCategory {
   image: String
   lang: Generic
   subtitle: String
+  programs: [Program!]
 }
 
 type ContentCategoryConnection {
@@ -838,6 +839,7 @@ input CreateContentCategoryInput {
   tags: [ID!]
   lang: Generic
   subtitle: String
+  programs: [ID!]
 }
 
 type CreateContentLibrary {
@@ -3365,6 +3367,7 @@ input UpdateContentCategoryInput {
   tags: [ID!]
   lang: Generic
   subtitle: String
+  programs: [ID!]
 }
 
 type UpdateContentLibrary {
