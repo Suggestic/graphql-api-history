@@ -275,6 +275,19 @@ enum AlertStatus {
   COMPLETED
 }
 
+enum AlignmentDirection {
+  RANGE
+  UPPER_BOUND
+  LOWER_BOUND
+}
+
+enum AlignmentStatus {
+  ON_TARGET
+  WARNING
+  OFF_TARGET
+  NO_GOAL
+}
+
 type Answer {
   id: ID
   answer: String
@@ -2787,6 +2800,12 @@ type DeleteNote {
   note: Note
 }
 
+"""Remove a single per-user nutrient goal override."""
+type DeleteProfileNutrientGoal {
+  success: Boolean!
+  message: String!
+}
+
 type DeleteQuestion {
   success: Boolean!
   message: String!
@@ -3568,6 +3587,12 @@ input GeoBoundingBox {
 type GeoPoint {
   lat: Float
   lon: Float
+}
+
+enum GoalSource {
+  USER_OVERRIDE
+  PROGRAM_GOAL
+  DEFAULT
 }
 
 type GooglePlayTransactionType implements Node {
@@ -4948,6 +4973,22 @@ type Mutation {
   deleteMyProfile: HardDeleteMyProfileMutation
   updateMealPlanSettings(overwrite: UpdateMPSettingsInput, update: UpdateMPSettingsInput): UpdateMealPlanSettings
   profileMealPlanSettings(calories: Int!, carbsPerc: Float!, error: Float!, fatPerc: Float!, format: [MealTime], omega3Perc: Float, proteinPerc: Float!): ProfileMealPlanSettings @deprecated(reason: "This doesn't allow doing settings reset. Use updateMealPlanSettings instead.")
+
+  """
+  Create or update per-user nutrient goal overrides.
+  
+  With `replace=true` the whole set of goals is replaced atomically;
+  omitted nutrients are deleted. With `replace=false` (default) the
+  provided goals are upserted and existing goals for other nutrients
+  are left untouched.
+  """
+  setProfileNutrientGoals(goals: [ProfileNutrientGoalInput!]!, replace: Boolean): SetProfileNutrientGoals
+
+  """Remove a single per-user nutrient goal override."""
+  deleteProfileNutrientGoal(
+    """Nutrient key to delete."""
+    nutrient: NutrientKey!
+  ): DeleteProfileNutrientGoal
   createProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): CreateProfileBiomarkers
   updateProfileBiomarkers(cholesterolLdl: Float, cortisol: Float, ferritin: Float, hba1c: Float, totalCholesterol: Float, vitaminB12: Float, vitaminD: Float): UpdateProfileBiomarkers
   updateProfile(birthdate: Date, country: String, currentSource: SourceType, dietPreferences: [ID!], email: String, enabledTrackers: [TrackerComponent!], familySize: Int, favoriteCuisines: [String!], hasOnboarded: Boolean, isImperial: Boolean, language: Language, mpDiversity: MealPlanDiversity, name: String, operationDietPreferences: Operation, phone: String, preferredCommunicationChannel: CommunicationChannel, thryveAuthenticationToken: String, timezone: String): UpdateProfile
@@ -5344,6 +5385,78 @@ type NutrientAggregationsByFoodLog {
   alphaLinolenicacid: NutrientGoalComparison
 }
 
+"""
+Aggregated nutrient adherence for a date window, used by the dashboard
+"Overall Alignment" card and the detail screen.
+"""
+type NutrientAlignment {
+  fromDate: Date!
+  toDate: Date!
+
+  """
+  0–100 score. ON_TARGET counts 1.0; WARNING 0.5; OFF_TARGET 0; NO_GOAL items
+  are excluded from the denominator. Null when nothing can be scored (no goals
+  configured or no logged days in the window).
+  """
+  overallScore: Float
+
+  """Same score computed for the previous window of equal length."""
+  previousScore: Float
+
+  """
+  overallScore - previousScore (points). Null when either window couldn't be scored.
+  """
+  deltaVsPrevious: Float
+
+  """Days with at least one food log in the window."""
+  loggedDays: Int
+
+  """Same as loggedDays for the previous window."""
+  previousLoggedDays: Int
+  items: [NutrientAlignmentItem!]!
+}
+
+"""
+Per-nutrient row used in the Future U "Overall Alignment" card and its
+expanded detail view. All `value` / `goal` numbers are daily averages.
+"""
+type NutrientAlignmentItem {
+  """Canonical lower-case key, e.g. 'fat', 'sodium', 'enerc_kcal'."""
+  nutrient: String!
+  displayName: String!
+
+  """Short unit label, e.g. 'g', 'mg', 'mcg', 'kcal'."""
+  unit: String!
+
+  """Daily average actual."""
+  value: Float!
+
+  """Daily target. 0 when no goal is configured."""
+  goal: Float!
+
+  """Signed value - goal (per day)."""
+  deviation: Float!
+
+  """Pre-formatted deviation with sign + unit, e.g. '+380 cal/day'."""
+  deviationLabel: String!
+  lowerLimit: Float
+  upperLimit: Float
+  status: AlignmentStatus!
+
+  """Human-readable status: 'On Track' | 'Moderate' | 'Needs Attention'."""
+  statusLabel: String!
+
+  """Optional partner/clinician copy for this row."""
+  description: String
+  source: GoalSource!
+
+  """
+  How the goal is enforced: RANGE (stay near target), UPPER_BOUND (stay under,
+  e.g. sodium), LOWER_BOUND (reach at least, e.g. fiber).
+  """
+  direction: AlignmentDirection
+}
+
 enum NutrientEnum {
   DHA
   EPA
@@ -5519,6 +5632,47 @@ input NutrientInput {
   nutrient: NutrientEnum!
 }
 
+"""An enumeration."""
+enum NutrientKey {
+  ENERC_KCAL
+  CHOCDF
+  PROCNT
+  FAT
+  NETCARBS
+  CALCIUM
+  CHROMIUM
+  COPPER
+  FLUORIDE
+  IODINE
+  IRON
+  MAGNESIUM
+  MANGANESE
+  MOLYBDENUM
+  PHOSPHORUS
+  SELENIUM
+  ZINC
+  POTASSIUM
+  SODIUM
+  CHLORIDE
+  VITAMINA
+  VITAMINC
+  VITAMIND
+  VITAMINE
+  VITAMINK
+  THIAMIN
+  RIBOFLAVIN
+  NIACIN
+  VITAMINB6
+  FOLATE
+  VITAMINB12
+  PANTOTHENICACID
+  BIOTIN
+  CHOLINE
+  TOTALFIBER
+  LINOLEICACID
+  ALPHA_LINOLENICACID
+}
+
 type Nutrients {
   chocdf: Float
   fat: Float
@@ -5594,6 +5748,14 @@ type NutrientsPerServing {
   molybdenum: Float
   iodine: Float
   omega3: Float
+}
+
+enum NutrientUnit {
+  PERCENT
+  GRAM
+  MILLIGRAM
+  MICROGRAM
+  KILOCALORIE
 }
 
 type NutritionalInfo {
@@ -6008,6 +6170,52 @@ type ProfileMealPlanSettings {
   success: Boolean
 }
 
+"""Per-user override for a single nutrient goal."""
+input ProfileNutrientGoalInput {
+  """Nutrient identifier (matches goals.NUTRIENT_OPTIONS)."""
+  nutrient: NutrientKey!
+
+  """
+  Unit for goal_amount / lower_limit / upper_limit. PERCENT is only valid for macros (FAT, PROCNT, CHOCDF).
+  """
+  unit: NutrientUnit!
+
+  """Daily target amount."""
+  goalAmount: Float!
+
+  """
+  Delta below `goalAmount` still considered on-target. Same semantics as goals.Nutrient.lower_limit.
+  """
+  lowerLimit: Float
+
+  """
+  Delta above `goalAmount` still considered on-target. Same semantics as goals.Nutrient.upper_limit.
+  """
+  upperLimit: Float
+
+  """
+  How the goal is enforced. Defaults to RANGE; use UPPER_BOUND for nutrients
+  like sodium and LOWER_BOUND for fiber/vitamins/minerals.
+  """
+  direction: AlignmentDirection
+  note: String
+}
+
+"""Per-user nutrient goal override."""
+type ProfileNutrientGoalType {
+  id: ID!
+  nutrient: NutrientKey!
+  unit: NutrientUnit!
+  goalAmount: Float!
+  lowerLimit: Float!
+  upperLimit: Float!
+  direction: AlignmentDirection!
+  source: String!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type ProfileRecommendationType {
   id: UUID!
   updatedAt: DateTime
@@ -6140,6 +6348,13 @@ type ProfileType {
   phone: String
   preferredCommunicationChannel: CommunicationChannel!
   enabledTrackers: [TrackerComponent!]
+
+  """
+  Per-user nutrient goal overrides for this profile (goals.ProfileNutrientGoal).
+  These sit at the top of the goal resolution hierarchy used by macroGoals and
+  nutrientAlignment.
+  """
+  profileNutrientGoals: [ProfileNutrientGoalType!]!
 }
 
 type Program implements Node {
@@ -6480,6 +6695,16 @@ type Query {
   countries: [GenericScalar]
   myChecklistItems(id: ID, offset: Int, before: String, after: String, first: Int, last: Int): MyChecklistItemConnection
   nutrientAggregationsByFoodLog(fromDate: Date!, toDate: Date!): NutrientAggregationsByFoodLog
+  nutrientAlignment(
+    fromDate: Date!
+    toDate: Date!
+
+    """
+    Optional whitelist of nutrient keys. Defaults to the standard alignment-card set.
+    """
+    nutrients: [String!]
+    includePrevious: Boolean
+  ): NutrientAlignment
   dietPreferences(id: ID): [DietPreference]
   zoomSessionRecordings(sessionId: String!): ZoomRecording
   zoomAccountRecordings(start: Date!, end: Date!, before: String, after: String, first: Int, last: Int): ZoomRecordingConnection
@@ -7380,6 +7605,20 @@ type SetActiveSource {
 type SetMealPlanToTemplate {
   success: Boolean!
   message: String!
+}
+
+"""
+Create or update per-user nutrient goal overrides.
+
+With `replace=true` the whole set of goals is replaced atomically;
+omitted nutrients are deleted. With `replace=false` (default) the
+provided goals are upserted and existing goals for other nutrients
+are left untouched.
+"""
+type SetProfileNutrientGoals {
+  success: Boolean!
+  message: String!
+  nutrientGoals: [ProfileNutrientGoalType!]
 }
 
 type SetThirdPartyAppUserAsTest {
