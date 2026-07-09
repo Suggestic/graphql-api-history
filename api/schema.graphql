@@ -1283,6 +1283,22 @@ type CheckTodaySupplementEntry {
   message: String!
 }
 
+type CircleCommunityMemberProfile {
+  id: ID!
+  headline: String
+  bio: String
+  instagramUrl: String
+  twitterUrl: String
+  avatarUrl: String
+}
+
+type CircleSession {
+  accessToken: String!
+  refreshToken: String!
+  communityId: Int
+  communityMemberId: Int
+}
+
 type ClearShoppingList {
   success: Boolean
 }
@@ -5025,6 +5041,9 @@ type Mutation {
   processFoodImageAssistant(input: ImageAssistantInput!): ProcessFoodImageAssistant
   processAiFood(input: ProcessAIFoodInput!): ProcessAIFood
   saveAiFoodLog(input: SaveAIFoodLogInput!): SaveAIFoodLog
+  circleAuthenticate: CircleSession
+  circleRefreshSession(refreshToken: String!): CircleSession
+  updateCircleCommunityMemberProfile(avatar: String, bio: String, communityId: ID!, headline: String, instagramUrl: String, twitterUrl: String): UpdateCircleCommunityMemberProfile
   createAssessment(input: CreateAssessmentInput!): CreateAssessment
   updateAssessment(input: UpdateAssessmentInput!): UpdateAssessment
   deleteAssessment(id: ID!): DeleteAssessment
@@ -7004,6 +7023,7 @@ type Query {
 
   """All restrictions"""
   restrictions(before: String, after: String, first: Int, last: Int): RestrictionConnection
+  myCircleCommunityProfile(communityId: ID!): CircleCommunityMemberProfile
   assessment(id: ID!): Assessment
   assessments(filters: AssessmentsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): AssessmentConnection
   questions(filters: QuestionsFilterInput, offset: Int, before: String, after: String, first: Int, last: Int): AssessmentQuestionConnection
@@ -8730,6 +8750,10 @@ input UpdateBiomarkerInput {
 type UpdateBloodPressureLog {
   success: Boolean!
   message: String!
+}
+
+type UpdateCircleCommunityMemberProfile {
+  profile: CircleCommunityMemberProfile
 }
 
 type UpdateCoachTeam {
