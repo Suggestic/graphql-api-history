@@ -2961,6 +2961,7 @@ type Query {
   memberFoodLogs(memberId: ID!, startDate: Date!, endDate: Date!, before: String, after: String, first: Int, last: Int): FoodLogConnection
   foodLogsByMember(memberId: ID!, start: DateTime, end: DateTime, before: String, after: String, first: Int, last: Int): UserMealLogConnection
   assistants: [Assistant!]
+  workflowExecutionLogs(memberId: ID!, channel: CommunicationChannel, startDate: DateTime, endDate: DateTime, before: String, after: String, first: Int, last: Int): WorkflowExecutionLogConnection
   customAttributes(search: String, offset: Int, before: String, after: String, first: Int, last: Int): CustomAttributeConnection
   flags: GenericScalar
   zoomSessionRecordings(sessionId: String!): ZoomRecording
@@ -4290,6 +4291,40 @@ type WeightLogsTendency {
 enum WeightLogsTendencyType {
   DOWN
   UP
+}
+
+"""A single AI assistant interaction for a member."""
+type WorkflowExecutionLog {
+  id: ID!
+
+  """When the interaction was requested"""
+  timestamp: DateTime!
+
+  """The message sent by the member"""
+  input: String
+
+  """The AI assistant response"""
+  output: String
+
+  """Channel the interaction happened on"""
+  channel: String
+}
+
+type WorkflowExecutionLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [WorkflowExecutionLogEdge]!
+}
+
+"""A Relay edge containing a `WorkflowExecutionLog` and its cursor."""
+type WorkflowExecutionLogEdge {
+  """The item at the end of the edge"""
+  node: WorkflowExecutionLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type ZoomParticipantAudioFile {
