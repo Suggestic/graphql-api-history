@@ -1611,6 +1611,94 @@ type ExternalCalendarEventsInDate {
   events: [ExternalCalendarEvent!]!
 }
 
+"""
+Upload a member's lab report (PDF and/or images) on their behalf and get
+back AI-extracted biomarker readings, each pre-matched to a biomarker that
+**already exists** in the portal for review.
+
+This mutation never persists anything and never creates biomarkers:
+matching only resolves to existing entities, and readings that can't be
+matched come back with ``matched = false`` / ``biomarkerId = null`` so the
+coach can select an existing biomarker manually. Once the coach approves
+(as-is or adjusted), the results are saved through ``addBiomarkerResults``.
+
+Transport always succeeds; inspect ``result.status`` ("success" |
+"partial" | "error") and ``result.error`` for extraction outcomes.
+"""
+type ExtractBiomarkersFromLabReport {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  result: ExtractBiomarkersFromLabReportResult
+}
+
+input ExtractBiomarkersFromLabReportInput {
+  """Member the lab report is being uploaded on behalf of."""
+  memberId: ID!
+
+  """A single lab report PDF."""
+  pdfFile: Upload
+
+  """One or more lab report images."""
+  images: [Upload!]
+  mode: ExtractBiomarkersFromLabReportMode = AUTO
+
+  """Optional free-text hint for the AI model."""
+  extraInstructions: String
+}
+
+enum ExtractBiomarkersFromLabReportMode {
+  AUTO
+  VISION
+  TEXT
+}
+
+"""
+Structured, review-ready output of the AI extraction.
+
+``status`` reports back to the coach whether extraction/matching:
+  - ``success``  — everything extracted and every reading matched an
+    existing biomarker.
+  - ``partial``  — extraction worked but at least one reading could not be
+    matched (see ``unmatched_biomarkers``) or the scanner flagged partial
+    results (see ``warnings``).
+  - ``error``    — extraction failed; ``biomarkers`` is empty and ``error``
+    holds the structured failure reason.
+
+Nothing is persisted by producing this result. The coach reviews the
+proposed mapping and saves approved rows through ``addBiomarkerResults``.
+"""
+type ExtractBiomarkersFromLabReportResult {
+  status: String!
+  biomarkers: [ExtractedBiomarkerResult!]
+  metadata: LabReportMetadata
+  warnings: [String!]
+  unmatchedBiomarkers: [String!]
+  error: LabReportError
+}
+
+"""
+A single biomarker read from the lab report by the AI service.
+
+``biomarker_id`` (a Relay-encoded ``Biomarker`` id) is populated only when
+the reading was matched to a biomarker that **already exists** in the
+portal for the coach's third party — this flow never creates biomarkers.
+When ``matched`` is ``False`` the coach must pick an existing biomarker
+manually before saving. Both ``value`` and ``qualitative_value`` are
+exposed so results like "Negative" or "<0.01" are not dropped.
+"""
+type ExtractedBiomarkerResult {
+  name: String!
+  value: Float
+  qualitativeValue: String
+  unit: String
+  referenceRange: String
+  category: String
+  flags: [String!]
+  biomarkerId: ID
+  matched: Boolean!
+}
+
 enum FeatureType {
   CONTENT
   FOOD_LOG
@@ -1897,6 +1985,19 @@ Use of this type is *not recommended* as you lose the benefits of having a defin
 schema (one of the key benefits of GraphQL).
 """
 scalar JSONString
+
+type LabReportError {
+  code: String
+  message: String
+}
+
+type LabReportMetadata {
+  labName: String
+  reportDate: String
+  patientName: String
+  totalPagesProcessed: Int
+  languageDetected: String
+}
 
 type LabTestReport {
   id: ID!
@@ -2401,6 +2502,22 @@ type Mutation {
   setPrimaryCoach(input: SetPrimaryCoachInput!): SetPrimaryCoachPayload
   addBiomarkerResults(input: AddBiomarkerResultsInput!): AddBiomarkerResults
   addBiomarker(input: AddBiomarkerInput!): AddBiomarker
+
+  """
+  Upload a member's lab report (PDF and/or images) on their behalf and get
+  back AI-extracted biomarker readings, each pre-matched to a biomarker that
+  **already exists** in the portal for review.
+  
+  This mutation never persists anything and never creates biomarkers:
+  matching only resolves to existing entities, and readings that can't be
+  matched come back with ``matched = false`` / ``biomarkerId = null`` so the
+  coach can select an existing biomarker manually. Once the coach approves
+  (as-is or adjusted), the results are saved through ``addBiomarkerResults``.
+  
+  Transport always succeeds; inspect ``result.status`` ("success" |
+  "partial" | "error") and ``result.error`` for extraction outcomes.
+  """
+  extractBiomarkersFromLabReport(input: ExtractBiomarkersFromLabReportInput!): ExtractBiomarkersFromLabReport
   createCoachType(input: CreateCoachTypeInput!): CreateCoachTypePayload
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachTypePayload
   deleteCoachType(id: ID!): DeleteCoachType
