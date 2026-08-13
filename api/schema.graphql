@@ -1137,6 +1137,12 @@ type CancelPodcast {
   podcast: Podcast!
 }
 
+type CancelWebinarRegistration {
+  success: Boolean!
+  message: String!
+  registration: WebinarRegistration
+}
+
 type ChangeMealPlannerDayMeal {
   recipe: Recipe
   success: Boolean
@@ -1534,6 +1540,7 @@ type Condition implements Node {
   bool: Boolean
   lte: Float
   gte: Float
+  usersegmentSet(offset: Int, before: String, after: String, first: Int, last: Int): UserSegmentConnection!
   supplementSet(offset: Int, before: String, after: String, first: Int, last: Int): SupplementConnection!
   biomarkerId: ID
 }
@@ -2414,6 +2421,24 @@ input CreateWebhookEndpointInput {
   eventTypes: [WebhookEventType!]!
 }
 
+type CreateWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
+}
+
+input CreateWebinarInput {
+  title: String!
+  description: String = ""
+  startTime: DateTime!
+  durationMinutes: Int!
+  timezone: String = "UTC"
+  zoomHostId: String!
+  programs: [ID!]
+  userSegments: [ID!]
+  zoomSettings: JSONString
+}
+
 type CreateWeightEntry {
   success: Boolean
   message: String
@@ -2869,6 +2894,12 @@ type DeleteWebhookEndpoint {
   success: Boolean!
   message: String!
   endpoint: WebhookEndpoint
+}
+
+type DeleteWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
 }
 
 type DeleteWeightEntry {
@@ -4788,6 +4819,11 @@ enum MPVariety {
 }
 
 type Mutation {
+  createWebinar(input: CreateWebinarInput!): CreateWebinar
+  updateWebinar(input: UpdateWebinarInput!): UpdateWebinar
+  deleteWebinar(id: ID!): DeleteWebinar
+  registerToWebinar(id: ID!): RegisterToWebinar
+  cancelWebinarRegistration(id: ID!): CancelWebinarRegistration
   createPodcast(input: CreatePodcastInput!): CreatePodcast
   cancelPodcast(id: ID!): CancelPodcast
   createWebhookEndpoint(input: CreateWebhookEndpointInput!): CreateWebhookEndpoint
@@ -6404,6 +6440,7 @@ type Program implements Node {
   energyNutrientEquation: CpcsProgramEnergyNutrientEquationChoices!
   ownerParty: ThirdParty
   videoUrl: String
+  usersegmentSet(offset: Int, before: String, after: String, first: Int, last: Int): UserSegmentConnection!
   thirdParties(offset: Int, before: String, after: String, first: Int, last: Int): ThirdPartyConnection!
   thirdPartiesDefault(offset: Int, before: String, after: String, first: Int, last: Int): ThirdPartyConnection!
   contentcategorySet(offset: Int, before: String, after: String, first: Int, last: Int): ContentCategoryTypeConnection!
@@ -6413,6 +6450,7 @@ type Program implements Node {
   productSet(offset: Int, before: String, after: String, first: Int, last: Int): ProductTypeConnection!
   subscriptionSet(offset: Int, before: String, after: String, first: Int, last: Int): SubscriptionTypeConnection!
   transactionSet(offset: Int, before: String, after: String, first: Int, last: Int): SubscriptionTransactionConnection!
+  webinars(offset: Int, before: String, after: String, first: Int, last: Int, status: String): WebinarConnection!
   databaseId: String
   authorAvatar: String
   cpcsIngredientGroups: CPCIngredientGroup
@@ -6499,6 +6537,8 @@ type PurchaseMealRecipe {
 }
 
 type Query {
+  webinars(offset: Int, before: String, after: String, first: Int, last: Int, status: String): WebinarConnection
+  myWebinars(offset: Int, before: String, after: String, first: Int, last: Int, status: String): WebinarConnection
   podcasts(filters: PodcastFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): PodcastConnection
   webhookEndpoints(offset: Int, before: String, after: String, first: Int, last: Int): WebhookEndpointConnection
   symptomCategories(offset: Int, before: String, after: String, first: Int, last: Int): SymptomCategoryConnection
@@ -7359,6 +7399,12 @@ type RecommendationCatalogType {
 type RecommendedSwaps {
   meals: [Recipe]
   recipes: [Recipe]
+}
+
+type RegisterToWebinar {
+  success: Boolean!
+  message: String!
+  registration: WebinarRegistration
 }
 
 type RelativeCalories {
@@ -9347,6 +9393,24 @@ input UpdateWebhookEndpointInput {
   eventTypes: [WebhookEventType!]
 }
 
+type UpdateWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
+}
+
+input UpdateWebinarInput {
+  id: ID!
+  title: String
+  description: String
+  startTime: DateTime
+  durationMinutes: Int
+  timezone: String
+  programs: [ID!]
+  userSegments: [ID!]
+  zoomSettings: JSONString
+}
+
 """
 Create scalar that ignores normal serialization/deserialization, since
 that will be handled by the multipart request spec
@@ -9613,6 +9677,32 @@ type UserRecipeProxy {
   userRecipe: UserRecipe!
 }
 
+"""Minimal exposure of cpcs.UserSegment for webinar audience targeting."""
+type UserSegment implements Node {
+  name: String!
+  priority: Float!
+
+  """The ID of the object"""
+  id: ID!
+}
+
+type UserSegmentConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserSegmentEdge]!
+}
+
+"""A Relay edge containing a `UserSegment` and its cursor."""
+type UserSegmentEdge {
+  """The item at the end of the edge"""
+  node: UserSegment
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 input UsersFiltersInput {
   createdAt: CreatedAtRangeInput
 }
@@ -9709,6 +9799,53 @@ enum WebhookEventType {
   FOOD_LOG_CREATED
   FOOD_LOG_UPDATED
   FOOD_LOG_DELETED
+}
+
+type Webinar implements Node {
+  updatedAt: DateTime
+  createdAt: DateTime
+  title: String!
+  description: String!
+  startTime: DateTime!
+  durationMinutes: Int!
+  timezone: String!
+  status: String!
+  zoomWebinarId: String!
+  zoomRegistrationUrl: String!
+  programs(offset: Int, before: String, after: String, first: Int, last: Int, isActive: Boolean, isPremium: Boolean): ProgramConnection!
+  userSegments(offset: Int, before: String, after: String, first: Int, last: Int): UserSegmentConnection!
+
+  """The ID of the object"""
+  id: ID!
+  registrantCount: Int!
+  viewerRegistration: WebinarRegistration
+}
+
+type WebinarConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [WebinarEdge]!
+}
+
+"""A Relay edge containing a `Webinar` and its cursor."""
+type WebinarEdge {
+  """The item at the end of the edge"""
+  node: Webinar
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type WebinarRegistration implements Node {
+  updatedAt: DateTime
+  createdAt: DateTime
+  status: String!
+  joinUrl: String!
+
+  """The ID of the object"""
+  id: ID!
 }
 
 enum WeeklyWeightGoal {
