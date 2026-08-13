@@ -1281,6 +1281,32 @@ type CreateSupplementPlanTemplate {
   template: SupplementPlanTemplate
 }
 
+type CreateWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
+}
+
+input CreateWebinarInput {
+  title: String!
+  description: String
+  startTime: DateTime!
+  durationMinutes: Int!
+
+  """Defaults to UTC"""
+  timezone: String
+
+  """Zoom user id or email on the partner account hosting the webinar"""
+  zoomHostId: String!
+
+  """Program ids to target; empty = visible to all partner users"""
+  programs: [ID!]
+
+  """User segment ids to target"""
+  userSegments: [ID!]
+  zoomSettings: JSONString
+}
+
 type CronofyAuthRevoke {
   success: Boolean!
   message: String!
@@ -1504,6 +1530,13 @@ type DeleteSupplementPlanTemplate {
   success: Boolean!
   message: String!
   template: SupplementPlanTemplate
+}
+
+"""Cancels the webinar and deletes it on Zoom"""
+type DeleteWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
 }
 
 input DirectionsOfUseInput {
@@ -2524,6 +2557,11 @@ type Mutation {
   createCoachTeam(input: CreateCoachTeamInput!): CreateCoachTeamPayload
   updateCoachTeam(input: UpdateCoachTeamInput!): UpdateCoachTeamPayload
   deleteCoachTeam(id: ID!): DeleteCoachTeam
+  createWebinar(input: CreateWebinarInput!): CreateWebinar
+  updateWebinar(input: UpdateWebinarInput!): UpdateWebinar
+
+  """Cancels the webinar and deletes it on Zoom"""
+  deleteWebinar(id: ID!): DeleteWebinar
   createCoachTwilioAccessToken: CreateCoachTwilioAccessToken
   startConversation(input: StartConversationInput!): StartConversationPayload
   deleteConversation(input: DeleteConversationInput!): DeleteConversationPayload
@@ -3062,6 +3100,7 @@ type Query {
   groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
   coachTypes(id: ID, filters: CoachTypesFilterInput, before: String, after: String, first: Int, last: Int): CoachTypeConnection
   coachTeams(id: ID, filters: CoachTeamsFilterInput, before: String, after: String, first: Int, last: Int): CoachTeamConnection
+  webinars(status: String, before: String, after: String, first: Int, last: Int): WebinarConnection
   memberSearch(
     """Query search term"""
     query: String
@@ -4197,6 +4236,28 @@ type UpdateSupplementPlanTemplate {
   template: SupplementPlanTemplate
 }
 
+type UpdateWebinar {
+  success: Boolean!
+  message: String!
+  webinar: Webinar
+}
+
+input UpdateWebinarInput {
+  id: ID!
+  title: String
+  description: String
+  startTime: DateTime
+  durationMinutes: Int
+  timezone: String
+
+  """When provided, replaces the current program targeting"""
+  programs: [ID!]
+
+  """When provided, replaces the current user segment targeting"""
+  userSegments: [ID!]
+  zoomSettings: JSONString
+}
+
 """
 Create scalar that ignores normal serialization/deserialization, since
 that will be handled by the multipart request spec
@@ -4354,6 +4415,51 @@ enum VideoZoomRole {
 type WaterLog {
   date: Date!
   value: Float!
+}
+
+type Webinar {
+  id: ID!
+  title: String!
+  description: String
+  startTime: DateTime!
+  durationMinutes: Int!
+  timezone: String!
+  status: String!
+  zoomWebinarId: String
+  zoomRegistrationUrl: String
+  registrantCount: Int!
+  programs: [WebinarProgram!]!
+  userSegments: [WebinarUserSegment!]!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type WebinarConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [WebinarEdge]!
+}
+
+"""A Relay edge containing a `Webinar` and its cursor."""
+type WebinarEdge {
+  """The item at the end of the edge"""
+  node: Webinar
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type WebinarProgram {
+  id: ID!
+  name: String!
+}
+
+type WebinarUserSegment {
+  id: ID!
+  name: String!
+  priority: Float
 }
 
 enum Weekday {
