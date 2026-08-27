@@ -6537,8 +6537,38 @@ type PurchaseMealRecipe {
 }
 
 type Query {
-  webinars(offset: Int, before: String, after: String, first: Int, last: Int, status: String): WebinarConnection
-  myWebinars(offset: Int, before: String, after: String, first: Int, last: Int, status: String): WebinarConnection
+  webinars(
+    """Search by title or description."""
+    search: String
+
+    """Only webinars starting at or after this date."""
+    startDate: DateTime
+
+    """Only webinars starting at or before this date."""
+    endDate: DateTime
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    status: String
+  ): WebinarConnection
+  myWebinars(
+    """Search by title or description."""
+    search: String
+
+    """Only webinars starting at or after this date."""
+    startDate: DateTime
+
+    """Only webinars starting at or before this date."""
+    endDate: DateTime
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    status: String
+  ): WebinarConnection
   podcasts(filters: PodcastFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): PodcastConnection
   webhookEndpoints(offset: Int, before: String, after: String, first: Int, last: Int): WebhookEndpointConnection
   symptomCategories(offset: Int, before: String, after: String, first: Int, last: Int): SymptomCategoryConnection

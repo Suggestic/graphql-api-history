@@ -3100,7 +3100,22 @@ type Query {
   groupChannels(memberIds: [ID!]!, isActive: Boolean = true, offset: Int, before: String, after: String, first: Int, last: Int): GroupChannelConnection
   coachTypes(id: ID, filters: CoachTypesFilterInput, before: String, after: String, first: Int, last: Int): CoachTypeConnection
   coachTeams(id: ID, filters: CoachTeamsFilterInput, before: String, after: String, first: Int, last: Int): CoachTeamConnection
-  webinars(status: String, before: String, after: String, first: Int, last: Int): WebinarConnection
+  webinars(
+    status: String
+
+    """Search by title or description."""
+    search: String
+
+    """Only webinars starting at or after this date."""
+    startDate: DateTime
+
+    """Only webinars starting at or before this date."""
+    endDate: DateTime
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): WebinarConnection
   memberSearch(
     """Query search term"""
     query: String
