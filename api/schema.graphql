@@ -6891,6 +6891,18 @@ type Query {
     last: Int
   ): RecipeConnection
 
+  """
+  On-the-fly adherence score for an arbitrary list of ingredients (e.g.
+  user-created recipes or own items) against the active profile's program
+  """
+  ingredientsAdherence(
+    """List of ingredient names to score"""
+    ingredients: [String!]!
+
+    """Optional recipe tags to include in the scoring"""
+    tags: [String!]
+  ): Adherence
+
   """List users program recipes"""
   premiumProgramRecipes(before: String, after: String, first: Int, last: Int): RecipeConnection
 
