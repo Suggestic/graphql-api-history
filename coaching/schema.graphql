@@ -672,6 +672,31 @@ enum CalendarContactType {
   PHONE_CALL
 }
 
+"""
+Chat out-of-hours auto response configuration (root: Coach).
+
+Sendbird chat only for now (SE-1232 / SUG-5874): the auto response is
+sent by sg-data's Sendbird flow. The schedule itself is channel-agnostic
+so SMS/WhatsApp (Twilio Conversations) support can reuse it later.
+"""
+type ChatAutoResponseSettings {
+  enabled: Boolean!
+  message: String
+  timezone: String
+  businessHours: [ChatBusinessHoursPeriod!]!
+}
+
+"""
+A weekly chat business-hours period (root: CoachChatBusinessHours).
+
+Mirrors the ``WeeklyRules`` shape used by the appointment availability
+rules so the portal UI can reuse its schedule components.
+"""
+type ChatBusinessHoursPeriod {
+  weekday: Weekday!
+  period: AvailabilityWeekdayPeriod!
+}
+
 type ChecklistItem {
   title: String!
   image: String!
@@ -701,6 +726,7 @@ type Coach implements Node {
   sendbirdAccessToken: String
   availabilitySettings: AvailabilitySettings!
   autoResponse: String
+  chatAutoResponseSettings: ChatAutoResponseSettings!
   isCalendarAuth: Boolean!
   conferencingProfiles: [ConferenceProviderName!]!
   externalCalendarEvents(start: Date, end: Date, timezone: String): [ExternalCalendarEventsInDate!]!
@@ -2511,7 +2537,29 @@ type Mutation {
   updateNoteTemplate(id: ID!, text: String, title: String): UpdateNoteTemplate
   deleteNoteTemplate(id: ID!): DeleteNoteTemplate
   addAppointmentCredits(appointmentType: ID!, decrease: Int, increase: Int, labTestReports: [ID], member: ID!, value: Int): AddAppointmentCredits
-  setCoachAutoResponse(autoResponse: String): SetCoachAutoResponse
+
+  """
+  Set the coach's chat auto response message and its enabled flag.
+  
+  NOTE: the auto response is only sent on the Sendbird chat channel for
+  now (SE-1232 / SUG-5874); SMS/WhatsApp members (Twilio Conversations,
+  handled in sg-data) do not receive it yet.
+  """
+  setCoachAutoResponse(
+    autoResponse: String
+
+    """Toggle the out-of-hours chat auto response"""
+    enabled: Boolean
+  ): SetCoachAutoResponse
+
+  """
+  Replace the coach's chat business-hours schedule.
+  
+  Independent from the appointment availability rules (Cronofy). Read by
+  the out-of-hours chat auto response flow — Sendbird only for now, the
+  schedule is channel-agnostic so SMS/WhatsApp can reuse it later.
+  """
+  setChatBusinessHours(timezone: String!, weeklyPeriods: [WeeklyPeriodInput!]!): SetChatBusinessHours
   updateSubscription(memberId: ID!, subscriptionId: ID!): UpdateSubscription
   createProtocol(input: CreateProtocolInput!): CreateProtocol
   updateProtocol(input: UpdateProtocolInput!): UpdateProtocol
@@ -3312,6 +3360,25 @@ input SaveZoomSessionForAppointmentInput {
   sessionId: String!
 }
 
+"""
+Replace the coach's chat business-hours schedule.
+
+Independent from the appointment availability rules (Cronofy). Read by
+the out-of-hours chat auto response flow — Sendbird only for now, the
+schedule is channel-agnostic so SMS/WhatsApp can reuse it later.
+"""
+type SetChatBusinessHours {
+  success: Boolean!
+  message: String!
+}
+
+"""
+Set the coach's chat auto response message and its enabled flag.
+
+NOTE: the auto response is only sent on the Sendbird chat channel for
+now (SE-1232 / SUG-5874); SMS/WhatsApp members (Twilio Conversations,
+handled in sg-data) do not receive it yet.
+"""
 type SetCoachAutoResponse {
   success: Boolean!
   message: String!
