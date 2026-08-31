@@ -3164,6 +3164,11 @@ type Query {
     first: Int
     last: Int
   ): WebinarConnection
+
+  """
+  Fresh Zoom host start URL for the webinar. The embedded token is short-lived; fetch on demand, never store.
+  """
+  webinarStartUrl(id: ID!): String
   memberSearch(
     """Query search term"""
     query: String

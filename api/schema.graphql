@@ -6569,6 +6569,11 @@ type Query {
     last: Int
     status: String
   ): WebinarConnection
+
+  """
+  Fresh Zoom host start URL for the webinar (SUG-5899). The embedded token is short-lived; fetch on demand, never store.
+  """
+  webinarStartUrl(id: ID!): String
   podcasts(filters: PodcastFiltersInput, offset: Int, before: String, after: String, first: Int, last: Int): PodcastConnection
   webhookEndpoints(offset: Int, before: String, after: String, first: Int, last: Int): WebhookEndpointConnection
   symptomCategories(offset: Int, before: String, after: String, first: Int, last: Int): SymptomCategoryConnection
