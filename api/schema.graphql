@@ -3605,6 +3605,11 @@ type GenericFoodNode implements Node {
   calories: Float
   isCommon: Boolean
   isBranded: Boolean
+
+  """
+  Curated common ingredient names for this food. Use these as the `ingredients` input of the `ingredientsAdherence` query.
+  """
+  commonIngNames: [String!]
 }
 
 type GenericFoodNodeProxy {
