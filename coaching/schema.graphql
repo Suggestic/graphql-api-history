@@ -1683,6 +1683,13 @@ coach can select an existing biomarker manually. Once the coach approves
 
 Transport always succeeds; inspect ``result.status`` ("success" |
 "partial" | "error") and ``result.error`` for extraction outcomes.
+
+Deprecated: use ``startLabReportExtraction`` and poll
+``labReportExtraction(jobId)``, which take the same input and return the
+same ``result``. This mutation holds the request until the scanner
+answers, inside the API's 60 s timeout, so a long report or a scanner
+container starting cold ends in a 502; the job has 10 minutes and retries
+the scanner once. It stays until the frontend has migrated.
 """
 type ExtractBiomarkersFromLabReport {
   success: Boolean!
@@ -2048,6 +2055,40 @@ scalar JSONString
 type LabReportError {
   code: String
   message: String
+}
+
+"""
+A queued lab-report extraction (AIE-1054): started with
+``startLabReportExtraction``, read back with ``labReportExtraction``.
+
+``status`` is the job's own lifecycle: ``PENDING`` (queued), ``RUNNING``,
+``DONE`` (``result`` holds exactly what the synchronous mutation returns,
+including an extraction ``error`` when the scanner reported one) or
+``FAILED`` (the job itself failed; ``error.code`` is one of
+``ENQUEUE_FAILED``, ``NOT_STARTED``, ``WORKER_LOST``, ``TIMEOUT`` or
+``TASK_FAILED``, and starting a new job is the way out). Every job reaches
+``DONE`` or ``FAILED``. Jobs expire after ``LAB_REPORT_EXTRACTION_JOB_TTL``
+seconds, one day by default.
+"""
+type LabReportExtractionJob {
+  id: ID!
+  status: LabReportExtractionStatus!
+
+  """The member the lab report was uploaded for."""
+  memberId: ID!
+  result: ExtractBiomarkersFromLabReportResult
+  error: LabReportError
+  createdAt: DateTime!
+  startedAt: DateTime
+  finishedAt: DateTime
+}
+
+"""An enumeration."""
+enum LabReportExtractionStatus {
+  PENDING
+  RUNNING
+  DONE
+  FAILED
 }
 
 type LabReportMetadata {
@@ -2597,8 +2638,30 @@ type Mutation {
   
   Transport always succeeds; inspect ``result.status`` ("success" |
   "partial" | "error") and ``result.error`` for extraction outcomes.
+  
+  Deprecated: use ``startLabReportExtraction`` and poll
+  ``labReportExtraction(jobId)``, which take the same input and return the
+  same ``result``. This mutation holds the request until the scanner
+  answers, inside the API's 60 s timeout, so a long report or a scanner
+  container starting cold ends in a 502; the job has 10 minutes and retries
+  the scanner once. It stays until the frontend has migrated.
   """
-  extractBiomarkersFromLabReport(input: ExtractBiomarkersFromLabReportInput!): ExtractBiomarkersFromLabReport
+  extractBiomarkersFromLabReport(input: ExtractBiomarkersFromLabReportInput!): ExtractBiomarkersFromLabReport @deprecated(reason: "Use startLabReportExtraction and poll labReportExtraction(jobId): same input and result, without the request's 60 s limit.")
+
+  """
+  Asynchronous twin of ``extractBiomarkersFromLabReport`` (AIE-1054).
+  
+  Same input and validation, but the request returns as soon as the upload
+  is stored (privately) and the extraction is queued for the lab reports
+  worker, so a long scanner call never holds an API worker or hits its
+  timeout. Poll ``labReportExtraction(jobId)`` until ``status`` is ``DONE``
+  (``result`` is then exactly what the synchronous mutation returns) or
+  ``FAILED``; every job reaches one of them.
+  
+  A portal user can have ``LAB_REPORT_MAX_ACTIVE_JOBS_PER_USER`` jobs queued
+  or running at once.
+  """
+  startLabReportExtraction(input: ExtractBiomarkersFromLabReportInput!): StartLabReportExtraction
   createCoachType(input: CreateCoachTypeInput!): CreateCoachTypePayload
   updateCoachType(input: UpdateCoachTypeInput!): UpdateCoachTypePayload
   deleteCoachType(id: ID!): DeleteCoachType
@@ -3117,6 +3180,13 @@ type Query {
   restrictions(before: String, after: String, first: Int, last: Int): RestrictionConnection
   recipeSearch(query: String, before: String, after: String, first: Int, last: Int): RecipeConnection
   recommendedSwaps(mealTime: MealTime!, memberId: ID): RecommendedSwaps
+
+  """
+  Status and result of a startLabReportExtraction job. Null when the job is
+  unknown or expired, belongs to another third party, or was started by another
+  portal user and the caller cannot read all members.
+  """
+  labReportExtraction(jobId: ID!): LabReportExtractionJob
   mealPlanTemplate(
     """The ID of the object"""
     id: ID!
@@ -3616,6 +3686,26 @@ type StartConversationPayload {
 type StartJourneys {
   message: String
   success: Boolean
+}
+
+"""
+Asynchronous twin of ``extractBiomarkersFromLabReport`` (AIE-1054).
+
+Same input and validation, but the request returns as soon as the upload
+is stored (privately) and the extraction is queued for the lab reports
+worker, so a long scanner call never holds an API worker or hits its
+timeout. Poll ``labReportExtraction(jobId)`` until ``status`` is ``DONE``
+(``result`` is then exactly what the synchronous mutation returns) or
+``FAILED``; every job reaches one of them.
+
+A portal user can have ``LAB_REPORT_MAX_ACTIVE_JOBS_PER_USER`` jobs queued
+or running at once.
+"""
+type StartLabReportExtraction {
+  success: Boolean!
+  message: String!
+  errors: [FormError!]
+  job: LabReportExtractionJob
 }
 
 type StepsCount {
