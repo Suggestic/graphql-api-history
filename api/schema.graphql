@@ -7202,6 +7202,7 @@ enum QuestionType {
   DATE_PICKER
   TIME_PICKER
   DROPDOWN
+  SEGMENTED_CONTROL
 }
 
 type QuizAnswer {
