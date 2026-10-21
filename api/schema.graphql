@@ -4286,46 +4286,6 @@ type LocationAutocomplete {
   location: GeoPoint
 }
 
-type Logger implements Node {
-  """The ID of the object"""
-  id: ID!
-  user: String
-  profileId: String
-  userId: String
-  program: String
-  isPremium: Boolean
-  restrictions: [String]
-  adherenceScore: Float
-  statusCode: String
-  method: String
-  path: String
-  host: String
-  uri: String
-  requestGet: GenericScalar
-  requestPost: GenericScalar
-  requestBody: String
-  response: GenericScalar
-  location: [Float]
-  indexedAt: DateTime
-}
-
-type LoggerConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [LoggerEdge]!
-}
-
-"""A Relay edge containing a `Logger` and its cursor."""
-type LoggerEdge {
-  """The item at the end of the edge"""
-  node: Logger
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
 type LoginUser {
   accessToken: String
   refreshToken: String
@@ -6836,26 +6796,6 @@ type Query {
   zoomSessionRecordings(sessionId: String!): ZoomRecording
   zoomAccountRecordings(start: Date!, end: Date!, before: String, after: String, first: Int, last: Int): ZoomRecordingConnection
   userTrackers(id: ID, tracker: TrackerComponent): [UserTracker!]
-  log(
-    """The ID of the object"""
-    id: ID!
-  ): Logger
-
-  """List and filter logs"""
-  logs(
-    """Filter by user email"""
-    user: String
-
-    """sorting field"""
-    sortBy: SortBy = INDEXED_AT
-
-    """sorting order"""
-    sortOrder: SortOrder = ASC
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): LoggerConnection
   recipe(
     """The ID of the object"""
     id: ID!
@@ -7915,11 +7855,6 @@ type SleepTimesConnnection {
   dailyGoal: Int!
   totalTime: Int!
   latestEntry: DateTime
-}
-
-enum SortBy {
-  """Orders logs by indexed_at field"""
-  INDEXED_AT
 }
 
 enum SortOrder {
