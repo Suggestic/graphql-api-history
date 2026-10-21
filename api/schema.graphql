@@ -3503,6 +3503,14 @@ type FoodProduct {
   nutritionalInfo: NutritionalInfo
 }
 
+enum FoodSource {
+  """Suggestic food database"""
+  CORELLIA
+
+  """Nutritionix, with the application's own Nutritionix credentials"""
+  NUTRITIONIX
+}
+
 type FormError {
   field: String
   messages: [String!]
@@ -3605,6 +3613,9 @@ type GenericFoodNode implements Node {
   calories: Float
   isCommon: Boolean
   isBranded: Boolean
+
+  """Origin of the food data, e.g. USDA or NUTRITIONIX"""
+  dataSource: String
 
   """
   Curated common ingredient names for this food. Use these as the `ingredients` input of the `ingredientsAdherence` query.
@@ -6770,7 +6781,22 @@ type Query {
   commonFoods(query: String, filter: FoodFilter, before: String, after: String, first: Int, last: Int): CommonFoodConnection @deprecated(reason: "This query will soon be deprecated. Please use food_search with the parameter is_common=True instead.")
   myBrandedFoods(id: String, before: String, after: String, first: Int, last: Int): MyBrandedFoodConnection
   myCommonFoods(id: String, before: String, after: String, first: Int, last: Int): MyCommonFoodConnection
-  foodSearch(query: String, barcode: String, filter: FoodFilter, isCommon: Boolean, isBranded: Boolean, before: String, after: String, first: Int, last: Int): GenericFoodConnection
+  foodSearch(
+    query: String
+    barcode: String
+    filter: FoodFilter
+    isCommon: Boolean
+    isBranded: Boolean
+
+    """
+    Food data source. Defaults to NUTRITIONIX when the application has Nutritionix enabled, CORELLIA otherwise.
+    """
+    source: FoodSource
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): GenericFoodConnection
   searchProfile(email: String!): ProfileType
   mealLog(start: DateTime, end: DateTime, before: String, after: String, first: Int, last: Int): MealLogConnection
   recentMealLogs: [MealLog]
