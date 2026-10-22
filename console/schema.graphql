@@ -622,6 +622,11 @@ type ConditionEdge {
   node: Condition
 }
 
+type ConfirmEmailChange {
+  success: Boolean!
+  message: String!
+}
+
 type Constraint {
   id: ID!
   name: String
@@ -2095,8 +2100,13 @@ type Mutation {
   """Delete a user segment by ID"""
   deleteUserSegment(id: ID!): DeleteUserSegment!
 
-  """Update a user"""
+  """Update a user. Email changes are only applied after confirmEmailChange"""
   updateUser(input: UpdateUserInput!): UpdateUser!
+
+  """
+  Confirm a pending email change with the token sent to the new email address
+  """
+  confirmEmailChange(token: String!): ConfirmEmailChange!
 
   """Delete a user by ID"""
   deleteUser(id: ID!): DeleteUser!
@@ -3799,6 +3809,11 @@ type UpdateUser {
   success: Boolean!
   message: String!
   user: User
+
+  """
+  True when an email change was requested and is waiting for confirmation
+  """
+  emailChangePending: Boolean
 }
 
 input UpdateUserInput {
