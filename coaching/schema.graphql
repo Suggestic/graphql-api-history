@@ -3360,7 +3360,7 @@ input RequestCoachResetPasswordInput {
 }
 
 type RequestCoachResetPasswordPayload {
-  coach: Coach
+  coach: Coach @deprecated(reason: "Always null: this mutation is public and must not return account data")
   success: Boolean!
   message: String!
   clientMutationId: String
