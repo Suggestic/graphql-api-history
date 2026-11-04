@@ -6627,7 +6627,17 @@ type Query {
   notes(id: ID, offset: Int, before: String, after: String, first: Int, last: Int, eventId: ID): NoteConnection
   thirdPartyAppsCustomizations: ThirdPartyAppCustomization
   appointmentCredits: AppointmentCredits!
-  coachAvailability(appointmentType: ID!, start: DateTime!, end: DateTime!, coaches: [ID!]): [TimePeriod!]!
+  coachAvailability(
+    appointmentType: ID!
+    start: DateTime!
+    end: DateTime!
+    coaches: [ID!]
+
+    """
+    Appointment being rescheduled. The availability returned is the one of its coach, since rescheduling keeps the coach.
+    """
+    appointment: ID
+  ): [TimePeriod!]!
   appointmentTypes(offset: Int, before: String, after: String, first: Int, last: Int): AppointmentTypeConnection
   myAppointments(start: DateTime, end: DateTime, timezone: String, labTestReportIds: [ID!], excludeAppointmentsCanceled: Boolean = true): [Appointment!]!
   upcomingAppointments(before: String, after: String, first: Int, last: Int): AppointmentConnection
