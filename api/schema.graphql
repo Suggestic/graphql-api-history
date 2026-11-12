@@ -1647,6 +1647,7 @@ input ContentLibraryOrderBy {
 }
 
 enum ContentLibraryOrderByField {
+  """Release date: publishAt, or the creation date when not scheduled."""
   created_at
   popularity
 }
@@ -1659,6 +1660,7 @@ type ContentLibraryType implements Node {
   isFeatured: Boolean!
   lang: JSONString!
   unlockAfterDays: Int
+  publishAt: DateTime
   id: ID!
   databaseId: String
   isFavorite: Boolean!
@@ -1953,6 +1955,11 @@ input CreateContentLibraryInput {
   programs: [ID]
   lang: GenericScalar = "{}"
   unlockAfterDays: Int
+
+  """
+  Content is hidden from users until this date (UTC). Null means published.
+  """
+  publishAt: DateTime
 }
 
 type CreateContentTag {
@@ -8914,6 +8921,11 @@ input UpdateContentLibraryInput {
   """Programs IDs."""
   programs: [ID!]
   unlockAfterDays: Int
+
+  """
+  Content is hidden from users until this date (UTC). Null means published.
+  """
+  publishAt: DateTime
 }
 
 type UpdateContentTag {
