@@ -6417,6 +6417,13 @@ type Program implements Node {
   image: String
   cover: String
   backgroundImage: String
+
+  """
+  Adherence scoring matches ingredient names to the program rules ignoring case,
+  plurals, aliases and USDA/branded naming (e.g. 'Onions', 'Raw egg, white',
+  'BACON BASE, BACON').
+  """
+  normalizeIngredientNames: Boolean!
   books: JSONString
   restrictions(encoded: Boolean): [String!]!
   createdAt: DateTime!
