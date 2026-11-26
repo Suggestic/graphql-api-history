@@ -1273,6 +1273,11 @@ type CheckoutCreate {
   success: Boolean!
   message: String!
   webUrl: String
+
+  """
+  True when the user's member discount is applied to the checkout (paid users of partners with a Shopify member discount).
+  """
+  discountApplied: Boolean
 }
 
 input CheckoutCreateInput {
@@ -4655,6 +4660,13 @@ enum MealType {
   EXPRESS_TRACK
 }
 
+type MemberDiscount {
+  percentage: Float!
+
+  """Whether the current user gets the discount at checkout."""
+  eligible: Boolean!
+}
+
 type MenuItem implements Node {
   """The ID of the object"""
   id: ID!
@@ -6103,6 +6115,15 @@ type ProductVariant {
   title: String!
   availableForSale: Boolean!
   price: Money!
+
+  """Shopify compare-at price (pre-sale price), if any."""
+  compareAtPrice: Money
+
+  """
+  Unit price after the partner's member discount. Null when the partner has no
+  member discount. Display only: the checkout cart is the source of truth for totals.
+  """
+  discountedPrice: Money
 }
 
 type ProfileBiomarker implements Node {
@@ -6417,6 +6438,21 @@ type Program implements Node {
   image: String
   cover: String
   backgroundImage: String
+
+  """
+  Adherence scoring matches ingredient names to the program rules ignoring case,
+  plurals, aliases and USDA/branded naming (e.g. 'Onions', 'Raw egg, white',
+  'BACON BASE, BACON').
+  """
+  normalizeIngredientNames: Boolean!
+
+  """
+  Score (0-100) for foods made of known ingredients that match no increase or
+  decrease rule (plain rice, water, spices), instead of 'unknown'. Empty:
+  unknown, as before. Avoid rules and restrictions still apply; foods with no
+  ingredient in the catalog stay unknown.
+  """
+  neutralScore: Float
   books: JSONString
   restrictions(encoded: Boolean): [String!]!
   createdAt: DateTime!
@@ -8277,6 +8313,9 @@ type SupplementParent {
   options: [ProductOption!]
   variants: [ProductVariant!]!
   featuredImage: String
+
+  """Partner's member discount; null when it has none."""
+  memberDiscount: MemberDiscount
 }
 
 type SupplementPlan implements Node {
